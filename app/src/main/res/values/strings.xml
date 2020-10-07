@@ -1,0 +1,60 @@
+<resources>
+
+    //menu górne
+    <string name="app_name">Idiom Quiz</string>
+    <string name="autor">Ewelina Kłobut</string>
+    <string name="send">Wyślij wiadomość</string>
+    <string name="share">Udostępnij</string>
+    <string name="version">Wersja SDK</string>
+    <string name="about">O programie</string>
+
+    //menu boczne
+    <string name="quiz">Nowa rozgrywka</string>
+    <string name="statystyki">Statystyki</string>
+    <string name="powtorki">Tablica powtórek</string>
+    <string name="pomoc">Pomoc</string>
+    <string name="nav_open_drawer">Otwórz szufladę</string>
+    <string name="nav_close_drawer">Zamknij szufladę</string>
+
+    //startPage
+    <string name="startPageTitle">Idiom Quiz</string>
+    <string name="hightScore">Hightscore:</string>
+    <string name="repeat">Add to replays</string>
+    <string name="nextQuestion">Next question</string>
+    <string name="nav_projekt_temat">Idiom Quiz</string>
+    <string name="nav_autor">Autor</string>
+    <string name="nav_projekt">Idiom Quiz</string>
+    <string name="checkLevel">" Select level"</string>
+    <string name="selectLevel">" Select level"</string>
+    <string-array name="level_array">
+        <item>Podstawowy</item>
+        <item>Srednio-zaawansowany</item>
+        <item>Zaawansowany</item>
+    </string-array>
+
+    //ustawienia
+    <string name="sync_pref"> Sync</string>
+    <string name="sync_pref_summary"> Get your photos, videos, contacts, subscriptions etc on all your devices. </string>
+
+    <string name="pref_syncConnType">Sync Conection Type</string>
+    <string name="pref_syncConnType_dialog_title">Perform Sync Using</string>
+    <string name="pref_syncConnType_default_values">Wifi</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lastResult">Last Result</string>
+
+    //kontrolki panel uzytkownika
+    <string name="twoj_poz">Jaki jest twój poziom zaawansowania?</string>
+
+    //poziom
+    <string-array name="poziom">
+        <item>podstawowy</item>
+        <item>średniozaawansowany</item>
+        <item>zaawansowany</item>
+    </string-array>
+    <string name="urodziny">Od kiedy uczysz się angielskiego?</string>
+    <string name="widocznosc">Czy chcesz być widoczny dla innych użytkowników?</string>
+
+
+</resources>

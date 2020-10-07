@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/quiz"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/quiz" />
+        <item
+            android:id="@+id/statistic"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="@string/statystyki" />
+        <item
+            android:id="@+id/repeat"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_directions"
+            android:title="@string/powtorki" />
+        <item
+            android:id="@+id/help"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="@string/pomoc" />
+    </group>
+
+    <item android:title="@string/nav_projekt">
+        <menu>
+            <item
+                android:id="@+id/temat"
+                android:title="@string/nav_projekt_temat"
+                android:icon="@android:drawable/stat_notify_chat" />
+            <item
+                android:id="@+id/autor"
+                android:title="@string/nav_autor"
+                android:icon="@android:drawable/btn_star" />
+
+        </menu>
+
+    </item>
+</menu>

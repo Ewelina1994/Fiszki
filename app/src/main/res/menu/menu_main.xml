@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/share"
+        android:title="Udostępnij"
+        app:showAsAction="ifRoom"
+        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider" />
+    <item
+        android:id="@+id/user"
+        android:icon="@drawable/send"
+        android:title="Twój profil"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/ustawienia"
+        android:title="Ustawienia"
+        app:showAsAction="never" />
+
+</menu>

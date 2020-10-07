@@ -1,0 +1,2 @@
+rootProject.name='Fiszki'
+include ':app'

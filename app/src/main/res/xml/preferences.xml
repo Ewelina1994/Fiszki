@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_sync"
+        android:summary="@string/sync_pref_summary"
+        android:title="@string/sync_pref" />
+    <ListPreference
+        android:defaultValue="false"
+        android:entries="@android:array/emailAddressTypes"
+        android:entryValues="@android:array/organizationTypes"
+        android:key="pref_sync_connection_type"
+        android:summary="@string/sync_pref_summary"
+        android:title="@string/pref_syncConnType" />
+</PreferenceScreen>
