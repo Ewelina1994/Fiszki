@@ -3,6 +3,7 @@
     package="com.example.fiszki">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,23 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".PanelUser"
+            android:name=".activityPanel.PanelUser"
             android:label="Uzupełnij swoje dane"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity android:name=".Ustawienia" />
+        <activity android:name=".activityPanel.AdminAddQuestion" />
         <activity
-            android:name=".Statystic"
+            android:name=".activityPanel.Statystic"
             android:label="Statystyki"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
-            android:name=".StartPageQuiz"
+            android:name=".activityPanel.StartPageQuiz"
             android:label="Rozpocznij rozgrywkę"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
-            android:name=".Quiz"
+            android:name=".activityPanel.QuizActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity android:name=".MainActivity">
             <intent-filter>

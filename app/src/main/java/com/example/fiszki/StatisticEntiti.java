@@ -3,6 +3,8 @@ package com.example.fiszki;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.fiszki.entity.Question;
+
 public class StatisticEntiti {
     public static final String DIFFICULTY_EASY="Easy";
     public static final String DIFFICULTY_MEDIUM="Medium";

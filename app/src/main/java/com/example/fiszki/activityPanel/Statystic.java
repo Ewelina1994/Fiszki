@@ -1,4 +1,4 @@
-package com.example.fiszki;
+package com.example.fiszki.activityPanel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

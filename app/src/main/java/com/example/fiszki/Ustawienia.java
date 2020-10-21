@@ -12,11 +12,11 @@ public class Ustawienia extends AppCompatActivity {
         setContentView(R.layout.activity_ustawienia);
 
         //getSupportActionBar().setTitle("Settings");
-        if(findViewById(R.id.fragment_ustawienia) != null){
-            if(savedInstanceState != null){
-                return;
-            }
-            getFragmentManager().beginTransaction().add(R.id.fragment_ustawienia, new UstawieniaFragment()).commit();
-        }
+//        if(findViewById(R.id.fragment_ustawienia) != null){
+//            if(savedInstanceState != null){
+//                return;
+//            }
+//            getFragmentManager().beginTransaction().add(R.id.fragment_ustawienia, new UstawieniaFragment()).commit();
+//        }
     }
 }

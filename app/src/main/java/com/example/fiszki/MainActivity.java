@@ -18,6 +18,10 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.fiszki.activityPanel.AdminAddQuestion;
+import com.example.fiszki.activityPanel.PanelUser;
+import com.example.fiszki.activityPanel.StartPageQuiz;
+import com.example.fiszki.activityPanel.Statystic;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -34,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         //ikona
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent2= new Intent(this, Ustawienia.class);
                 startActivity(intent2);
                 return true;
+            case R.id.admin:
+                Intent intent3=new Intent(this, AdminAddQuestion.class);
+                startActivity(intent3);
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -93,11 +98,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         shareActionProvider.setShareIntent(intent);
     }
 
-    public String getAndroidVersion() {
-        String relase = Build.VERSION.RELEASE;
-        int sdkVersion = Build.VERSION.SDK_INT;
-        return "Android SDK: " + sdkVersion + " (" + relase + ")";
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

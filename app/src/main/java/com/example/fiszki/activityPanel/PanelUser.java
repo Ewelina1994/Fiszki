@@ -1,4 +1,4 @@
-package com.example.fiszki;
+package com.example.fiszki.activityPanel;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,8 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.fiszki.R;
 
 public class PanelUser extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -32,7 +31,7 @@ public class PanelUser extends AppCompatActivity implements AdapterView.OnItemCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kontrolki);
+        setContentView(R.layout.activity_user_panel);
 
         imie = (EditText) findViewById(R.id.nickStudent);
 

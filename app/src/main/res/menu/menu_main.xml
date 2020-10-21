@@ -18,5 +18,9 @@
         android:id="@+id/ustawienia"
         android:title="Ustawienia"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/admin"
+        android:title="Panel admina"
+        app:showAsAction="never" />
 
 </menu>

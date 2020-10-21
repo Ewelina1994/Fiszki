@@ -22,7 +22,7 @@
     <string name="repeat">Add to replays</string>
     <string name="nextQuestion">Next question</string>
     <string name="nav_projekt_temat">Idiom Quiz</string>
-    <string name="nav_autor">Autor</string>
+    <string name="nav_autor">Author</string>
     <string name="nav_projekt">Idiom Quiz</string>
     <string name="checkLevel">" Select level"</string>
     <string name="selectLevel">" Select level"</string>
@@ -36,7 +36,7 @@
     <string name="sync_pref"> Sync</string>
     <string name="sync_pref_summary"> Get your photos, videos, contacts, subscriptions etc on all your devices. </string>
 
-    <string name="pref_syncConnType">Sync Conection Type</string>
+    <string name="pref_syncConnType">Sync Connection Type</string>
     <string name="pref_syncConnType_dialog_title">Perform Sync Using</string>
     <string name="pref_syncConnType_default_values">Wifi</string>
 
@@ -55,6 +55,10 @@
     </string-array>
     <string name="urodziny">Od kiedy uczysz się angielskiego?</string>
     <string name="widocznosc">Czy chcesz być widoczny dla innych użytkowników?</string>
+
+    //admin
+    <string name="add_new_idiom">Add new idiom</string>
+    <string name="btnAdminNext">Next</string>
 
 
 </resources>

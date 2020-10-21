@@ -5,15 +5,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Path;
 
 import androidx.annotation.Nullable;
-import com.example.fiszki.QuizContract.*;
+
+import com.example.fiszki.db.OptionContract;
+import com.example.fiszki.db.QuestionContract;
+import com.example.fiszki.db.StatisticContract;
+import com.example.fiszki.db.UserContract;
+import com.example.fiszki.entity.Option;
+import com.example.fiszki.entity.Question;
+import com.example.fiszki.enums.LanguageEnum;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuizDbHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "QuizIdiom.db";
+    private static final String DATABASE_NAME = "Fiszki.db";
     private static final int DATABASE_VERSION=1;
 
     private static QuizDbHelper instance;
@@ -35,65 +43,197 @@ public class QuizDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         this.db=db;
 
-        final String SQL_CREATE_QUESTIONS_TABLE = "CREATE TABLE " + QuestionTable.TABLE_NAME + " (" +
-                QuestionTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                QuestionTable.COLUMN_QUESTION + " TEXT, " +
-                QuestionTable.COLUMN_OPTIONS1 + " TEXT, " +
-                QuestionTable.COLUMN_OPTIONS2 + " TEXT, " +
-                QuestionTable.COLUMN_OPTIONS3 + " TEXT, " +
-                QuestionTable.COLUMN_ANSWER_NR + " INTEGER, " +
-                QuestionTable.COLUMN_DEFFICULTY + " TEXT" +
-                ")";
-        final String SQL_CREATE_QUESTIONS_STATISTIC = "CREATE TABLE " + StaticTable.TABLE_NAME + " (" +
-                StaticTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                StaticTable.COLUMN_LEVEL + " TEXT, " +
-                StaticTable.COLUMN_score + " INT, " +
-                StaticTable.COLUMN_wrong + " INT,"+
-                StaticTable.COLUMN_date + " TEXT"+
-                ")";
+        db.execSQL ("PRAGMA Foreign_keys = ON");
 
-        db.execSQL(SQL_CREATE_QUESTIONS_TABLE);
-        db.execSQL(SQL_CREATE_QUESTIONS_STATISTIC);
+        final String SQL_CREATE_USER_TABLE = UserContract.SQL_CREATE_ENTRIES;
+        final String SQL_CREATE_QUESTION_TABLE = QuestionContract.SQL_CREATE_ENTRIES;
+        final String SQL_CREATE_OPTION_TABLE = OptionContract.SQL_CREATE_ENTRIES;
+        final String SQL_CREATE_STATISTIC_TABLE = StatisticContract.SQL_CREATE_ENTRIES;
+
+        db.execSQL(SQL_CREATE_USER_TABLE);
+        db.execSQL(SQL_CREATE_QUESTION_TABLE);
+        db.execSQL(SQL_CREATE_OPTION_TABLE);
+        db.execSQL(SQL_CREATE_STATISTIC_TABLE);
         fillQuestionsTable();
+        fillOptionsTable();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+QuestionTable.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS "+StaticTable.TABLE_NAME);
+        db.execSQL(UserContract.SQL_DELETE_ENTRIES);
+        db.execSQL(QuestionContract.SQL_DELETE_ENTRIES);
+        db.execSQL(OptionContract.SQL_DELETE_ENTRIES);
+        db.execSQL(StatisticContract.SQL_CREATE_ENTRIES);
         onCreate(db);
     }
+
+    private void fillOptionsTable() {
+        Option o1ENq1= new Option(1, "You are looking down.", 0, "EN");
+        Option o2ENq1= new Option(1, "You look sad.", 1, "EN");
+        Option o3ENq1= new Option(1, "You look great", 0, "EN");
+
+        Option o1ENq2= new Option(2, "He acts like a military commander.", 1, "EN");
+        Option o2ENq2= new Option(2, "He is a military commander.", 0, "EN");
+        Option o3ENq2= new Option(2, "He wants to join the military.", 0, "EN");
+
+        Option o1ENq3= new Option(3, "Feel better and get a positivity stick.", 0, "EN");
+        Option o2ENq3= new Option(3, "Smile upwards and maintain a positive attitude.", 0, "EN");
+        Option o3ENq3= new Option(3, "Feel better and maintain positive thoughts.", 1, "EN");
+
+        Option o1ENq4= new Option(4, "Things have been happening lately.", 0, "EN");
+        Option o2ENq4= new Option(4, "If one more thing happens, it will happen too late.", 0, "EN");
+        Option o3ENq4= new Option(4, "Things have happened close together in time.", 1, "EN");
+
+        Option o1ENq5= new Option(5, "Maybe it will change my luck. I knock on wood to give myself luck.", 1, "EN");
+        Option o2ENq5= new Option(5, "Maybe it will change my luck and someone's knocking.", 0, "EN");
+        Option o3ENq5= new Option(5, "Maybe it will change my luck if I knock on the door.", 0, "EN");
+
+        Option o1ENq6= new Option(6, "Please stop talking about that topic.", 1, "EN");
+        Option o2ENq6= new Option(6, "Please lay down.", 0, "EN");
+        Option o3ENq6= new Option(6, "Please stop talking and lay down.", 0, "EN");
+
+        Option o1ENq7= new Option(7, "I think I'll wait in line for that job.", 0, "EN");
+        Option o2ENq7= new Option(7, "I think I might get that job.", 0, "EN");
+        Option o3ENq7= new Option(7, "I think I'll stand and think about the job.", 1, "EN");
+
+        Option o1ENq8= new Option(8, "I'm obeying the new diet.", 1, "EN");
+        Option o2ENq8= new Option(8, "I'm sticking to the kitchen counter.", 0, "EN");
+        Option o3ENq8= new Option(8, "I'm on a new diet of sticky rice..", 0, "EN");
+
+        Option o1ENq9= new Option(9, "This weather is gloomy.", 0, "EN");
+        Option o2ENq9= new Option(9, "I don't like this weather.", 1, "EN");
+        Option o3ENq9= new Option(9, "This weather is rainy.", 0, "EN");
+
+        Option o1ENq10= new Option(10, "We need to hurry up, like ducks flying.", 0, "EN");
+        Option o2ENq10= new Option(10, "We need to get organized.", 1, "EN");
+        Option o3ENq10= new Option(10, "We need to position our ducks.", 0, "EN");
+
+        insertOption(o1ENq1);
+        insertOption(o2ENq1);
+        insertOption(o3ENq1);
+        insertOption(o1ENq2);
+        insertOption(o2ENq2);
+        insertOption(o3ENq2);
+        insertOption(o1ENq3);
+        insertOption(o2ENq3);
+        insertOption(o3ENq3);
+        insertOption(o1ENq4);
+        insertOption(o2ENq4);
+        insertOption(o3ENq4);
+        insertOption(o1ENq5);
+        insertOption(o2ENq5);
+        insertOption(o3ENq5);
+        insertOption(o1ENq6);
+        insertOption(o2ENq6);
+        insertOption(o3ENq6);
+        insertOption(o1ENq7);
+        insertOption(o2ENq7);
+        insertOption(o3ENq7);
+        insertOption(o1ENq8);
+        insertOption(o2ENq8);
+        insertOption(o3ENq8);
+        insertOption(o1ENq9);
+        insertOption(o2ENq9);
+        insertOption(o3ENq9);
+        insertOption(o1ENq10);
+        insertOption(o2ENq10);
+        insertOption(o3ENq10);
+
+        //pl wersja
+        Option o1PLq1= new Option(1, "Ktoś patrzy w dół", 0, "PL");
+        Option o2PLq1= new Option(1, "Wyglądasz na smutnego.", 1, "PL");
+        Option o3PLq1= new Option(1, "Świetnie wyglądasz", 0, "PL");
+
+        Option o1PLq2= new Option(2, "Ktoś działa jak dowódca w wojsku.", 1, "PL");
+        Option o2PLq2= new Option(2, "Ktoś jest dowódca wojskowym", 0, "PL");
+        Option o3PLq2= new Option(2, "Ktoś chce wstąpić do wojska", 0, "PL");
+
+        Option o1PLq3= new Option(3, "Czuj sie dobrze i trzymaj się", 0, "PL");
+        Option o2PLq3= new Option(3, "Uśmiechnij się i zachowaj pozytywne myślenie", 0, "PL");
+        Option o3PLq3= new Option(3, "Życzę ci żebyś poczuł sie lepiej i pozytywnie myślał", 1, "PL");
+
+        Option o1PLq4= new Option(4, "Ostatnio coś sie działo", 0, "PL");
+        Option o2PLq4= new Option(4, "Jeśli wydarzy sie jeszcze jedna rzecz, będzie za późno", 0, "PL");
+        Option o3PLq4= new Option(4, "Wszystko zdarzyło się w jednym czasie", 1, "PL");
+
+        Option o1PLq5= new Option(5, "Może to da mi szczęście jeśli zapukam w drewno", 1, "PL");
+        Option o2PLq5= new Option(5, "Może to zmieni moje szczęście i ktoś sie do mnie odezwie", 0, "PL");
+        Option o3PLq5= new Option(5, "Może to zmieni moje szczęście, jeśli zapukam do drzwi.", 0, "PL");
+
+        Option o1PLq6= new Option(6, "Proszę, przestań mówić na ten temat.", 1, "PL");
+        Option o2PLq6= new Option(6, "Proszę się położyć.", 0, "PL");
+        Option o3PLq6= new Option(6, "Proszę przestań mówić i połóż się.", 0, "PL");
+
+        Option o1PLq7= new Option(7, "Myślę, że będę czekał w kolejce do tej pracy.", 0, "PL");
+        Option o2PLq7= new Option(7, "Myślę, że mógłbym dostać tę pracę.", 0, "PL");
+        Option o3PLq7= new Option(7, "Myślę, że wstanę i pomyślę o pracy.", 1, "PL");
+
+        Option o1PLq8= new Option(8, "Przestrzegam nowej diety.", 1, "PL");
+        Option o2PLq8= new Option(8, "Trzymam się blatu w kuchni", 0, "PL");
+        Option o3PLq8= new Option(8, "Jestem na nowej diecie lepkiego ryżu.", 0, "PL");
+
+        Option o1PLq9= new Option(9, "Ta pogoda jest ponura.", 0, "PL");
+        Option o2PLq9= new Option(9,  "Nie lubię tej pogody.", 1, "PL");
+        Option o3PLq9= new Option(9, "Ta pogoda jest deszczowa.", 0, "PL");
+
+        Option o1PLq10= new Option(10, "Musimy się spieszyć, jak latające kaczki.", 0, "PL");
+        Option o2PLq10= new Option(10, "Musimy się zorganizować.", 1, "PL");
+        Option o3PLq10= new Option(10, "Musimy ustawić nasze kaczki.", 0, "PL");
+
+        insertOption(o1PLq1);
+        insertOption(o2PLq1);
+        insertOption(o3PLq1);
+        insertOption(o1PLq2);
+        insertOption(o2PLq2);
+        insertOption(o3PLq2);
+        insertOption(o1PLq3);
+        insertOption(o2PLq3);
+        insertOption(o3PLq3);
+        insertOption(o1PLq4);
+        insertOption(o2PLq4);
+        insertOption(o3PLq4);
+        insertOption(o1PLq5);
+        insertOption(o2PLq5);
+        insertOption(o3PLq5);
+        insertOption(o1PLq6);
+        insertOption(o2PLq6);
+        insertOption(o3PLq6);
+        insertOption(o1PLq7);
+        insertOption(o2PLq7);
+        insertOption(o3PLq7);
+        insertOption(o1PLq8);
+        insertOption(o2PLq8);
+        insertOption(o3PLq8);
+        insertOption(o1PLq9);
+        insertOption(o2PLq9);
+        insertOption(o3PLq9);
+        insertOption(o1PLq10);
+        insertOption(o2PLq10);
+        insertOption(o3PLq10);
+
+    }
     private void fillQuestionsTable() {
-        Question q1= new Question("You look a little down in the dumps.", "You are looking down.", "You look sad.", "You look great", 2, Question.DIFFICULTY_EASY);
+        Question q1 = new Question("You look a little down in the dumps.");
+        Question q2 = new Question("He comes across as a military commander.");
+        Question q3 = new Question( "Just cheer up and stick with a positive attitude.");
+        Question q4 = new Question( "It has been one thing after another lately.");
+        Question q5 = new Question( "Maybe it will even change my luck, knock on wood.");
+        Question q6 = new Question("Please give it a rest.");
+        Question q7 = new Question( "I think I stand a change of getting that job.");
+        Question q8 = new Question("I'm sticking to the new diet.");
+        Question q9 = new Question("This weather leaves a lot to be desired.");
+        Question q10 = new Question("We need to get our ducks in a row.");
+
         insertQuestions(q1);
-        Question q2= new Question("He comes across as a military commander.", "He acts like a military commander.", "He is a military commander.", "He wants to join the military.", 1, Question.DIFFICULTY_EASY);
         insertQuestions(q2);
-        Question q3= new Question("Just cheer up and stick with a positive attitude.", "Feel better and get a positivity stick.", "Smile upwards and maintain a positive attitude.", "Feel better and maintain positive thoughts.", 3, Question.DIFFICULTY_MEDIUM);
         insertQuestions(q3);
-        Question q4= new Question("It has been one thing after another lately.", "Things have been happening lately.", "If one more thing happens, it will happen too late.", "Things have happened close together in time.", 3, Question.DIFFICULTY_HARD);
         insertQuestions(q4);
-        Question q5= new Question("Maybe it will even change my luck, knock on wood.", "Maybe it will change my luck. I knock on wood to give myself luck.", "Maybe it will change my luck and someone's knocking.", "Maybe it will change my luck if I knock on the door.", 1, Question.DIFFICULTY_HARD);
         insertQuestions(q5);
-        Question q6= new Question("Please give it a rest.", "Please stop talking about that topic.", "Please lay down.", "Please stop talking and lay down.", 1, Question.DIFFICULTY_EASY);
         insertQuestions(q6);
-        Question q7= new Question("I think I stand a change of getting that job.", "I think I'll wait in line for that job.", "I think I might get that job.", "I think I'll stand and think about the job.", 3, Question.DIFFICULTY_EASY);
         insertQuestions(q7);
-        Question q8= new Question("I'm sticking to the new diet.", "I'm obeying the new diet.", "I'm sticking to the kitchen counter.", "I'm on a new diet of sticky rice..", 1, Question.DIFFICULTY_EASY);
         insertQuestions(q8);
-        Question q9= new Question("This weather leaves a lot to be desired.", "This weather is gloomy.", "I don't like this weather.", "This weather is rainy.", 2, Question.DIFFICULTY_MEDIUM);
         insertQuestions(q9);
-        Question q10= new Question("We need to get our ducks in a row.", "We need to hurry up, like ducks flying.", "We need to get organized.", "We need to position our ducks.", 2, Question.DIFFICULTY_MEDIUM);
         insertQuestions(q10);
-        Question q11= new Question("Thanks for taking a rain check.", "Thanks for meeting me on such a rainy day.", "Thanks for writing me a check while it's raining.", "Thanks for agreeing to postpone our appointment.", 3, Question.DIFFICULTY_MEDIUM);
-        insertQuestions(q11);
-        Question q12= new Question("We don't want our team to come under fire.", "We don't want our team to get destroyed.", "We don't want our team to get assaulted.", "We don't want our team to get public criticism.", 3, Question.DIFFICULTY_MEDIUM);
-        insertQuestions(q12);
-        Question q13= new Question("My friend and I are going to hit the road this summer.", "My friend and I are going to help repair the road.", "My friend and I are going on a long walk this summer.", "My friend and I are going to travel from town to town this summer.", 2, Question.DIFFICULTY_HARD);
-        insertQuestions(q13);
-        Question q14= new Question("For crying out loud!", "I am crying!", "I am crazy!", "I am frustrated!", 3, Question.DIFFICULTY_HARD);
-        insertQuestions(q14);
-        Question q15= new Question("I won't beat around the bush.", "I won't walk around a bush.", "I won't avoid the subject.", "I won't avoid the bush.", 2, Question.DIFFICULTY_HARD);
-        insertQuestions(q15);
 
     }
 //dodaje jedno pytanie
@@ -111,14 +251,20 @@ public class QuizDbHelper extends SQLiteOpenHelper {
     }
     private void insertQuestions(Question q){
         ContentValues cv = new ContentValues();
-        cv.put(QuestionTable.COLUMN_QUESTION, q.getQuestion());
-        cv.put(QuestionTable.COLUMN_OPTIONS1, q.getOptions1());
-        cv.put(QuestionTable.COLUMN_OPTIONS2, q.getOptions2());
-        cv.put(QuestionTable.COLUMN_OPTIONS3, q.getOptions3());
-        cv.put(QuestionTable.COLUMN_ANSWER_NR, q.getAnswerNr());
-        cv.put(QuestionTable.COLUMN_DEFFICULTY, q.getDifficulty());
+        cv.put(QuestionContract.QuestionTable.COLUMN_QUESTION, q.getQuestion());
 
-        db.insert(QuestionTable.TABLE_NAME, null, cv);
+        db.insert(QuestionContract.QuestionTable.TABLE_NAME, null, cv);
+    }
+
+    private void insertOption(Option o) {
+        ContentValues cv= new ContentValues();
+        cv.put(OptionContract.OptionTable.COLUMN_QUESTION_ID, o.getQuestion_id());
+        cv.put(OptionContract.OptionTable.COLUMN_OPTION, o.getOption());
+        cv.put(OptionContract.OptionTable.COLUMN_IS_RIGHT, o.getIs_right());
+        cv.put(OptionContract.OptionTable.COLUMN_LANGUAGE, o.getLanguage());
+
+        db.insert(OptionContract.OptionTable.TABLE_NAME, null, cv);
+
     }
 
     public void addStatistic(StatisticEntiti s){
@@ -128,27 +274,23 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
     private void insertStatic(StatisticEntiti s) {
         ContentValues cv = new ContentValues();
-        cv.put(StaticTable.COLUMN_score, s.getScore());
-        cv.put(StaticTable.COLUMN_wrong, s.getWrong());
-        cv.put(StaticTable.COLUMN_LEVEL, s.getDifficulty());
-        cv.put(StaticTable.COLUMN_date, s.getData());
-        db.insert(StaticTable.TABLE_NAME, null, cv);
+        cv.put(StatisticContract.StatisticTable.COLUMN_score, s.getScore());
+        cv.put(StatisticContract.StatisticTable.COLUMN_wrong, s.getWrong());
+        cv.put(StatisticContract.StatisticTable.COLUMN_LEVEL, s.getDifficulty());
+        cv.put(StatisticContract.StatisticTable.COLUMN_date, s.getData());
+        db.insert(StatisticContract.StatisticTable.TABLE_NAME, null, cv);
     }
 
     public ArrayList<Question> getAllQuestions(){
         ArrayList<Question> questionList= new ArrayList<>();
         db= getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM "+ QuestionTable.TABLE_NAME, null);
+        Cursor c = db.rawQuery("SELECT * FROM " + QuestionContract.QuestionTable.TABLE_NAME+";", null);
 
         if(c.moveToFirst()){
             do{
                 Question question = new Question();
-                question.setQuestion(c.getString(c.getColumnIndex(QuestionTable.COLUMN_QUESTION)));
-                question.setOptions1(c.getString(c.getColumnIndex(QuestionTable.COLUMN_OPTIONS1)));
-                question.setOptions2(c.getString(c.getColumnIndex(QuestionTable.COLUMN_OPTIONS2)));
-                question.setOptions3(c.getString(c.getColumnIndex(QuestionTable.COLUMN_OPTIONS3)));
-                question.setAnswerNr(c.getInt(c.getColumnIndex(QuestionTable.COLUMN_ANSWER_NR)));
-                question.setDifficulty(c.getString(c.getColumnIndex(QuestionTable.COLUMN_DEFFICULTY)));
+                question.setId(c.getInt(c.getColumnIndex(QuestionContract.QuestionTable._ID)));
+                question.setQuestion(c.getString(c.getColumnIndex(QuestionContract.QuestionTable.COLUMN_QUESTION)));
                 questionList.add(question);
             }while ((c.moveToNext()));
         }
@@ -156,26 +298,30 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         return questionList;
     }
 
-    public ArrayList<Question> getQuestions(String difficult){
-        ArrayList<Question> questionList= new ArrayList<>();
+//    Wyszukiwanie option z where
+    public List<Option> getOptionsToQuiz(int questionNumber, LanguageEnum l){
+        List<Option> optionsList= new ArrayList<>();
         db= getReadableDatabase();
 
-        String[] selectionArgs = new String[]{difficult};
-        Cursor c = db.rawQuery("SELECT * FROM "+ QuestionTable.TABLE_NAME + " WHERE "+QuestionTable.COLUMN_DEFFICULTY + "=?", selectionArgs);
+        String numberQuestion= String.valueOf(questionNumber);
+        String language=l.toString();
+        String[] selectionArgs = new String[]{numberQuestion, language};
+        Cursor c = db.rawQuery(
+                "SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "=? " +
+                        "AND "+ OptionContract.OptionTable.COLUMN_LANGUAGE + "=?", selectionArgs);
 
         if(c.moveToFirst()){
             do{
-                Question question = new Question();
-                question.setQuestion(c.getString(c.getColumnIndex(QuestionTable.COLUMN_QUESTION)));
-                question.setOptions1(c.getString(c.getColumnIndex(QuestionTable.COLUMN_OPTIONS1)));
-                question.setOptions2(c.getString(c.getColumnIndex(QuestionTable.COLUMN_OPTIONS2)));
-                question.setOptions3(c.getString(c.getColumnIndex(QuestionTable.COLUMN_OPTIONS3)));
-                question.setAnswerNr(c.getInt(c.getColumnIndex(QuestionTable.COLUMN_ANSWER_NR)));
-                question.setDifficulty(c.getString(c.getColumnIndex(QuestionTable.COLUMN_DEFFICULTY)));
-                questionList.add(question);
+                Option question = new Option();
+                question.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
+                question.setQuestion_id(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_QUESTION_ID)));
+                question.setOption(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));
+                question.setIs_right(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_IS_RIGHT)));
+                question.setLanguage(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_LANGUAGE)));
+                optionsList.add(question);
             }while ((c.moveToNext()));
         }
         c.close();
-        return questionList;
+        return optionsList;
     }
 }

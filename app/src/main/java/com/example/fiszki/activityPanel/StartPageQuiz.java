@@ -1,7 +1,6 @@
-package com.example.fiszki;
+package com.example.fiszki.activityPanel;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,7 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.List;
+import com.example.fiszki.R;
+import com.example.fiszki.activityPanel.QuizActivity;
 
 public class StartPageQuiz extends AppCompatActivity {
 
@@ -37,7 +37,11 @@ public class StartPageQuiz extends AppCompatActivity {
         textViewLastResult=findViewById(R.id.lastResult);
         spinnerDifficulty=findViewById(R.id.spinner_difficulty);
 
-        String[] difficultyLevels=Question.getAllDifficultyLevels();
+       String[] difficultyLevels={
+               "Easy",
+               "Medium",
+               "Hard"
+       };
 
         ArrayAdapter<String> adapterDifficulty = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, difficultyLevels);
         adapterDifficulty.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -52,7 +56,7 @@ public class StartPageQuiz extends AppCompatActivity {
     }
     public void startQuiz(View v) {
         String diffculty = spinnerDifficulty.getSelectedItem().toString();
-        Intent intent = new Intent(this, Quiz.class);
+        Intent intent = new Intent(this, QuizActivity.class);
         intent.putExtra(EXTRA_DIFFICULTY, diffculty);
         startActivityForResult(intent, REQUEST_CODE_QUIZ);
     }
@@ -63,8 +67,8 @@ public class StartPageQuiz extends AppCompatActivity {
 
         if(requestCode == REQUEST_CODE_QUIZ){
             if(resultCode==RESULT_OK){
-                int score = data.getIntExtra(Quiz.EXTRA_SCORE, 0);
-                int wrong = data.getIntExtra(Quiz.EXTRA_WRONG, 0);
+                int score = data.getIntExtra(QuizActivity.EXTRA_SCORE, 0);
+                int wrong = data.getIntExtra(QuizActivity.EXTRA_WRONG, 0);
                 updateLastResult(score);
 
                 if(score>highscore){
