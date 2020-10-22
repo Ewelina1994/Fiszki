@@ -17,6 +17,7 @@ import android.os.CountDownTimer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -143,7 +144,9 @@ public class QuizActivity extends AppCompatActivity {
 
             //ustawienie dla poziomu trudnego nie wyświetlanai textu pytania
             if(difficultyEnum==DifficultyEnum.Hard){
-                textViewQuestion.setTextColor(Color.WHITE);
+                final ViewGroup viewGroup= findViewById(R.id.questionLayout);
+                viewGroup.removeAllViews();
+                viewGroup.addView(View.inflate(this, R.layout.hard_difficulty_change_question_view, null));
             }
             
             buttoinNext.setOnClickListener(new View.OnClickListener() {
@@ -229,16 +232,19 @@ public class QuizActivity extends AppCompatActivity {
                 @SuppressLint({"ResourceAsColor", "ResourceType"})
                 @Override
                 public void onClick(View v) {
-                    //jeśli klikniemy ustawiamy zaznaczoną opcje na obecnie klikniętą
-                    clickedAnswer=currentQuestion.getOptions().get(index);
-                    //dla każdej karty ustawiamy kolor żeby przy podwójnym kliknięciu nie było 2 razy zaznaczonej karty
-                    cardsView.forEach(card->{
-                        if(card==cardsView.get(index)){
-                            card.getChildAt(0).setBackgroundColor(0xff0000ff);
-                        }else {
-                            card.getChildAt(0).setBackgroundColor(R.drawable.bg2);
-                        }
-                    });
+                    //spr czy czas już nie minął czy nie udzieliłes odp
+                    if(!ansewered){
+                        //jeśli klikniemy ustawiamy zaznaczoną opcje na obecnie klikniętą
+                        clickedAnswer=currentQuestion.getOptions().get(index);
+                        //dla każdej karty ustawiamy kolor żeby przy podwójnym kliknięciu nie było 2 razy zaznaczonej karty
+                        cardsView.forEach(card->{
+                            if(card==cardsView.get(index)){
+                                card.getChildAt(0).setBackgroundColor(Color.parseColor("#E78230"));
+                            }else {
+                                card.getChildAt(0).setBackgroundColor(Color.parseColor("#CCDAE7"));
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -246,9 +252,9 @@ public class QuizActivity extends AppCompatActivity {
 
     private void showNextQuestion() {
         if (questionCount < questionCountTotal) {
-            textViewQuestion1.setBackgroundColor(R.drawable.bg2);
-            textViewQuestion2.setBackgroundColor(R.drawable.bg2);
-            textViewQuestion3.setBackgroundColor(R.drawable.bg2);
+            textViewQuestion1.setBackgroundColor(Color.parseColor("#CCDAE7"));
+            textViewQuestion2.setBackgroundColor(Color.parseColor("#CCDAE7"));
+            textViewQuestion3.setBackgroundColor(Color.parseColor("#CCDAE7"));
 //        linearayoutCardView.clearFocus();
             currentQuestion = questionList.get(questionCount);
 

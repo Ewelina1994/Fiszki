@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".Ustawienia">
+    tools:context=".Ustawienia"
+    android:background="#CCDAE7">
 <!--    <FrameLayout-->
 <!--        android:id="@+id/fragment_ustawienia"-->
 <!--        android:layout_width="match_parent"-->
@@ -15,24 +16,28 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
         android:text="Pitch"
         android:textSize="16sp"/>
     <SeekBar
         android:id="@+id/seek_bar_pitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:progress="50"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Speed"
-        android:gravity="center"
-        android:textSize="16sp"/>
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:layout_margin="20dp"/>
     <SeekBar
         android:id="@+id/seek_bar_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:progress="50"/>
+        android:progress="50"
+        android:layout_margin="20dp"/>
 </LinearLayout>

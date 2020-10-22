@@ -46,6 +46,14 @@ public class StartPageQuiz extends AppCompatActivity {
         ArrayAdapter<String> adapterDifficulty = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, difficultyLevels);
         adapterDifficulty.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDifficulty.setAdapter(adapterDifficulty);
+//        ArrayAdapter adapterDifficulty=ArrayAdapter.createFromResource(
+//                this,
+//                R.array.level_array,
+//                R.layout.color_spinner_layout
+//        );
+//        adapterDifficulty.setDropDownViewResource(R.layout.spinner_text_view);
+//        spinnerDifficulty.setAdapter(adapterDifficulty);
+
         loadHighScore();
         loadLastResult();
 //        dodawanie pytania np z inputów

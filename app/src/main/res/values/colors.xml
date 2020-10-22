@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03dac5</color>
     <color name="checkAnswer">#0066ff</color>
+    <color name="overflow_background">#CCDAE7</color>
 </resources>

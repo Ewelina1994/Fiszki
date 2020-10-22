@@ -27,9 +27,9 @@
     <string name="checkLevel">" Select level"</string>
     <string name="selectLevel">" Select level"</string>
     <string-array name="level_array">
-        <item>Podstawowy</item>
-        <item>Srednio-zaawansowany</item>
-        <item>Zaawansowany</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
     </string-array>
 
     //ustawienia

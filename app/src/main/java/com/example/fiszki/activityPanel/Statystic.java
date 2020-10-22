@@ -81,7 +81,7 @@ public class Statystic extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cursor = db.query("quiz_static", new String[] {"_id", "level", "score", "wrong", "date"}, null, null, null, null, null);
+        cursor = db.query("statistic", new String[] {"_id", "score", "wrong", "level", "date"}, null, null, null, null, null);
 
         if(cursor.moveToFirst()){
             SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this,

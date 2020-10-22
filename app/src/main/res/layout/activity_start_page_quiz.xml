@@ -4,16 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorAccent">
+    android:background="#23293F"
+    >
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activityPanel.StartPageQuiz">
+    tools:context=".activityPanel.StartPageQuiz"
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="#23293F"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="43dp"
         tools:layout_editor_absoluteY="-16dp">
@@ -27,54 +30,74 @@
             android:padding="20dp"
             android:text="@string/startPageTitle"
             android:textSize="30dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="#2C4158"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <FrameLayout
+            android:layout_width="322dp"
+            android:layout_height="128dp"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/lastResult"
-            android:textSize="20dp" />
+            android:layout_marginTop="30dp"
+            android:background="#CCDAE7"
+            >
 
-        <TextView
-            android:id="@+id/lastResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#FFFFFF"
-            android:text=""
-            android:textSize="20dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/Level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/hightScore"
-            android:textSize="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/lastResult"
+                    android:textSize="20dp"
+                    />
 
-        <TextView
-            android:id="@+id/textViewHighScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#FFFFFF"
-            android:text=""
-            android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/lastResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/hightScore"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/textViewHighScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
 
         <TextView
             android:id="@string/selectLevel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="30dp"
+            android:background="#2C4158"
             android:gravity="center"
             android:text="@string/selectLevel"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="@android:color/white"
+            />
 
         <Spinner
             android:id="@+id/spinner_difficulty"
@@ -83,24 +106,32 @@
             android:layout_below="@+id/button_start_quiz"
             android:layout_alignStart="@+id/button_start_quiz"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="#FFFFFF"
+            android:layout_marginTop="25dp"
+            android:background="#CCDAE7"
             android:gravity="center"
             android:textAlignment="center"
             android:spinnerMode="dropdown"
-            android:popupBackground="@drawable/spinner"/>
+            android:popupBackground="#CCDAE7"
+            android:textColor="@android:color/white"/>
+<!--        <Spinner-->
+<!--            android:id="@+id/spinner_difficulty"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:entries="@array/level_array">-->
+<!--        </Spinner>-->
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="264dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:onClick="startQuiz"
-            android:background="@drawable/start_button"
-            android:freezesText="true"
-            android:text="START QUIZ" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="264dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:onClick="startQuiz"
+                    android:background="#E78230"
+                    android:freezesText="true"
+                    android:text="START QUIZ" />
+            </LinearLayout>
 
-</RelativeLayout>
-    </ScrollView>
+        </RelativeLayout>
+            </ScrollView>

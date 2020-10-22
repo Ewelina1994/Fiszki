@@ -8,22 +8,26 @@
             android:id="@+id/quiz"
             android:checkable="true"
             android:icon="@android:drawable/ic_menu_gallery"
-            android:title="@string/quiz" />
+            android:title="@string/quiz">
+            @color/overflow_background</item>
         <item
             android:id="@+id/statistic"
             android:checkable="true"
             android:icon="@android:drawable/ic_menu_info_details"
-            android:title="@string/statystyki" />
+            android:title="@string/statystyki"
+            >@color/overflow_background</item>
         <item
             android:id="@+id/repeat"
             android:checkable="true"
             android:icon="@android:drawable/ic_menu_directions"
-            android:title="@string/powtorki" />
+            android:title="@string/powtorki" >
+            @color/overflow_background</item>
         <item
             android:id="@+id/help"
             android:checkable="true"
             android:icon="@android:drawable/ic_menu_help"
-            android:title="@string/pomoc" />
+            android:title="@string/pomoc" >
+            @color/overflow_background</item>
     </group>
 
     <item android:title="@string/nav_projekt">
@@ -31,11 +35,13 @@
             <item
                 android:id="@+id/temat"
                 android:title="@string/nav_projekt_temat"
-                android:icon="@android:drawable/stat_notify_chat" />
+                android:icon="@android:drawable/stat_notify_chat">
+                @color/overflow_background</item>
             <item
                 android:id="@+id/autor"
                 android:title="@string/nav_autor"
-                android:icon="@android:drawable/btn_star" />
+                android:icon="@android:drawable/btn_star" >
+                @color/overflow_background</item>
 
         </menu>
 

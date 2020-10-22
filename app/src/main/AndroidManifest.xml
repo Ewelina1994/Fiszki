@@ -17,16 +17,24 @@
             android:label="Uzupełnij swoje dane"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme" />
-        <activity android:name=".Ustawienia" />
-        <activity android:name=".activityPanel.AdminAddQuestion" />
+        <activity
+            android:name=".Ustawienia"
+            android:parentActivityName=".MainActivity"
+            android:label="Setting"
+            android:theme="@style/MyAppTheme"/>
+        <activity
+            android:name=".activityPanel.AdminAddQuestion"
+            android:parentActivityName=".MainActivity"
+            android:label="Your profile"
+            android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.Statystic"
-            android:label="Statystyki"
+            android:label="Statistics"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.StartPageQuiz"
-            android:label="Rozpocznij rozgrywkę"
+            android:label="Start the game"
             android:parentActivityName=".MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
