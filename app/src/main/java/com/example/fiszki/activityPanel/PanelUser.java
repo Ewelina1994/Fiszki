@@ -82,23 +82,28 @@ public class PanelUser extends AppCompatActivity implements AdapterView.OnItemCl
 
     public void wyslij(View view){
         RadioButton rb = (RadioButton) findViewById(radioGroup.getCheckedRadioButtonId());
-        komunikat="Imię: "+imie.getText().toString()+
-                "\nJego poziom to: "
-                +spinner.getSelectedItem().toString()+", "
-                +rb.getText().toString()
-                +"\nUczy się od: "
-                +datepicker.getText().toString()
-                +"\nCzy chce być widoczny dla innych użytkowników: "
-                +togglebtn.getText().toString()
-                +"\nCzy akceptuje regulamin: ";
-        if(regulamin.isChecked()){
-            komunikat+="TAK";
+        if (rb == null || imie.getText().toString().isEmpty()|| datepicker.getText().toString().isEmpty()) {
+            Toast.makeText(this, R.string.validationPanelUser, Toast.LENGTH_LONG).show();
+        }else {
+            komunikat="Imię: "+imie.getText().toString()+
+                    "\nJego poziom to: "
+                    +spinner.getSelectedItem().toString()+", "
+                    +rb.getText().toString()
+                    +"\nUczy się od: "
+                    +datepicker.getText().toString()
+                    +"\nCzy chce być widoczny dla innych użytkowników: "
+                    +togglebtn.getText().toString()
+                    +"\nCzy akceptuje regulamin: ";
+            if(regulamin.isChecked()){
+                komunikat+="TAK";
+            }
+            else {
+                komunikat+="NIE";
+            }
+            komunikat+="\n TAKIE DANE ZOSTAŁY ZAPISANE W BAZIE";
+            Toast.makeText(this, komunikat, Toast.LENGTH_LONG).show();
         }
-        else {
-            komunikat+="NIE";
-        }
-        komunikat+="\n TAKIE DANE ZOSTAŁY ZAPISANE W BAZIE";
-        Toast.makeText(this, komunikat, Toast.LENGTH_LONG).show();
+
     }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

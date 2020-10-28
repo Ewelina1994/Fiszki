@@ -4,7 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Question implements Parcelable {
-    int id;
+    //metoda do generowania id
+    private static long idCounter=0;
+    public static synchronized Long createID()
+    {
+        return (idCounter++);
+    }
+
+    long id;
     private String question;
 
     public Question() {
@@ -16,6 +23,7 @@ public class Question implements Parcelable {
 
     public Question(String question) {
         this.question = question;
+        this.id=createID();
     }
 
     public String getQuestion() {
@@ -26,11 +34,11 @@ public class Question implements Parcelable {
         this.question = question;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -4,14 +4,10 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="pref_sync"
-        android:summary="@string/sync_pref_summary"
-        android:title="@string/sync_pref" />
+        android:key="pref_sync"/>
     <ListPreference
         android:defaultValue="false"
         android:entries="@android:array/emailAddressTypes"
         android:entryValues="@android:array/organizationTypes"
-        android:key="pref_sync_connection_type"
-        android:summary="@string/sync_pref_summary"
-        android:title="@string/pref_syncConnType" />
+        android:key="pref_sync_connection_type"/>
 </PreferenceScreen>

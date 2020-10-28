@@ -1,6 +1,37 @@
 package com.example.fiszki.entity;
 
-public class Option {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Option implements Parcelable {
+    //metoda do generowania id
+    private static long idCounter=0;
+
+    protected Option(Parcel in) {
+        id = in.readLong();
+        question_id = in.readLong();
+        option = in.readString();
+        is_right = in.readInt();
+        language = in.readString();
+    }
+
+    public static final Creator<Option> CREATOR = new Creator<Option>() {
+        @Override
+        public Option createFromParcel(Parcel in) {
+            return new Option(in);
+        }
+
+        @Override
+        public Option[] newArray(int size) {
+            return new Option[size];
+        }
+    };
+
+    public static synchronized Long createID()
+    {
+        return (idCounter++);
+    }
+
     long id;
     long question_id;
     String option;
@@ -8,6 +39,7 @@ public class Option {
     String language;
 
     public Option(long question_id, String option, int is_right, String language) {
+        this.id=createID();
         this.question_id = question_id;
         this.option = option;
         this.is_right = is_right;
@@ -55,5 +87,19 @@ public class Option {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(question_id);
+        dest.writeString(option);
+        dest.writeInt(is_right);
+        dest.writeString(language);
     }
 }

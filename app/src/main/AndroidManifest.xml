@@ -15,32 +15,43 @@
         <activity
             android:name=".activityPanel.PanelUser"
             android:label="Uzupełnij swoje dane"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".Ustawienia"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activityPanel.MainActivity"
             android:label="Setting"
             android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.AdminAddQuestion"
-            android:parentActivityName=".MainActivity"
-            android:label="Your profile"
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:label="Add question"
             android:theme="@style/MyAppTheme"/>
+        <activity
+            android:name=".activityPanel.AddOption"
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:label="Add option"
+            android:theme="@style/MyAppTheme"/>
+
         <activity
             android:name=".activityPanel.Statystic"
             android:label="Statistics"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:theme="@style/MyAppTheme" />
+        <activity
+            android:name=".activityPanel.RepeatBoard"
+            android:label="Board Replace"
+            android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.StartPageQuiz"
             android:label="Start the game"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.QuizActivity"
             android:configChanges="orientation|keyboardHidden" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activityPanel.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

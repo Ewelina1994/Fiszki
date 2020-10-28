@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
@@ -25,11 +26,12 @@ import android.widget.Toast;
 
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
-import com.example.fiszki.QuizService;
+import com.example.fiszki.services.QuizService;
 import com.example.fiszki.R;
-import com.example.fiszki.StatisticEntiti;
+import com.example.fiszki.entity.StatisticEntiti;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.enums.DifficultyEnum;
+import com.example.fiszki.services.RepeatBoardService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,6 +98,7 @@ public class QuizActivity extends AppCompatActivity {
     TextToSpeech textToSpeech;
 
     QuizService quizService;
+    static RepeatBoardService repeatBoardService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,8 @@ public class QuizActivity extends AppCompatActivity {
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
+            //zainicjowanie serwisu do zapisywania pytań dodanych do powtórek
+            repeatBoardService= new RepeatBoardService();
             showNextQuestion();
             //set Event to cardView
             setSingleEvent(linearayoutCardView);
@@ -171,6 +176,12 @@ public class QuizActivity extends AppCompatActivity {
                     }
                 }
             });
+            buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    repeatBoardService.addToList(currentQuestion);
+                }
+                });
         } else {
             questionList = savedInstanceState.getParcelableArrayList(KEY_QUESTION_LIST);
 

@@ -55,7 +55,7 @@
                     android:padding="10dp"
                     android:text="@string/lastResult"
                     android:textSize="20dp"
-                    />
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/lastResult"
@@ -64,7 +64,8 @@
                     android:layout_gravity="center"
                     android:text=""
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/Level"
@@ -74,7 +75,8 @@
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@string/hightScore"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/textViewHighScore"
@@ -83,7 +85,8 @@
                     android:layout_gravity="center"
                     android:text=""
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
             </LinearLayout>
         </FrameLayout>
 

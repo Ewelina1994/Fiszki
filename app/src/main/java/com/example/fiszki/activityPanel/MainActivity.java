@@ -1,4 +1,4 @@
-package com.example.fiszki;
+package com.example.fiszki.activityPanel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -18,10 +18,8 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.fiszki.activityPanel.AdminAddQuestion;
-import com.example.fiszki.activityPanel.PanelUser;
-import com.example.fiszki.activityPanel.StartPageQuiz;
-import com.example.fiszki.activityPanel.Statystic;
+import com.example.fiszki.R;
+import com.example.fiszki.Ustawienia;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -73,9 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent= new Intent(this, PanelUser.class);
             startActivity(intent);
                 return true;
-            case R.id.share:
-                Toast.makeText(this, "Udostępnij", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.ustawienia:
                // Toast.makeText(this, getAndroidVersion(), Toast.LENGTH_SHORT).show();
                // findViewById(R.id.version).setBackgroundColor(Color.parseColor("#FFFF00"));
@@ -112,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent1);
                 break;
             case R.id.repeat:
-
+                Intent intent2= new Intent(this, RepeatBoard.class);
+                startActivity(intent2);
                 break;
             case R.id.help:
 

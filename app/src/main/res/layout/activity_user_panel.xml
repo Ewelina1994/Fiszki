@@ -133,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:onClick="wyslij"
-                android:text="Wyslij dane" />
+                android:text="Wyslij dane"
+                android:background="#E78230"/>
 
 </LinearLayout>

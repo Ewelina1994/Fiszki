@@ -1,4 +1,4 @@
-package com.example.fiszki;
+package com.example.fiszki.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,10 +6,14 @@ import android.os.Parcelable;
 import com.example.fiszki.entity.Question;
 
 public class StatisticEntiti {
-    public static final String DIFFICULTY_EASY="Easy";
-    public static final String DIFFICULTY_MEDIUM="Medium";
-    public static final String DIFFICULTY_HARD="Hard";
+    //metoda do generowania id
+    private static long idCounter=0;
+    public static synchronized Long createID()
+    {
+        return (idCounter++);
+    }
 
+    private long id;
     private int wrong;
     private int score;
     private String difficulty;
@@ -25,6 +29,7 @@ public class StatisticEntiti {
     }
 
     public StatisticEntiti(int score, int wrong, String difficulty, String data) {
+        this.id=createID();
         this.wrong = wrong;
         this.score = score;
         this.difficulty = difficulty;
@@ -63,17 +68,6 @@ public class StatisticEntiti {
         this.difficulty = difficulty;
     }
 
-    public static String[] getAllDifficultyLevels(){
-        return new String[]{
-                DIFFICULTY_EASY,
-                DIFFICULTY_MEDIUM,
-                DIFFICULTY_HARD
-        };
-    }
-
-    public int describeContents() {
-        return 0;
-    }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(score);

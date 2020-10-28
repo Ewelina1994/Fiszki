@@ -3,28 +3,26 @@
     //menu górne
     <string name="app_name">Idiom Quiz</string>
     <string name="autor">Ewelina Kłobut</string>
-    <string name="send">Wyślij wiadomość</string>
-    <string name="share">Udostępnij</string>
-    <string name="version">Wersja SDK</string>
-    <string name="about">O programie</string>
+    <string name="send">Send message</string>
+    <string name="share">Share</string>
+    <string name="about">About the program</string>
 
     //menu boczne
-    <string name="quiz">Nowa rozgrywka</string>
-    <string name="statystyki">Statystyki</string>
-    <string name="powtorki">Tablica powtórek</string>
-    <string name="pomoc">Pomoc</string>
-    <string name="nav_open_drawer">Otwórz szufladę</string>
-    <string name="nav_close_drawer">Zamknij szufladę</string>
+    <string name="quiz">New game</string>
+    <string name="statystyki">Statistics</string>
+    <string name="powtorki">Repetition table</string>
+    <string name="pomoc">Help</string>
+    <string name="nav_open_drawer">Open the drawer</string>
+    <string name="nav_close_drawer">Close the drawer</string>
 
     //startPage
     <string name="startPageTitle">Idiom Quiz</string>
-    <string name="hightScore">Hightscore:</string>
-    <string name="repeat">Add to replays</string>
+    <string name="hightScore">Highest score:</string>
+    <string name="repeat">Add to repetitions</string>
     <string name="nextQuestion">Next question</string>
     <string name="nav_projekt_temat">Idiom Quiz</string>
     <string name="nav_autor">Author</string>
     <string name="nav_projekt">Idiom Quiz</string>
-    <string name="checkLevel">" Select level"</string>
     <string name="selectLevel">" Select level"</string>
     <string-array name="level_array">
         <item>Easy</item>
@@ -33,32 +31,32 @@
     </string-array>
 
     //ustawienia
-    <string name="sync_pref"> Sync</string>
-    <string name="sync_pref_summary"> Get your photos, videos, contacts, subscriptions etc on all your devices. </string>
-
-    <string name="pref_syncConnType">Sync Connection Type</string>
-    <string name="pref_syncConnType_dialog_title">Perform Sync Using</string>
-    <string name="pref_syncConnType_default_values">Wifi</string>
-
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="lastResult">Last Result</string>
 
     //kontrolki panel uzytkownika
-    <string name="twoj_poz">Jaki jest twój poziom zaawansowania?</string>
+    <string name="twoj_poz">Your level of advancement</string>
 
     //poziom
     <string-array name="poziom">
-        <item>podstawowy</item>
-        <item>średniozaawansowany</item>
-        <item>zaawansowany</item>
+        <item>Basic</item>
+        <item>Intermediate</item>
+        <item>Advanced</item>
     </string-array>
-    <string name="urodziny">Od kiedy uczysz się angielskiego?</string>
-    <string name="widocznosc">Czy chcesz być widoczny dla innych użytkowników?</string>
+    <string name="urodziny">How many years have you been learning english?</string>
+    <string name="widocznosc">Do you want to be visible to other users?</string>
 
     //admin
     <string name="add_new_idiom">Add new idiom</string>
     <string name="btnAdminNext">Next</string>
+    <string name="validationPanelUser">Nick or language or year are empty. Please  complete.</string>
+    <string name="add_new_option_PL">Enter your answer in Polish</string>
+    <string name="btnAdminSave">Save option</string>
+    <string name="add_new_option_EN">Enter answer in English</string>
+    <string name="option_number">Option number 1</string>
+    <string name="uesr_panel">User panel</string>
+    <string name="setting">Setting</string>
+    <string name="panel_admin">Admin panel</string>
 
 
 </resources>

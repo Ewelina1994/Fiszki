@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Path;
 
 import androidx.annotation.Nullable;
 
@@ -15,6 +14,7 @@ import com.example.fiszki.db.StatisticContract;
 import com.example.fiszki.db.UserContract;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
+import com.example.fiszki.entity.StatisticEntiti;
 import com.example.fiszki.enums.LanguageEnum;
 
 import java.util.ArrayList;
@@ -241,6 +241,12 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         db=getWritableDatabase();
         insertQuestions(q);
     }
+
+    //dodaje opcje
+    public void addOption(Option o){
+        db=getWritableDatabase();
+        insertOption(o);
+    }
 //dodaje liste pytan do bazy
     public void addQuestions(List<Question> questions){
         db=getWritableDatabase();
@@ -299,7 +305,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
     }
 
 //    Wyszukiwanie option z where
-    public List<Option> getOptionsToQuiz(int questionNumber, LanguageEnum l){
+    public List<Option> getOptionsToQuiz(long questionNumber, LanguageEnum l){
         List<Option> optionsList= new ArrayList<>();
         db= getReadableDatabase();
 

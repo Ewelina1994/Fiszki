@@ -1,5 +1,7 @@
-package com.example.fiszki;
+package com.example.fiszki.services;
 
+import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
 import com.example.fiszki.enums.DifficultyEnum;
