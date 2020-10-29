@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Idiom Quiz</string>
+    <string name="send">Wyślin wiadomość</string>
+    <string name="share">Udostępnij</string>
+    <string name="about">O programie</string>
+    <string name="quiz">Nowa gra</string>
+    <string name="statystyki">Statystyki</string>
+    <string name="powtorki">Tablica powtórek</string>
+    <string name="pomoc">Pomoc</string>
+    <string name="nav_open_drawer">Otwórz szufladę</string>
+    <string name="nav_close_drawer">Zamknij szufladę</string>
+    <string name="hightScore">Najwyższy wynik</string>
+    <string name="repeat">Dodaj do powtórek</string>
+    <string name="nextQuestion">Następne pytanie</string>
+    <string name="nav_autor">Autor</string>
+    <string name="selectLevel">Wybierz poziom</string>
+    <string name="lastResult">Ostatni wyniki</string>
+    <string name="twoj_poz">Twój poziom zaawansowania</string>
+    <string name="urodziny">Ile lat uczysz sie angielskiego?</string>
+    <string name="widocznosc">Czy chcesz być widoczny dla innych?</string>
+    <string name="add_new_idiom">Dodaj nowy idiom</string>
+    <string name="btnAdminNext">Następny</string>
+    <string name="validationPanelUser">Twoja nazwa lub liczba lat jest pusta</string>
+    <string name="add_new_option_PL">Wpisz odpowiedz w jezyku polskim</string>
+    <string name="btnAdminSave">Zapisz opcję</string>
+    <string name="add_new_option_EN">Wpisz odpowiedz w języku angielskim</string>
+    <string name="option_number">Opcja nr 1</string>
+    <string name="uesr_panel">Panel użytkownika</string>
+    <string name="setting">Ustawienia</string>
+    <string name="panel_admin">Panel admina</string>
+</resources>

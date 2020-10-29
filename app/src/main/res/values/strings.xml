@@ -2,7 +2,7 @@
 
     //menu górne
     <string name="app_name">Idiom Quiz</string>
-    <string name="autor">Ewelina Kłobut</string>
+    <string name="autor" translatable="false">Ewelina Kłobut</string>
     <string name="send">Send message</string>
     <string name="share">Share</string>
     <string name="about">About the program</string>
@@ -16,13 +16,13 @@
     <string name="nav_close_drawer">Close the drawer</string>
 
     //startPage
-    <string name="startPageTitle">Idiom Quiz</string>
+    <string name="startPageTitle" translatable="false">Idiom Quiz</string>
     <string name="hightScore">Highest score:</string>
     <string name="repeat">Add to repetitions</string>
     <string name="nextQuestion">Next question</string>
-    <string name="nav_projekt_temat">Idiom Quiz</string>
+    <string name="nav_projekt_temat" translatable="false">Idiom Quiz</string>
     <string name="nav_autor">Author</string>
-    <string name="nav_projekt">Idiom Quiz</string>
+    <string name="nav_projekt" translatable="false">Idiom Quiz</string>
     <string name="selectLevel">" Select level"</string>
     <string-array name="level_array">
         <item>Easy</item>
