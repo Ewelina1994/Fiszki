@@ -12,26 +12,34 @@ public class Question implements Parcelable {
     }
 
     long id;
-    private String question;
+    private String name;
+    private String name_image;
+    private String sentence;
 
     public Question() {
     }
 
     public Question(Parcel in) {
-        question=in.readString();
+        name =in.readString();
     }
 
     public Question(String question) {
-        this.question = question;
+        this.name = question;
         this.id=createID();
     }
 
-    public String getQuestion() {
-        return question;
+    public Question(String name, String name_image, String sentence) {
+        this.name = name;
+        this.name_image = name_image;
+        this.sentence = sentence;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getId() {
@@ -42,6 +50,22 @@ public class Question implements Parcelable {
         this.id = id;
     }
 
+    public String getName_image() {
+        return name_image;
+    }
+
+    public void setName_image(String name_image) {
+        this.name_image = name_image;
+    }
+
+    public String getSentence() {
+        return sentence;
+    }
+
+    public void setSentence(String sentence) {
+        this.sentence = sentence;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -49,7 +73,7 @@ public class Question implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(question);
+        dest.writeString(name);
     }
 
     public static final Creator<Question> CREATOR = new Creator<Question>() {

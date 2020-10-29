@@ -1,6 +1,5 @@
 package com.example.fiszki.activityPanel;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -15,10 +14,8 @@ import androidx.cardview.widget.CardView;
 
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.R;
-import com.example.fiszki.entity.Option;
 import com.example.fiszki.services.RepeatBoardService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.fiszki.activityPanel.QuizActivity.repeatBoardService;
@@ -61,8 +58,8 @@ public class RepeatBoard extends AppCompatActivity {
         });
         currentQuestion=0;
 
-        RepeatBoardService boardRepeat= repeatBoardService;
-        questionList = boardRepeat.getAll();
+//        RepeatBoardService boardRepeat= repeatBoardService;
+//        questionList = boardRepeat.getAll();
 
         showQuestion();
     }
@@ -70,11 +67,11 @@ public class RepeatBoard extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void showQuestion() {
         if (currentQuestion<questionList.size()){
-            questionTextView.setText(questionList.get(currentQuestion).getQuestion().getQuestion());
+            questionTextView.setText(questionList.get(currentQuestion).getQuestion().getName());
 
             questionList.get(currentQuestion).getOptions().forEach(option -> {
                         if (option.getIs_right() == 1) {
-                            answerTextView.setText(option.getOption());
+                            answerTextView.setText(option.getName());
                         }
                     }
             );

@@ -8,12 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.fiszki.activityPanel.RepeatBoard;
 import com.example.fiszki.db.OptionContract;
 import com.example.fiszki.db.QuestionContract;
+import com.example.fiszki.db.RepeatQuestionContract;
 import com.example.fiszki.db.StatisticContract;
 import com.example.fiszki.db.UserContract;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
+import com.example.fiszki.entity.RepeatQuestion;
 import com.example.fiszki.entity.StatisticEntiti;
 import com.example.fiszki.enums.LanguageEnum;
 
@@ -237,54 +240,47 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
     }
 //dodaje jedno pytanie
-    public void addQuestion(Question q){
+    public long addQuestion(Question q){
         db=getWritableDatabase();
-        insertQuestions(q);
+        return insertQuestions(q);
     }
 
     //dodaje opcje
-    public void addOption(Option o){
+    public long addOption(Option o){
         db=getWritableDatabase();
-        insertOption(o);
+        return insertOption(o);
     }
-//dodaje liste pytan do bazy
-    public void addQuestions(List<Question> questions){
-        db=getWritableDatabase();
 
-        for(Question question: questions){
-            insertQuestions(question);
-        }
-    }
-    private void insertQuestions(Question q){
+    private long insertQuestions(Question q){
         ContentValues cv = new ContentValues();
-        cv.put(QuestionContract.QuestionTable.COLUMN_QUESTION, q.getQuestion());
+        cv.put(QuestionContract.QuestionTable.COLUMN_QUESTION, q.getName());
 
-        db.insert(QuestionContract.QuestionTable.TABLE_NAME, null, cv);
+        return db.insert(QuestionContract.QuestionTable.TABLE_NAME, null, cv);
     }
 
-    private void insertOption(Option o) {
+    private long insertOption(Option o) {
         ContentValues cv= new ContentValues();
         cv.put(OptionContract.OptionTable.COLUMN_QUESTION_ID, o.getQuestion_id());
-        cv.put(OptionContract.OptionTable.COLUMN_OPTION, o.getOption());
+        cv.put(OptionContract.OptionTable.COLUMN_OPTION, o.getName());
         cv.put(OptionContract.OptionTable.COLUMN_IS_RIGHT, o.getIs_right());
         cv.put(OptionContract.OptionTable.COLUMN_LANGUAGE, o.getLanguage());
 
-        db.insert(OptionContract.OptionTable.TABLE_NAME, null, cv);
+        return db.insert(OptionContract.OptionTable.TABLE_NAME, null, cv);
 
     }
 
-    public void addStatistic(StatisticEntiti s){
+    public long addStatistic(StatisticEntiti s){
         db=getWritableDatabase();
-        insertStatic(s);
+        return insertStatic(s);
     }
 
-    private void insertStatic(StatisticEntiti s) {
+    private long insertStatic(StatisticEntiti s) {
         ContentValues cv = new ContentValues();
         cv.put(StatisticContract.StatisticTable.COLUMN_score, s.getScore());
         cv.put(StatisticContract.StatisticTable.COLUMN_wrong, s.getWrong());
         cv.put(StatisticContract.StatisticTable.COLUMN_LEVEL, s.getDifficulty());
         cv.put(StatisticContract.StatisticTable.COLUMN_date, s.getData());
-        db.insert(StatisticContract.StatisticTable.TABLE_NAME, null, cv);
+        return db.insert(StatisticContract.StatisticTable.TABLE_NAME, null, cv);
     }
 
     public ArrayList<Question> getAllQuestions(){
@@ -296,7 +292,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
             do{
                 Question question = new Question();
                 question.setId(c.getInt(c.getColumnIndex(QuestionContract.QuestionTable._ID)));
-                question.setQuestion(c.getString(c.getColumnIndex(QuestionContract.QuestionTable.COLUMN_QUESTION)));
+                question.setName(c.getString(c.getColumnIndex(QuestionContract.QuestionTable.COLUMN_QUESTION)));
                 questionList.add(question);
             }while ((c.moveToNext()));
         }
@@ -321,7 +317,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
                 Option question = new Option();
                 question.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
                 question.setQuestion_id(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_QUESTION_ID)));
-                question.setOption(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));
+                question.setName(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));
                 question.setIs_right(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_IS_RIGHT)));
                 question.setLanguage(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_LANGUAGE)));
                 optionsList.add(question);
@@ -329,5 +325,74 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         }
         c.close();
         return optionsList;
+    }
+
+    public Option getGoodOptionPL(long questionNumber){
+        Option optionPL= new Option();
+        db=getReadableDatabase();
+        String numberQuestion= String.valueOf(questionNumber);
+        String is_right=String.valueOf(1);
+        String[] selectionArgs = new String[]{numberQuestion, is_right};
+        Cursor c= db.rawQuery("SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "= ?"
+                +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?", selectionArgs);
+
+        if(c.equals(1)){
+                optionPL.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
+                optionPL.setQuestion_id(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_QUESTION_ID)));
+                optionPL.setName(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));
+                optionPL.setIs_right(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_IS_RIGHT)));
+                optionPL.setLanguage(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_LANGUAGE)));
+        }
+        c.close();
+        return optionPL;
+    }
+
+    public Option getGoodOptionEN(long questionNumber){
+        Option optionEN= new Option();
+        db=getReadableDatabase();
+        String numberQuestion= String.valueOf(questionNumber);
+        String is_right=String.valueOf(1);
+        String[] selectionArgs = new String[]{numberQuestion, is_right};
+        Cursor c= db.rawQuery("SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "= ?"
+                +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?", selectionArgs);
+
+        if(c.equals(1)){
+            optionEN.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
+            optionEN.setQuestion_id(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_QUESTION_ID)));
+            optionEN.setName(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));
+            optionEN.setIs_right(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_IS_RIGHT)));
+            optionEN.setLanguage(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_LANGUAGE)));
+        }
+        c.close();
+        return optionEN;
+    }
+
+    public long addQuestionToRepeatTable(Question q){
+        db=getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(RepeatQuestionContract.RepeatQuestionTable.COLUMN_question, q.getId());
+        return db.insert(RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME, null, cv);
+    }
+
+    public int deleteQuestionFromRepeatTable(Question q){
+        db=this.getWritableDatabase();
+        String questionNumber=String.valueOf(q.getId());
+        return db.delete(RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME,"ID = ?",new String[] {questionNumber});
+    }
+
+    public List<RepeatQuestion> getAllQuestionFromRepeatTable(){
+        db=getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME+";", null);
+        List<RepeatQuestion> repeatQuestionList= new ArrayList<>();
+        if(c.moveToFirst()){
+            do{
+                RepeatQuestion repeatQuestion = new RepeatQuestion();
+                repeatQuestion.setId(c.getInt(c.getColumnIndex(RepeatQuestionContract.RepeatQuestionTable._ID)));
+                repeatQuestion.setQuestion(c.getInt(c.getColumnIndex(RepeatQuestionContract.RepeatQuestionTable.COLUMN_question)));
+                repeatQuestionList.add(repeatQuestion);
+            }while ((c.moveToNext()));
+        }
+        c.close();
+        return repeatQuestionList;
     }
 }

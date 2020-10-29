@@ -3,6 +3,7 @@ package com.example.fiszki.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//będzie można potem usunąc tą percable
 public class Option implements Parcelable {
     //metoda do generowania id
     private static long idCounter=0;
@@ -10,7 +11,7 @@ public class Option implements Parcelable {
     protected Option(Parcel in) {
         id = in.readLong();
         question_id = in.readLong();
-        option = in.readString();
+        name = in.readString();
         is_right = in.readInt();
         language = in.readString();
     }
@@ -34,14 +35,14 @@ public class Option implements Parcelable {
 
     long id;
     long question_id;
-    String option;
+    String name;
     int is_right;
     String language;
 
     public Option(long question_id, String option, int is_right, String language) {
         this.id=createID();
         this.question_id = question_id;
-        this.option = option;
+        this.name = option;
         this.is_right = is_right;
         this.language = language;
     }
@@ -65,12 +66,12 @@ public class Option implements Parcelable {
         this.question_id = question_id;
     }
 
-    public String getOption() {
-        return option;
+    public String getName() {
+        return name;
     }
 
-    public void setOption(String option) {
-        this.option = option;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getIs_right() {
@@ -98,7 +99,7 @@ public class Option implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeLong(question_id);
-        dest.writeString(option);
+        dest.writeString(name);
         dest.writeInt(is_right);
         dest.writeString(language);
     }

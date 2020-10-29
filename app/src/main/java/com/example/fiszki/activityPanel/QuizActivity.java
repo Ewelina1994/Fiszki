@@ -26,12 +26,15 @@ import android.widget.Toast;
 
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.RepeatQuestionDTO;
 import com.example.fiszki.services.QuizService;
 import com.example.fiszki.R;
 import com.example.fiszki.entity.StatisticEntiti;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.enums.DifficultyEnum;
 import com.example.fiszki.services.RepeatBoardService;
+import com.example.fiszki.services.RepeatQuestionListService;
+import com.example.fiszki.services.RepeatQuestionService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,7 +101,7 @@ public class QuizActivity extends AppCompatActivity {
     TextToSpeech textToSpeech;
 
     QuizService quizService;
-    static RepeatBoardService repeatBoardService;
+    static RepeatQuestionService repeatBoardService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +145,7 @@ public class QuizActivity extends AppCompatActivity {
             Collections.shuffle(questionList);
 
             //zainicjowanie serwisu do zapisywania pytań dodanych do powtórek
-            repeatBoardService= new RepeatBoardService();
+            repeatBoardService= new RepeatQuestionService(dbHelper, currentQuestion);
             showNextQuestion();
             //set Event to cardView
             setSingleEvent(linearayoutCardView);
@@ -179,7 +182,10 @@ public class QuizActivity extends AppCompatActivity {
             buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    repeatBoardService.addToList(currentQuestion);
+                   RepeatQuestionDTO repeatQuestionDTO= repeatBoardService.convertQuestionDTOtoRepeatQuestionDTO();
+                    repeatBoardService.saveQuestionToDBRepeatTable();
+                  RepeatQuestionListService repeatQuestionListService= new RepeatQuestionListService();
+                  repeatQuestionListService.addToRepeatQuestionDTOList(repeatQuestionDTO);
                 }
                 });
         } else {
@@ -274,10 +280,10 @@ public class QuizActivity extends AppCompatActivity {
 
             currentQuestion.setOptions(listOptionsInQuiz);
 
-            textViewQuestion.setText(currentQuestion.getQuestion().getQuestion());
-            textViewQuestion1.setText(listOptionsInQuiz.get(0).getOption());
-            textViewQuestion2.setText(listOptionsInQuiz.get(1).getOption());
-            textViewQuestion3.setText(listOptionsInQuiz.get(2).getOption());
+            textViewQuestion.setText(currentQuestion.getQuestion().getName());
+            textViewQuestion1.setText(listOptionsInQuiz.get(0).getName());
+            textViewQuestion2.setText(listOptionsInQuiz.get(1).getName());
+            textViewQuestion3.setText(listOptionsInQuiz.get(2).getName());
 
             //daj głos do pytania automatycznie ale nie działa :(
             giveVoice();
