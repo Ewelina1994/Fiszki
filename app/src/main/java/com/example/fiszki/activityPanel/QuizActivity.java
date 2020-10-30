@@ -26,14 +26,11 @@ import android.widget.Toast;
 
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
-import com.example.fiszki.RepeatQuestionDTO;
 import com.example.fiszki.services.QuizService;
 import com.example.fiszki.R;
 import com.example.fiszki.entity.StatisticEntiti;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.enums.DifficultyEnum;
-import com.example.fiszki.services.RepeatBoardService;
-import com.example.fiszki.services.RepeatQuestionListService;
 import com.example.fiszki.services.RepeatQuestionService;
 
 import java.text.SimpleDateFormat;
@@ -101,7 +98,7 @@ public class QuizActivity extends AppCompatActivity {
     TextToSpeech textToSpeech;
 
     QuizService quizService;
-    static RepeatQuestionService repeatBoardService;
+    static RepeatQuestionService repeatQuestionService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +142,7 @@ public class QuizActivity extends AppCompatActivity {
             Collections.shuffle(questionList);
 
             //zainicjowanie serwisu do zapisywania pytań dodanych do powtórek
-            repeatBoardService= new RepeatQuestionService(dbHelper, currentQuestion);
+            repeatQuestionService = new RepeatQuestionService(dbHelper);
             showNextQuestion();
             //set Event to cardView
             setSingleEvent(linearayoutCardView);
@@ -182,10 +179,9 @@ public class QuizActivity extends AppCompatActivity {
             buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   RepeatQuestionDTO repeatQuestionDTO= repeatBoardService.convertQuestionDTOtoRepeatQuestionDTO();
-                    repeatBoardService.saveQuestionToDBRepeatTable();
-                  RepeatQuestionListService repeatQuestionListService= new RepeatQuestionListService();
-                  repeatQuestionListService.addToRepeatQuestionDTOList(repeatQuestionDTO);
+
+                    repeatQuestionService.saveQuestionToDBRepeatTable(currentQuestion);
+                    buttonAddToReplays.setBackgroundColor(Integer.parseInt("#C0C0C0"));
                 }
                 });
         } else {

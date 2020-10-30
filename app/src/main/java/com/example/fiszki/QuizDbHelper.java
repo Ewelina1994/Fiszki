@@ -42,6 +42,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+    //tworzenie tabel
     @Override
     public void onCreate(SQLiteDatabase db) {
         this.db=db;
@@ -52,11 +53,13 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_QUESTION_TABLE = QuestionContract.SQL_CREATE_ENTRIES;
         final String SQL_CREATE_OPTION_TABLE = OptionContract.SQL_CREATE_ENTRIES;
         final String SQL_CREATE_STATISTIC_TABLE = StatisticContract.SQL_CREATE_ENTRIES;
+        final String SQL_CREATE_REPEAT_TABLE = RepeatQuestionContract.SQL_CREATE_ENTRIES;
 
         db.execSQL(SQL_CREATE_USER_TABLE);
         db.execSQL(SQL_CREATE_QUESTION_TABLE);
         db.execSQL(SQL_CREATE_OPTION_TABLE);
         db.execSQL(SQL_CREATE_STATISTIC_TABLE);
+        db.execSQL(SQL_CREATE_REPEAT_TABLE);
         fillQuestionsTable();
         fillOptionsTable();
     }
@@ -67,6 +70,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         db.execSQL(QuestionContract.SQL_DELETE_ENTRIES);
         db.execSQL(OptionContract.SQL_DELETE_ENTRIES);
         db.execSQL(StatisticContract.SQL_CREATE_ENTRIES);
+        db.execSQL(RepeatQuestionContract.SQL_CREATE_ENTRIES);
         onCreate(db);
     }
 
@@ -300,6 +304,22 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         return questionList;
     }
 
+    public Question getQuestionById(long id){
+        db=getReadableDatabase();
+        String numberQuestion= String.valueOf(id);
+        String[] selectionArgs = new String[]{numberQuestion};
+
+        Cursor c = db.rawQuery("SELECT * FROM " + QuestionContract.QuestionTable.TABLE_NAME+" WHERE "+QuestionContract.QuestionTable._ID +" =?;", selectionArgs);
+        Question question = new Question();
+        if( c != null && c.moveToFirst() ) {
+
+            question.setId(c.getInt(c.getColumnIndex(QuestionContract.QuestionTable._ID)));
+            question.setName(c.getString(c.getColumnIndex(QuestionContract.QuestionTable.COLUMN_QUESTION)));
+        }
+        c.close();
+        return  question;
+    }
+
 //    Wyszukiwanie option z where
     public List<Option> getOptionsToQuiz(long questionNumber, LanguageEnum l){
         List<Option> optionsList= new ArrayList<>();
@@ -336,7 +356,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         Cursor c= db.rawQuery("SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "= ?"
                 +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?", selectionArgs);
 
-        if(c.equals(1)){
+        if(c!=null && c.moveToNext()){
                 optionPL.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
                 optionPL.setQuestion_id(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_QUESTION_ID)));
                 optionPL.setName(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));
@@ -356,7 +376,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         Cursor c= db.rawQuery("SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "= ?"
                 +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?", selectionArgs);
 
-        if(c.equals(1)){
+        if(c!= null && c.moveToNext()){
             optionEN.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
             optionEN.setQuestion_id(c.getInt(c.getColumnIndex(OptionContract.OptionTable.COLUMN_QUESTION_ID)));
             optionEN.setName(c.getString(c.getColumnIndex(OptionContract.OptionTable.COLUMN_OPTION)));

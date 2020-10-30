@@ -12,24 +12,25 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
-import com.example.fiszki.services.RepeatBoardService;
+import com.example.fiszki.RepeatQuestionDTO;
+import com.example.fiszki.services.RepeatQuestionService;
 
 import java.util.List;
-
-import static com.example.fiszki.activityPanel.QuizActivity.repeatBoardService;
 
 public class RepeatBoard extends AppCompatActivity {
     ImageView image;
     private TextView questionTextView;
-    private TextView answerTextView;
-    private TextView sentence;
+    private TextView answerTextViewEN;
+    private TextView answerTextViewPL;
     private CardView cardView;
 
     int currentQuestion;
 
-    private List<QuestionDTO> questionList;
+    RepeatQuestionService repeatQuestionService;
+
+    private List<RepeatQuestionDTO> repeatQuestionDTOList;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -40,9 +41,14 @@ public class RepeatBoard extends AppCompatActivity {
         int img=R.drawable.def_as_;
         image.setImageResource(img);
         questionTextView = findViewById(R.id.questionTxt);
-        answerTextView = findViewById(R.id.answerTxt);
-        sentence = findViewById(R.id.sentenceTxt);
+        answerTextViewEN = findViewById(R.id.answerTxt);
+        answerTextViewPL=findViewById(R.id.sentenceTxt);
         cardView=findViewById(R.id.card_view_question);
+
+        QuizDbHelper dbHelper = new QuizDbHelper(this);
+        repeatQuestionService= new RepeatQuestionService(dbHelper);
+        repeatQuestionDTOList=repeatQuestionService.getRepeatQuestionDTOList();
+
         cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -58,23 +64,16 @@ public class RepeatBoard extends AppCompatActivity {
         });
         currentQuestion=0;
 
-//        RepeatBoardService boardRepeat= repeatBoardService;
-//        questionList = boardRepeat.getAll();
-
         showQuestion();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void showQuestion() {
-        if (currentQuestion<questionList.size()){
-            questionTextView.setText(questionList.get(currentQuestion).getQuestion().getName());
+        if (currentQuestion<repeatQuestionDTOList.size()){
+            questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion());
+            answerTextViewEN.setText(repeatQuestionDTOList.get(currentQuestion).getOptionEN());
+            answerTextViewPL.setText(repeatQuestionDTOList.get(currentQuestion).getOptionPL());
 
-            questionList.get(currentQuestion).getOptions().forEach(option -> {
-                        if (option.getIs_right() == 1) {
-                            answerTextView.setText(option.getName());
-                        }
-                    }
-            );
             currentQuestion++;
         }
     }
