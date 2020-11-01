@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -79,6 +80,8 @@ public class QuizActivity extends AppCompatActivity {
     private int score;
     private int wrong;
     private String date;
+
+    boolean is_addQuestion_to_replace_board;
 
     private boolean ansewered;
     private Option clickedAnswer;
@@ -179,9 +182,21 @@ public class QuizActivity extends AppCompatActivity {
             buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
+                    if(is_addQuestion_to_replace_board==false){
+                        repeatQuestionService.saveQuestionToDBRepeatTable(currentQuestion);
+                        is_addQuestion_to_replace_board=true;
+                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
 
-                    repeatQuestionService.saveQuestionToDBRepeatTable(currentQuestion);
-                    buttonAddToReplays.setBackgroundColor(Integer.parseInt("#C0C0C0"));
+                    }
+                    //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
+                     else {
+                        repeatQuestionService.deleteQuestionToDBRepeatTable(currentQuestion);
+                        is_addQuestion_to_replace_board=false;
+                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+
+                    }
+
                 }
                 });
         } else {
@@ -288,11 +303,26 @@ public class QuizActivity extends AppCompatActivity {
             countQuestion.setText("Question: " + questionCount + "/" + questionCountTotal);
             //ustawienie że nie została wybrana żadna odpowiedz
             ansewered = false;
-            buttoinNext.setText("Confirm");
+            buttoinNext.setText(R.string.confirm);
             timeLeftInMillis = COUNTDOWN_IN_MILLIS;
             startCountDown();
+
+            //spr czy pytanie jest w tablicy powtórek
+            is_addQuestion_to_replace_board=repeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion);
+            setColorBtnAddToReplace(is_addQuestion_to_replace_board);
         } else {
             finishQuiz();
+        }
+    }
+
+    private void setColorBtnAddToReplace(boolean is_addQuestion) {
+        GradientDrawable bgShape1 = (GradientDrawable) buttonAddToReplays.getBackground();
+        if(is_addQuestion==true){
+            bgShape1.setColor(Color.parseColor("#E78230"));
+            buttonAddToReplays.setText(R.string.addedToReplace);
+        }else {
+            bgShape1.setColor(Color.parseColor("#C0C0C0"));
+            buttonAddToReplays.setText(R.string.no_added_to_replace);
         }
     }
 

@@ -17,11 +17,12 @@ public class RepeatQuestionService {
 
     public RepeatQuestionService(QuizDbHelper dbHelper) {
         this.quizDbHelper=dbHelper;
+        repeatQuestionList=getAllQuestionOnRepeatBoard();
         repeatQuestionDTOList= new ArrayList<>();
     }
 
     public List<RepeatQuestionDTO> getRepeatQuestionDTOList() {
-        repeatQuestionList=quizDbHelper.getAllQuestionFromRepeatTable();
+        repeatQuestionList=getAllQuestionOnRepeatBoard();
 
         for(int i=0; i<repeatQuestionList.size(); i++){
             RepeatQuestionDTO repeatQuestionDTO= new RepeatQuestionDTO();
@@ -43,8 +44,15 @@ public class RepeatQuestionService {
     }
 
     public long saveQuestionToDBRepeatTable(QuestionDTO question){
+        repeatQuestionList=getAllQuestionOnRepeatBoard();
         QuestionDTO questionDTO = question;
-        return quizDbHelper.addQuestionToRepeatTable(questionDTO.getQuestion());
+
+        boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question);
+        //spr czy pytenie nie jest w tablicy powtórek
+        if(isAddToRepeatBoard==false){
+            return quizDbHelper.addQuestionToRepeatTable(questionDTO.getQuestion());
+        }
+        return -1;
     }
 
     //???
@@ -53,6 +61,21 @@ public class RepeatQuestionService {
         return quizDbHelper.deleteQuestionFromRepeatTable(questionDTO.getQuestion());
     }
 
-    //???
+    public List<RepeatQuestion> getAllQuestionOnRepeatBoard(){
+        return quizDbHelper.getAllQuestionFromRepeatTable();
+    }
+
+    //sprawdzenie czy pytanie jest juz w tablicy powtórek
+    public boolean isAddQuestionToRepeatBoard(QuestionDTO question){
+        repeatQuestionList=getAllQuestionOnRepeatBoard();
+        boolean isAddToRepeatBoard=false;
+        for (int i=0; i<repeatQuestionList.size(); i++){
+            if(repeatQuestionList.get(i).getQuestion()==question.getQuestion().getId()){
+                isAddToRepeatBoard=true;
+                break;
+            }
+        }
+        return isAddToRepeatBoard;
+    }
 
 }

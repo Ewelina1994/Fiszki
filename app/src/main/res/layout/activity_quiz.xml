@@ -244,7 +244,7 @@
                     android:layout_height="65dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@drawable/mybutton"
+                    android:background="@drawable/btn_add_to_repeat"
                     android:text="@string/repeat" />
 
                 <Button
@@ -253,7 +253,7 @@
                     android:layout_height="65dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="@drawable/mybutton"
+                    android:background="@drawable/btn_next_question"
                     android:freezesText="true"
                     android:text="@string/nextQuestion" />
             </LinearLayout>

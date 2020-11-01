@@ -397,7 +397,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
     public int deleteQuestionFromRepeatTable(Question q){
         db=this.getWritableDatabase();
         String questionNumber=String.valueOf(q.getId());
-        return db.delete(RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME,"ID = ?",new String[] {questionNumber});
+        return db.delete(RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME, "question_id = ?", new String[] {questionNumber});
     }
 
     public List<RepeatQuestion> getAllQuestionFromRepeatTable(){

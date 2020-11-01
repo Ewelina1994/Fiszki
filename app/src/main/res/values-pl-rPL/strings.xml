@@ -29,4 +29,8 @@
     <string name="uesr_panel">Panel użytkownika</string>
     <string name="setting">Ustawienia</string>
     <string name="panel_admin">Panel admina</string>
+    <string name="confirm">Sprawdź</string>
+    <string name="addedToReplace">Dodane do powtórek</string>
+    <string name="difficultyLevel">Łatwy</string>
+    <string name="no_added_to_replace">Add to replace</string>
 </resources>

@@ -39,9 +39,9 @@
 
     //poziom
     <string-array name="poziom">
-        <item>Basic</item>
-        <item>Intermediate</item>
-        <item>Advanced</item>
+        <item>Łatwy</item>
+        <item>Średni</item>
+        <item>Zaawansowany</item>
     </string-array>
     <string name="urodziny">How many years have you been learning english?</string>
     <string name="widocznosc">Do you want to be visible to other users?</string>
@@ -57,6 +57,9 @@
     <string name="uesr_panel">User panel</string>
     <string name="setting">Setting</string>
     <string name="panel_admin">Admin panel</string>
-
+    <string name="confirm">Confirm</string>
+    <string name="addedToReplace">Dodane do powtórek</string>
+    <string name="no_added_to_replace">Dodaj do powtórek</string>
+    <string name="difficultyLevel">Łatwy</string>
 
 </resources>

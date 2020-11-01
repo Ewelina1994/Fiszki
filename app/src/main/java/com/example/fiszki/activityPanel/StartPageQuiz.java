@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,13 +38,10 @@ public class StartPageQuiz extends AppCompatActivity {
         textViewLastResult=findViewById(R.id.lastResult);
         spinnerDifficulty=findViewById(R.id.spinner_difficulty);
 
-       String[] difficultyLevels={
-               "Easy",
-               "Medium",
-               "Hard"
-       };
+        Resources res = getResources();
+        String[] level = res.getStringArray(R.array.poziom);
 
-        ArrayAdapter<String> adapterDifficulty = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, difficultyLevels);
+        ArrayAdapter<String> adapterDifficulty = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, level);
         adapterDifficulty.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDifficulty.setAdapter(adapterDifficulty);
 //        ArrayAdapter adapterDifficulty=ArrayAdapter.createFromResource(
