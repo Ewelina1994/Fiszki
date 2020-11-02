@@ -151,7 +151,7 @@ public class QuizActivity extends AppCompatActivity {
             setSingleEvent(linearayoutCardView);
 
             //ustawienie dla poziomu trudnego nie wyświetlanai textu pytania
-            if(difficultyEnum==DifficultyEnum.Hard){
+            if(difficultyEnum==DifficultyEnum.Trudny){
                 final ViewGroup viewGroup= findViewById(R.id.questionLayout);
                 viewGroup.removeAllViews();
                 viewGroup.addView(View.inflate(this, R.layout.hard_difficulty_change_question_view, null));

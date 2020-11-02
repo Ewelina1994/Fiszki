@@ -18,7 +18,6 @@
     //startPage
     <string name="startPageTitle" translatable="false">Idiom Quiz</string>
     <string name="hightScore">Highest score:</string>
-    <string name="repeat">Add to repetitions</string>
     <string name="nextQuestion">Next question</string>
     <string name="nav_projekt_temat" translatable="false">Idiom Quiz</string>
     <string name="nav_autor">Author</string>
@@ -59,7 +58,8 @@
     <string name="panel_admin">Admin panel</string>
     <string name="confirm">Confirm</string>
     <string name="addedToReplace">Dodane do powtórek</string>
-    <string name="no_added_to_replace">Dodaj do powtórek</string>
+    <string name="no_added_to_replace">Add to replace</string>
     <string name="difficultyLevel">Łatwy</string>
+    <string name="repeat">Add to repeat</string>
 
 </resources>

@@ -47,9 +47,9 @@ public class QuizService {
 
     public LanguageEnum checkWhatLanguage(DifficultyEnum difficulty) {
         switch (difficulty) {
-            case Easy:
+            case Łatwy:
                 return LanguageEnum.PL;
-            case Medium:
+            case Średni:
                 return  LanguageEnum.EN;
             default:
                 return LanguageEnum.EN;

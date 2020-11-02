@@ -32,5 +32,5 @@
     <string name="confirm">Sprawdź</string>
     <string name="addedToReplace">Dodane do powtórek</string>
     <string name="difficultyLevel">Łatwy</string>
-    <string name="no_added_to_replace">Add to replace</string>
+    <string name="no_added_to_replace">Dodaj do powtórek</string>
 </resources>
