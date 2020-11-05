@@ -14,8 +14,9 @@
         android:text= "@string/add_new_idiom"
         android:textSize="30dp"
         android:gravity="center"
-        android:padding="20dp"
-        android:textStyle="bold"/>
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/txtQuestion"
@@ -23,12 +24,46 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textAutoCorrect"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+"
+    <Button
+        android:id="@+id/btnGetImageGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btnAddFotoGalery"
+        android:layout_weight="1"
+        android:background="#EAD1BD"/>
+    <Button
+        android:id="@+id/btnGetImageInternet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btnAddFotoInternet"
+        android:layout_weight="1"
+        android:background="#CAAC93"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnAddQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btnAdminNext"
-        android:background="#E78230"/>
+        android:background="#E78230"
+        android:layout_marginTop="20dp"/>
+    <ProgressBar
+        android:id="@+id/progresBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_marginTop="20dp"/>
+    <ImageView
+        android:id="@+id/imageQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ImageView>
 </LinearLayout>

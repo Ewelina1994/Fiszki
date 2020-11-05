@@ -13,7 +13,7 @@ public class Question implements Parcelable {
 
     long id;
     private String name;
-    private String name_image;
+    private byte[]  name_image;
     private String sentence;
 
     public Question() {
@@ -28,10 +28,10 @@ public class Question implements Parcelable {
         this.id=createID();
     }
 
-    public Question(String name, String name_image, String sentence) {
-        this.name = name;
-        this.name_image = name_image;
-        this.sentence = sentence;
+    public Question(String question, byte[] image) {
+        this.name_image=image;
+        this.name = question;
+        this.id=createID();
     }
 
     public String getName() {
@@ -50,20 +50,12 @@ public class Question implements Parcelable {
         this.id = id;
     }
 
-    public String getName_image() {
+    public byte[] getName_image() {
         return name_image;
     }
 
-    public void setName_image(String name_image) {
+    public void setName_image(byte[] name_image) {
         this.name_image = name_image;
-    }
-
-    public String getSentence() {
-        return sentence;
-    }
-
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
     }
 
     @Override

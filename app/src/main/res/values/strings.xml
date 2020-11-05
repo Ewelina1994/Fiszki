@@ -61,5 +61,7 @@
     <string name="no_added_to_replace">Add to replace</string>
     <string name="difficultyLevel">Łatwy</string>
     <string name="repeat">Add to repeat</string>
+    <string name="btnAddFotoGalery">Add a photo from the gallery cell</string>
+    <string name="btnAddFotoInternet">Add a photo from the internet</string>
 
 </resources>

@@ -33,4 +33,6 @@
     <string name="addedToReplace">Dodane do powtórek</string>
     <string name="difficultyLevel">Łatwy</string>
     <string name="no_added_to_replace">Dodaj do powtórek</string>
+    <string name="btnAddFotoGalery">Dodaj zdjecie z lokalnej galerii</string>
+    <string name="btnAddFotoInternet">Dodaj zdjecie z Internetu</string>
 </resources>
