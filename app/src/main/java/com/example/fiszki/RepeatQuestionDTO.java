@@ -1,7 +1,7 @@
 package com.example.fiszki;
 
 public class RepeatQuestionDTO {
-    private String name_image;
+    private byte[] name_image;
     private String question;
     private String OptionPL;
     private String OptionEN;
@@ -10,7 +10,7 @@ public class RepeatQuestionDTO {
     public RepeatQuestionDTO() {
     }
 
-    public RepeatQuestionDTO(String name_image, String question, String optionPL, String optionEN, String sentence) {
+    public RepeatQuestionDTO(byte[] name_image, String question, String optionPL, String optionEN, String sentence) {
         this.name_image = name_image;
         this.question = question;
         OptionPL = optionPL;
@@ -26,11 +26,11 @@ public class RepeatQuestionDTO {
         Sentence = sentence;
     }
 
-    public String getName_image() {
+    public byte[] getName_image() {
         return name_image;
     }
 
-    public void setName_image(String name_image) {
+    public void setName_image(byte[] name_image) {
         this.name_image = name_image;
     }
 

@@ -1,9 +1,12 @@
 package com.example.fiszki.activityPanel;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +28,10 @@ public class RepeatBoard extends AppCompatActivity {
     private TextView answerTextViewEN;
     private TextView answerTextViewPL;
     private CardView cardView;
+    private Button buttonAddToReplays;
+    private Button buttoinNext;
 
+    boolean is_addQuestion_to_replace_board;
     int currentQuestion;
 
     RepeatQuestionService repeatQuestionService;
@@ -44,10 +50,15 @@ public class RepeatBoard extends AppCompatActivity {
         answerTextViewEN = findViewById(R.id.answerTxt);
         answerTextViewPL=findViewById(R.id.sentenceTxt);
         cardView=findViewById(R.id.card_view_question);
+        buttonAddToReplays=findViewById(R.id.btnAddToReplays);
+        buttoinNext=findViewById(R.id.btnNextQuestion);
 
         QuizDbHelper dbHelper = new QuizDbHelper(this);
         repeatQuestionService= new RepeatQuestionService(dbHelper);
         repeatQuestionDTOList=repeatQuestionService.getRepeatQuestionDTOList();
+
+        is_addQuestion_to_replace_board=true;
+        currentQuestion=0;
 
         cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -62,7 +73,34 @@ public class RepeatBoard extends AppCompatActivity {
                 return true;
             }
         });
-        currentQuestion=0;
+
+        buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
+//                if(is_addQuestion_to_replace_board==false){
+//                    repeatQuestionService.saveQuestionToDBRepeatTable(repeatQuestionDTOList.get(currentQuestion));
+//                    is_addQuestion_to_replace_board=true;
+//                    setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+//
+//                }
+//                //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
+//                else {
+//                    repeatQuestionService.deleteQuestionToDBRepeatTable(currentQuestion);
+//                    is_addQuestion_to_replace_board=false;
+//                    setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+//
+//                }
+
+            }
+        });
+
+        buttoinNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showQuestion();
+            }
+        });
 
         showQuestion();
     }
@@ -70,6 +108,10 @@ public class RepeatBoard extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void showQuestion() {
         if (currentQuestion<repeatQuestionDTOList.size()){
+            byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
+            //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
+            image.setImageBitmap(bmp);
             questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion());
             answerTextViewEN.setText(repeatQuestionDTOList.get(currentQuestion).getOptionEN());
             answerTextViewPL.setText(repeatQuestionDTOList.get(currentQuestion).getOptionPL());

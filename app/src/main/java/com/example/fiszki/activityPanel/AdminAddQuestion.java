@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -77,6 +78,15 @@ public class AdminAddQuestion extends AppCompatActivity {
             }
         });
 
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            //your codes here
+        }
+
         if (savedInstanceState == null) {
             dbHelper = new QuizDbHelper(this);
         }else {
@@ -86,7 +96,6 @@ public class AdminAddQuestion extends AppCompatActivity {
 
     private void loadImageInternet() {
         new Pobranie().execute("https://upload.wikimedia.org/wikipedia/commons/3/3a/Isolated_oak_at_Backley_Holmes%2C_New_Forest_-_geograph.org.uk_-_469673.jpg");
-
     }
 
     private void loadImageGallery() {
@@ -137,31 +146,35 @@ public class AdminAddQuestion extends AppCompatActivity {
         saveQuestion.setEnabled(false);
     }
 
-    private byte[] getLogoImage(String url) {
-        byte[] byteImg = new byte[0];
+    public static byte[] getLogoImage(String path) {
+        byte[] imgByByte = new byte[0];
+        int file_length = 0;
         try {
-            URL imageUrl = new URL(url);
-            URLConnection ucon = imageUrl.openConnection();
-            InputStream is = ucon.getInputStream();
+            URL url = new URL(path);
+            URLConnection urlConnection = url.openConnection();
+            urlConnection.connect();
+            file_length = urlConnection.getContentLength();
+            InputStream is = urlConnection.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
 
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            //We create an array of bytes
             byte[] data = new byte[50];
-            int current = 0;
+            //We create an array of bytes
+            int total = 0;
+            int count = 0;
 
-            while((current = bis.read(data,0,data.length)) != -1){
-                buffer.write(data,0,current);
+            while((count = bis.read(data,0,data.length)) != -1){
+                total += count;
+                buffer.write(data,0, count);
             }
-
-            //FileOutputStream fos = new FileOutputStream(file);
-            byteImg= buffer.toByteArray();
-           // fos.write(buffer.toByteArray());
-          //  fos.close();
-        } catch (Exception e) {
-            Log.d("ImageManager", "Error: " + e.toString());
+            imgByByte= buffer.toByteArray();
+            is.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return byteImg;
+        return imgByByte;
     }
 
     public class Pobranie extends AsyncTask<String, Integer, String> {
