@@ -7,11 +7,11 @@ import com.example.fiszki.entity.Question;
 
 public class StatisticEntiti {
     //metoda do generowania id
-    private static long idCounter=0;
-    public static synchronized Long createID()
-    {
-        return (idCounter++);
-    }
+//    private static long idCounter=0;
+//    public static synchronized Long createID()
+//    {
+//        return (idCounter++);
+//    }
 
     private long id;
     private int wrong;
@@ -29,7 +29,7 @@ public class StatisticEntiti {
     }
 
     public StatisticEntiti(int score, int wrong, String difficulty, String data) {
-        this.id=createID();
+      //  this.id=createID();
         this.wrong = wrong;
         this.score = score;
         this.difficulty = difficulty;

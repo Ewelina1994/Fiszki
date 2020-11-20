@@ -5,25 +5,25 @@ public class RepeatQuestionDTO {
     private String question;
     private String OptionPL;
     private String OptionEN;
-    private String Sentence;
+    private boolean isAddToRepeatBoard;
 
     public RepeatQuestionDTO() {
     }
 
-    public RepeatQuestionDTO(byte[] name_image, String question, String optionPL, String optionEN, String sentence) {
+    public RepeatQuestionDTO(byte[] name_image, String question, String optionPL, String optionEN, boolean isAddToRepeatBoard) {
         this.name_image = name_image;
         this.question = question;
         OptionPL = optionPL;
         OptionEN = optionEN;
-        Sentence = sentence;
+        isAddToRepeatBoard = isAddToRepeatBoard;
     }
 
     //construktor bez image
-    public RepeatQuestionDTO(String question, String optionPL, String optionEN, String sentence) {
+    public RepeatQuestionDTO(String question, String optionPL, String optionEN, boolean isAddToRepeatBoard) {
         this.question = question;
         OptionPL = optionPL;
         OptionEN = optionEN;
-        Sentence = sentence;
+        isAddToRepeatBoard = isAddToRepeatBoard;
     }
 
     public byte[] getName_image() {
@@ -58,11 +58,11 @@ public class RepeatQuestionDTO {
         OptionEN = optionEN;
     }
 
-    public String getSentence() {
-        return Sentence;
+    public boolean getIsAddToRepeatBoard() {
+        return isAddToRepeatBoard;
     }
 
-    public void setSentence(String sentence) {
-        Sentence = sentence;
+    public void setAddToRepeatBoard(boolean addToRepeatBoard) {
+        isAddToRepeatBoard = addToRepeatBoard;
     }
 }

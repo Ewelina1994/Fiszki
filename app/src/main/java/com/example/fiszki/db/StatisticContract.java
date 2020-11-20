@@ -16,7 +16,7 @@ public class StatisticContract {
 
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + StatisticContract.StatisticTable.TABLE_NAME + " (" +
-                    StatisticContract.StatisticTable._ID + " INTEGER PRIMARY KEY, " +
+                    StatisticContract.StatisticTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     StatisticContract.StatisticTable.COLUMN_score + " INTEGER, " +
                     StatisticContract.StatisticTable.COLUMN_wrong + " INTEGER, " +
                     StatisticContract.StatisticTable.COLUMN_LEVEL + " TEXT, " +

@@ -5,33 +5,41 @@ import android.os.Parcelable;
 
 public class Question implements Parcelable {
     //metoda do generowania id
-    private static long idCounter=0;
-    public static synchronized Long createID()
-    {
-        return (idCounter++);
-    }
+//    private static long idCounter=1;
+//    public static synchronized Long createID()
+//    {
+//        return (idCounter++);
+//    }
 
     long id;
     private String name;
     private byte[]  name_image;
-    private String sentence;
 
     public Question() {
     }
 
     public Question(Parcel in) {
-        name =in.readString();
+       // id=in.readLong();
+        name=in.readString();
+        name_image = new byte[in.readInt()];
+        in.readByteArray(name_image);
     }
 
     public Question(String question) {
         this.name = question;
-        this.id=createID();
+       // this.id=createID();
     }
 
     public Question(String question, byte[] image) {
         this.name_image=image;
         this.name = question;
-        this.id=createID();
+       // this.id=createID();
+    }
+    public Question(Long id, String question, byte[] image) {
+        this.id=id;
+        this.name_image=image;
+        this.name = question;
+        //this.id=createID();
     }
 
     public String getName() {
@@ -43,6 +51,7 @@ public class Question implements Parcelable {
     }
 
     public long getId() {
+
         return id;
     }
 
@@ -65,7 +74,10 @@ public class Question implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+       // dest.writeLong(id);
         dest.writeString(name);
+        dest.writeInt(name_image.length);
+        dest.writeByteArray(name_image);
     }
 
     public static final Creator<Question> CREATOR = new Creator<Question>() {
@@ -76,6 +88,7 @@ public class Question implements Parcelable {
 
         @Override
         public Question[] newArray(int size) {
+
             return new Question[size];
         }
     };

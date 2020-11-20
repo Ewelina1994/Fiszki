@@ -1,17 +1,17 @@
 package com.example.fiszki.entity;
 
 public class RepeatQuestion {
-    private static long idCounter=0;
-    public static synchronized Long createID()
-    {
-        return (idCounter++);
-    }
+//    private static long idCounter=0;
+//    public static synchronized Long createID()
+//    {
+//        return (idCounter++);
+//    }
 
     private long id;
     private long question;
 
     public RepeatQuestion(long question) {
-        this.id=createID();
+        //this.id=createID();
         this.question = question;
     }
 

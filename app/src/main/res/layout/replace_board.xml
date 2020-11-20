@@ -59,10 +59,13 @@
                         android:layout_weight="80"
                         android:freezesText="true"
                         android:gravity="center"
-                        android:paddingVertical="5dp"
-                        android:text="Nilu"
+                        android:text="With Android 8.0 (API level 26) and higher, you can instruct a TextView"
                         android:textColor="#191818"
-                        android:textSize="30sp" />
+                        android:textSize="20sp"/>
+<!--                        android:autoSizeTextType="uniform"-->
+<!--                        android:autoSizeMinTextSize="15sp"-->
+<!--                        android:autoSizeMaxTextSize="100sp"-->
+<!--                        android:autoSizeStepGranularity="2sp"-->
 
                     <Button
                         android:id="@+id/speakBtn"
@@ -70,7 +73,8 @@
                         android:layout_height="41dp"
                         android:layout_weight="20"
                         android:drawableLeft="@android:drawable/ic_media_play"
-                        android:text="" />
+                        android:text=""
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -85,11 +89,9 @@
                     android:background="#CCDAE7"
                     android:freezesText="true"
                     android:gravity="center"
-                    android:padding="10dp"
-                    android:paddingVertical="5dp"
                     android:text="dsfdfdf"
                     android:textColor="#191818"
-                    android:textSize="30sp" />
+                    android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/sentenceTxt"
@@ -103,11 +105,9 @@
                     android:background="#CCDAE7"
                     android:freezesText="true"
                     android:gravity="center"
-                    android:padding="10dp"
-                    android:paddingVertical="5dp"
                     android:text="Sample sentence with this idom"
                     android:textColor="#191818"
-                    android:textSize="30sp" />
+                    android:textSize="20sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -119,11 +119,21 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/backQuestion"
+                        android:layout_width="0dp"
+                        android:layout_height="65dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/btn_next_question"
+                        android:text="@string/previo_question" />
+                    <Button
                         android:id="@+id/btnAddToReplays"
                         android:layout_width="0dp"
                         android:layout_height="65dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
+                        android:layout_margin="10dp"
                         android:background="@drawable/btn_add_to_repeat"
                         android:text="@string/repeat" />
 
@@ -133,6 +143,7 @@
                         android:layout_height="65dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
+                        android:layout_margin="10dp"
                         android:background="@drawable/btn_next_question"
                         android:freezesText="true"
                         android:text="@string/nextQuestion" />

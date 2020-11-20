@@ -23,6 +23,7 @@ public class RepeatQuestionService {
 
     public List<RepeatQuestionDTO> getRepeatQuestionDTOList() {
         repeatQuestionList=getAllQuestionOnRepeatBoard();
+        repeatQuestionDTOList.clear();
 
         for(int i=0; i<repeatQuestionList.size(); i++){
             RepeatQuestionDTO repeatQuestionDTO= new RepeatQuestionDTO();
@@ -35,6 +36,7 @@ public class RepeatQuestionService {
             repeatQuestionDTO.setName_image(question.getName_image());
             repeatQuestionDTO.setOptionPL(optionPL.getName());
             repeatQuestionDTO.setOptionEN(optionEN.getName());
+            repeatQuestionDTO.setAddToRepeatBoard(isAddQuestionToRepeatBoard(question.getId()));
             // repeatQuestionDTO.setName_image(questionDTO.getQuestion().getName_image()));
             //  repeatQuestionDTO.setSentence(questionDTO.getQuestion().getSentence());
 
@@ -44,22 +46,21 @@ public class RepeatQuestionService {
         return repeatQuestionDTOList;
     }
 
-    public long saveQuestionToDBRepeatTable(QuestionDTO question){
-        repeatQuestionList=getAllQuestionOnRepeatBoard();
-        QuestionDTO questionDTO = question;
+    public long saveQuestionToDBRepeatTable(RepeatQuestion question){
+        //repeatQuestionList=getAllQuestionOnRepeatBoard();
+        RepeatQuestion repeatQuestion = question;
 
-        boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question);
+        boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question.getQuestion());
         //spr czy pytenie nie jest w tablicy powtórek
         if(isAddToRepeatBoard==false){
-            return quizDbHelper.addQuestionToRepeatTable(questionDTO.getQuestion());
+            return quizDbHelper.addQuestionToRepeatTable(repeatQuestion.getQuestion());
         }
         return -1;
     }
 
     //???
-    public long deleteQuestionToDBRepeatTable(QuestionDTO question){
-        QuestionDTO questionDTO =question;
-        return quizDbHelper.deleteQuestionFromRepeatTable(questionDTO.getQuestion());
+    public long deleteQuestionToDBRepeatTable(RepeatQuestion question){
+        return quizDbHelper.deleteQuestionFromRepeatTable(question.getQuestion());
     }
 
     public List<RepeatQuestion> getAllQuestionOnRepeatBoard(){
@@ -67,11 +68,11 @@ public class RepeatQuestionService {
     }
 
     //sprawdzenie czy pytanie jest juz w tablicy powtórek
-    public boolean isAddQuestionToRepeatBoard(QuestionDTO question){
+    public boolean isAddQuestionToRepeatBoard(long idQuestion){
         repeatQuestionList=getAllQuestionOnRepeatBoard();
         boolean isAddToRepeatBoard=false;
         for (int i=0; i<repeatQuestionList.size(); i++){
-            if(repeatQuestionList.get(i).getQuestion()==question.getQuestion().getId()){
+            if(repeatQuestionList.get(i).getQuestion()==idQuestion){
                 isAddToRepeatBoard=true;
                 break;
             }

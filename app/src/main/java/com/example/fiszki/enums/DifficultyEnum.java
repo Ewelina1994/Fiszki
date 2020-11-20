@@ -1,5 +1,5 @@
 package com.example.fiszki.enums;
 
 public enum  DifficultyEnum {
-    Łatwy, Średni, Trudny
+    Łatwy, Średni, Zaawansowany
 }

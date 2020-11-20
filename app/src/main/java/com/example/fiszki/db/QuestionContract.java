@@ -16,7 +16,7 @@ public class QuestionContract {
 
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + QuestionContract.QuestionTable.TABLE_NAME + " (" +
-                    QuestionTable._ID + " INTEGER PRIMARY KEY, " +
+                    QuestionTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     QuestionTable.COLUMN_QUESTION + " TEXT, "+
                     QuestionTable.COLUMN_IMG + " BLOB);";
 

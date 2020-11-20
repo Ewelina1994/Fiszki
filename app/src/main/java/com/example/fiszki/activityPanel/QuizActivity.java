@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fiszki.Converter;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.services.QuizService;
@@ -99,6 +100,7 @@ public class QuizActivity extends AppCompatActivity {
 
     //Głos
     TextToSpeech textToSpeech;
+    Button speakButton;
 
     QuizService quizService;
     static RepeatQuestionService repeatQuestionService;
@@ -123,6 +125,7 @@ public class QuizActivity extends AppCompatActivity {
         buttonAddToReplays = findViewById(R.id.btnAddToReplays);
 
         clickedAnswer=new Option();
+        speakButton = findViewById(R.id.speakBtn);
         //głos do przysłowia
         giveVoice();
 
@@ -133,6 +136,9 @@ public class QuizActivity extends AppCompatActivity {
        // difficulty = intent.getStringExtra(Quiz.EXTRA_DIFFICULTY);
         difficulty = intent.getStringExtra(QuizActivity.EXTRA_DIFFICULTY);
         textDifficulty.setText("Difficulty: " + difficulty);
+
+        //inicjalizacja textToSpeach
+        initialTextToSpech();
 
         //pobranie randomowych pytań z QuizService
 
@@ -151,7 +157,7 @@ public class QuizActivity extends AppCompatActivity {
             setSingleEvent(linearayoutCardView);
 
             //ustawienie dla poziomu trudnego nie wyświetlanai textu pytania
-            if(difficultyEnum==DifficultyEnum.Trudny){
+            if(difficultyEnum==DifficultyEnum.Zaawansowany){
                 final ViewGroup viewGroup= findViewById(R.id.questionLayout);
                 viewGroup.removeAllViews();
                 viewGroup.addView(View.inflate(this, R.layout.hard_difficulty_change_question_view, null));
@@ -184,14 +190,14 @@ public class QuizActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
                     if(is_addQuestion_to_replace_board==false){
-                        repeatQuestionService.saveQuestionToDBRepeatTable(currentQuestion);
+                        repeatQuestionService.saveQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
                         is_addQuestion_to_replace_board=true;
                         setColorBtnAddToReplace(is_addQuestion_to_replace_board);
 
                     }
                     //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
                      else {
-                        repeatQuestionService.deleteQuestionToDBRepeatTable(currentQuestion);
+                        repeatQuestionService.deleteQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
                         is_addQuestion_to_replace_board=false;
                         setColorBtnAddToReplace(is_addQuestion_to_replace_board);
 
@@ -220,15 +226,7 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    private void giveVoice() {
-        Button speakButton = findViewById(R.id.speakBtn);
-        speakButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = textViewQuestion.getText().toString();
-                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-            }
-        });
+    private void initialTextToSpech() {
         textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -245,6 +243,18 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void giveVoice() {
+
+        speakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = textViewQuestion.getText().toString();
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
     }
 
 
@@ -308,7 +318,7 @@ public class QuizActivity extends AppCompatActivity {
             startCountDown();
 
             //spr czy pytanie jest w tablicy powtórek
-            is_addQuestion_to_replace_board=repeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion);
+            is_addQuestion_to_replace_board=repeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion.getQuestion().getId());
             setColorBtnAddToReplace(is_addQuestion_to_replace_board);
         } else {
             finishQuiz();
@@ -397,8 +407,6 @@ public class QuizActivity extends AppCompatActivity {
     private void finishQuiz() {
 
         //dodawanie statystyki do bazy
-        QuizDbHelper dbHelper = QuizDbHelper.getInstance(this);
-
         Date nowDate = new Date();
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         date = sdf1.format(nowDate);
@@ -480,11 +488,11 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
+        if(textToSpeech !=null){
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+        }
     }
 
-//   public String translate(String text){
-//
-//    }
 }
 

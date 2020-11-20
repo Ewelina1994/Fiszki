@@ -231,15 +231,15 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
     }
     private void fillQuestionsTable() {
-        Question q1 = new Question("You look a little down in the dumps.", AdminAddQuestion.getLogoImage("https://pbs.twimg.com/media/EWIV9OwXYAAghMY.jpg"));
+        Question q1 = new Question( "You look a little down in the dumps.", AdminAddQuestion.getLogoImage("https://pbs.twimg.com/media/EWIV9OwXYAAghMY.jpg"));
         Question q2 = new Question("He comes across as a military commander.", AdminAddQuestion.getLogoImage("https://image.cnbcfm.com/api/v1/image/103750362-RTR4IZU8.jpg?v=1529452088&w=678&h=381"));
-        Question q3 = new Question( "Just cheer up and stick with a positive attitude.", AdminAddQuestion.getLogoImage("https://post.healthline.com/wp-content/uploads/2019/01/happy_woman-1200x628-facebook.jpg"));
+        Question q3 = new Question(  "Just cheer up and stick with a positive attitude.", AdminAddQuestion.getLogoImage("https://post.healthline.com/wp-content/uploads/2019/01/happy_woman-1200x628-facebook.jpg"));
         Question q4 = new Question( "It has been one thing after another lately.", AdminAddQuestion.getLogoImage("https://ohme.pl/portal/wp-content/uploads/2015/12/ogarne-wszystko-760x428.jpg"));
         Question q5 = new Question( "Maybe it will even change my luck, knock on wood.", AdminAddQuestion.getLogoImage("https://1ystw51j9au5396xq33o60xy-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/knock-on-wood-to-sell-home-300x197.jpg"));
         Question q6 = new Question("Please give it a rest.", AdminAddQuestion.getLogoImage("https://memegenerator.net/img/instances/53567119.jpg"));
-        Question q7 = new Question( "I think I stand a change of getting that job.", AdminAddQuestion.getLogoImage("https://cdn.theatlantic.com/thumbor/TVQN19NPLE6Hi8ndXvk79zEjGcY=/1920x1102/media/img/2019/06/14/opener_Web_alt-3/original.jpg"));
+        Question q7 = new Question(  "I think I stand a change of getting that job.", AdminAddQuestion.getLogoImage("https://cdn.theatlantic.com/thumbor/TVQN19NPLE6Hi8ndXvk79zEjGcY=/1920x1102/media/img/2019/06/14/opener_Web_alt-3/original.jpg"));
         Question q8 = new Question("I'm sticking to the new diet.", AdminAddQuestion.getLogoImage("https://miro.medium.com/max/5632/1*A3Tb73XAyEJUIdyLktp-ug.jpeg"));
-        Question q9 = new Question("This weather leaves a lot to be desired.", AdminAddQuestion.getLogoImage("https://pbs.twimg.com/profile_images/800710559108775936/EulcV2o9_400x400.jpg"));
+        Question q9 = new Question( "This weather leaves a lot to be desired.", AdminAddQuestion.getLogoImage("https://pbs.twimg.com/profile_images/800710559108775936/EulcV2o9_400x400.jpg"));
         Question q10 = new Question("We need to get our ducks in a row.", AdminAddQuestion.getLogoImage("https://www.idioms4you.com/img/angif-get-your-ducks-in-a-row.gif"));
 
         insertQuestions(q1);
@@ -268,15 +268,17 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
     private long insertQuestions(Question q){
         ContentValues cv = new ContentValues();
+       // cv.put(QuestionContract.QuestionTable._ID, q.getId());
         cv.put(QuestionContract.QuestionTable.COLUMN_QUESTION, q.getName());
         cv.put(QuestionContract.QuestionTable.COLUMN_IMG, q.getName_image());
+
 
         return db.insert(QuestionContract.QuestionTable.TABLE_NAME, null, cv);
     }
 
     private long insertOption(Option o) {
         ContentValues cv= new ContentValues();
-        cv.put(OptionContract.OptionTable.COLUMN_QUESTION_ID, o.getQuestion_id());
+        //cv.put(OptionContract.OptionTable.COLUMN_QUESTION_ID, o.getQuestion_id());
         cv.put(OptionContract.OptionTable.COLUMN_OPTION, o.getName());
         cv.put(OptionContract.OptionTable.COLUMN_IS_RIGHT, o.getIs_right());
         cv.put(OptionContract.OptionTable.COLUMN_LANGUAGE, o.getLanguage());
@@ -334,6 +336,22 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         return  question;
     }
 
+    public Question getQuestionByName(String nameQuestion){
+        db=getReadableDatabase();
+        String[] selectionArgs = new String[]{nameQuestion};
+        Cursor c = db.rawQuery("SELECT * FROM " + QuestionContract.QuestionTable.TABLE_NAME+" WHERE "+QuestionContract.QuestionTable.TABLE_NAME +" =?;", selectionArgs);
+        Question question = new Question();
+        if( c != null && c.moveToFirst() ) {
+
+            question.setId(c.getInt(c.getColumnIndex(QuestionContract.QuestionTable._ID)));
+            question.setName(c.getString(c.getColumnIndex(QuestionContract.QuestionTable.COLUMN_QUESTION)));
+            question.setName_image(c.getBlob(c.getColumnIndex(QuestionContract.QuestionTable.COLUMN_IMG)));
+        }
+        c.close();
+        return  question;
+
+    }
+
 //    Wyszukiwanie option z where
     public List<Option> getOptionsToQuiz(long questionNumber, LanguageEnum l){
         List<Option> optionsList= new ArrayList<>();
@@ -366,9 +384,9 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         db=getReadableDatabase();
         String numberQuestion= String.valueOf(questionNumber);
         String is_right=String.valueOf(1);
-        String[] selectionArgs = new String[]{numberQuestion, is_right};
+        String[] selectionArgs = new String[]{numberQuestion, is_right, "PL"};
         Cursor c= db.rawQuery("SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "= ?"
-                +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?", selectionArgs);
+                +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?"+" AND "+OptionContract.OptionTable.COLUMN_LANGUAGE+" =?", selectionArgs);
 
         if(c!=null && c.moveToNext()){
                 optionPL.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
@@ -386,9 +404,9 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         db=getReadableDatabase();
         String numberQuestion= String.valueOf(questionNumber);
         String is_right=String.valueOf(1);
-        String[] selectionArgs = new String[]{numberQuestion, is_right};
+        String[] selectionArgs = new String[]{numberQuestion, is_right, "EN"};
         Cursor c= db.rawQuery("SELECT * FROM "+ OptionContract.OptionTable.TABLE_NAME + " WHERE "+OptionContract.OptionTable.COLUMN_QUESTION_ID + "= ?"
-                +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?", selectionArgs);
+                +" AND "+OptionContract.OptionTable.COLUMN_IS_RIGHT+" =?"+" AND "+OptionContract.OptionTable.COLUMN_LANGUAGE+" =?", selectionArgs);
 
         if(c!= null && c.moveToNext()){
             optionEN.setId(c.getInt(c.getColumnIndex(OptionContract.OptionTable._ID)));
@@ -401,16 +419,16 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         return optionEN;
     }
 
-    public long addQuestionToRepeatTable(Question q){
+    public long addQuestionToRepeatTable(long idQuestion){
         db=getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(RepeatQuestionContract.RepeatQuestionTable.COLUMN_question, q.getId());
+        cv.put(RepeatQuestionContract.RepeatQuestionTable.COLUMN_question, idQuestion);
         return db.insert(RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME, null, cv);
     }
 
-    public int deleteQuestionFromRepeatTable(Question q){
+    public int deleteQuestionFromRepeatTable(long idQuestion){
         db=this.getWritableDatabase();
-        String questionNumber=String.valueOf(q.getId());
+        String questionNumber=String.valueOf(idQuestion);
         return db.delete(RepeatQuestionContract.RepeatQuestionTable.TABLE_NAME, "question_id = ?", new String[] {questionNumber});
     }
 

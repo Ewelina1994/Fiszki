@@ -58,6 +58,7 @@ public class QuestionDTO implements Parcelable {
     };
 
     public Question getQuestion() {
+
         return question;
     }
 

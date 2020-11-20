@@ -2,12 +2,18 @@ package com.example.fiszki.activityPanel;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
+import static xdroid.toaster.Toaster.toast;
+import static xdroid.toaster.Toaster.toastLong;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,7 +22,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fiszki.QuizDbHelper;
@@ -26,10 +33,8 @@ import com.example.fiszki.entity.Question;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -39,7 +44,7 @@ public class AdminAddQuestion extends AppCompatActivity {
     private EditText questionEditT;
     Button addImageGallery;
     Button addImageInternet;
-    Button saveQuestion;
+    Button btnsaveQuestion;
     ProgressBar progressBarAT;
     ImageView imageView;
     QuizDbHelper dbHelper;
@@ -55,7 +60,7 @@ public class AdminAddQuestion extends AppCompatActivity {
         questionEditT = findViewById(R.id.txtQuestion);
         addImageGallery=findViewById(R.id.btnGetImageGallery);
         addImageInternet=findViewById(R.id.btnGetImageInternet);
-        saveQuestion = findViewById(R.id.btnAddQuestion);
+        btnsaveQuestion = findViewById(R.id.btnAddQuestion);
         progressBarAT=findViewById(R.id.progresBar);
         imageView=findViewById(R.id.imageQuestion);
 
@@ -68,10 +73,11 @@ public class AdminAddQuestion extends AppCompatActivity {
         addImageInternet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadImageInternet();
+
+                showDialogWindow();
             }
         });
-        saveQuestion.setOnClickListener(new View.OnClickListener() {
+        btnsaveQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveQuestion();
@@ -94,8 +100,35 @@ public class AdminAddQuestion extends AppCompatActivity {
         }
     }
 
-    private void loadImageInternet() {
-        new Pobranie().execute("https://upload.wikimedia.org/wikipedia/commons/3/3a/Isolated_oak_at_Backley_Holmes%2C_New_Forest_-_geograph.org.uk_-_469673.jpg");
+    private void showDialogWindow() {
+        View view = View.inflate(this, R.layout.path_internet_img_window, null);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(view);
+        //dialog.setTitle("Title");
+        TextView text = (TextView) dialog.findViewById(R.id.pathImgTV);
+
+        EditText pathEditText = (EditText) dialog.findViewById(R.id.pathImgET);
+
+        Button addPathBTN=(Button) dialog.findViewById(R.id.addPathImgBTN);
+        addPathBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String path=pathEditText.getText().toString();
+                String treeLatesLetter=path.substring(path.length()-3);
+                if(treeLatesLetter.equals("jpg")||treeLatesLetter.equals("png")||treeLatesLetter.equals("gif")){
+                    loadImageInternet(path);
+                    dialog.cancel();
+                }else {
+                    //nie działa :(
+                    Toast.makeText(AdminAddQuestion.this, R.string.validationPath, Toast.LENGTH_LONG);
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    private void loadImageInternet(String path) {
+        new Pobranie().execute(path);
     }
 
     private void loadImageGallery() {
@@ -127,23 +160,24 @@ public class AdminAddQuestion extends AppCompatActivity {
 
                     e.printStackTrace();
                 }
+
             }
         }
 
     private void saveQuestion(){
         Question newQuestion=new Question(questionEditT.getText().toString(), imgByByte);
-        dbHelper.addQuestion(newQuestion);
-        long quiz_nr = newQuestion.getId();
 
-        openNewActivity(quiz_nr);
+        openNewActivity(newQuestion);
     }
 
-    private void openNewActivity(long quiz_nr) {
+    private void openNewActivity(Question saveQuestion) {
         questionEditT.getText().clear();
+        imageView.setImageDrawable(null);
         Intent intent = new Intent(this, AddOption.class);
-        intent.putExtra(QUIZ_NR, quiz_nr);
+        intent.putExtra("question", (Parcelable) saveQuestion);
         startActivity(intent);
-        saveQuestion.setEnabled(false);
+       // btnsaveQuestion.setEnabled(false);
+
     }
 
     public static byte[] getLogoImage(String path) {
@@ -179,13 +213,15 @@ public class AdminAddQuestion extends AppCompatActivity {
 
     public class Pobranie extends AsyncTask<String, Integer, String> {
 
+        boolean isGoodPathImg = false;
+
         @Override
         protected void onPreExecute() {
             progressBarAT.setMax(100);
             progressBarAT.setProgress(0);
             progressBarAT.setVisibility(View.VISIBLE);
             addImageInternet.setEnabled(false);
-            saveQuestion.setEnabled(false);
+            btnsaveQuestion.setEnabled(false);
         }
 
         @SuppressLint("LongLogTag")
@@ -207,17 +243,19 @@ public class AdminAddQuestion extends AppCompatActivity {
                 int total = 0;
                 int count = 0;
 
-                while((count = bis.read(data,0,data.length)) != -1){
+                while ((count = bis.read(data, 0, data.length)) != -1) {
                     total += count;
-                    buffer.write(data,0, count);
+                    buffer.write(data, 0, count);
                     int progress = (int) total * 100 / file_length;
                     publishProgress(progress);
                 }
-                imgByByte= buffer.toByteArray();
+                imgByByte = buffer.toByteArray();
                 is.close();
                 setImage();
+                isGoodPathImg = true;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                setToastWrongPath();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -234,12 +272,12 @@ public class AdminAddQuestion extends AppCompatActivity {
             progressBarAT.setVisibility(View.INVISIBLE);
             Log.v("Ustawiam pasek", String.valueOf(progressBarAT));
 
-           // imageView.setImageDrawable(Drawable.createFromPath(path));
+            // imageView.setImageDrawable(Drawable.createFromPath(path));
             addImageInternet.setEnabled(true);
-            saveQuestion.setEnabled(true);
+            btnsaveQuestion.setEnabled(true);
         }
 
-        private void setImage(){
+        private void setImage() {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -248,6 +286,19 @@ public class AdminAddQuestion extends AppCompatActivity {
                 }
             });
         }
-    }
 
+        private void setToastWrongPath() {
+            Thread thread = new Thread(){
+                public void run(){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(AdminAddQuestion.this, "Finco is Daddy", Toast.LENGTH_LONG);
+                        }
+                    });
+                }
+            };
+            thread.start();
+        }
+
+    }
 }

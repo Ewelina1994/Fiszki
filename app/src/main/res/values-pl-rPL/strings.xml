@@ -35,4 +35,9 @@
     <string name="no_added_to_replace">Dodaj do powtórek</string>
     <string name="btnAddFotoGalery">Dodaj zdjecie z lokalnej galerii</string>
     <string name="btnAddFotoInternet">Dodaj zdjecie z Internetu</string>
+    <string name="finishRepeatBoard">Koniec</string>
+    <string name="previo_question">Poprzednie pytanie</string>
+    <string name="path_to_Internet_img">Wpisz ścieżkę do obrazka z internetu</string>
+    <string name="add_pat_img_btn">Dodaj źródło do zdjecia</string>
+    <string name="validationPath">Źródło do zdjecia jest nie prawidłowe</string>
 </resources>

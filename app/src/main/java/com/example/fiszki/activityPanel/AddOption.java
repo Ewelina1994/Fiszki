@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
 import com.example.fiszki.entity.Option;
+import com.example.fiszki.entity.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ public class AddOption extends AppCompatActivity {
     private EditText optionENEditText;
     CheckBox checkBox;
     int is_Right;
-    int question_nr;
+    Question question_save;
+    List<Option> optionList;
     int option_nr;
 
     Button saveOption;
@@ -45,19 +47,19 @@ public class AddOption extends AppCompatActivity {
         //lista do której będziemy zapisywać zaznaczone checkboxy tak żeby ktoś 2 razy nie zaznaczył że odp jest prawidłowa
         listRightAnswer= new ArrayList<>();
         saveOption = (Button) findViewById(R.id.btnAddOption);
+        optionList= new ArrayList<>();
         saveOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                saveOption.setEnabled(false);
+                //saveOption.setEnabled(false);
                 saveOption();
             }
         });
 
         if (savedInstanceState == null) {
             dbHelper = new QuizDbHelper(this);
-            Bundle extras = getIntent().getExtras();
-            question_nr= extras.getInt(AdminAddQuestion.QUIZ_NR);
+            question_save=getIntent().getParcelableExtra("question");
 
         }else {
             //przywracanie zmiennych po obróceniu telefonu
@@ -65,7 +67,7 @@ public class AddOption extends AppCompatActivity {
     }
 
     private void saveOption(){
-        updateOptionNr();
+
         if(option_nr<=3){
             //jeśli checkbox jest zaznaczony ustaw wartość na 1
             if(checkBox.isChecked()){
@@ -77,21 +79,40 @@ public class AddOption extends AppCompatActivity {
             if(is_Right==1 && listRightAnswer.contains(is_Right)){
                 Toast.makeText(this, "You cannot set the answer to true a second time", Toast.LENGTH_LONG).show();
             }else {
-                Option optionPL= new Option(question_nr, optionPLEditText.getText().toString(), is_Right, "PL");
-                dbHelper.addOption(optionPL);
+                saveOption.setEnabled(false);
+                Option optionPL= new Option(optionPLEditText.getText().toString(), is_Right, "PL");
+                //dbHelper.addOption(optionPL);
+                optionList.add(optionPL);
 
-                Option optionEN= new Option(question_nr, optionENEditText.getText().toString(), is_Right, "EN");
-                dbHelper.addOption(optionEN);
+                Option optionEN= new Option(optionENEditText.getText().toString(), is_Right, "EN");
+                //dbHelper.addOption(optionEN);
+                optionList.add(optionEN);
 
                 addCheckboxAnswerttOlIST();
-                clearInput();
+
+                if(option_nr==3){
+                    saveToDatabase();
+                    finish();
+                }else{
+                    clearInput();
+                    updateOptionNr();
+                }
             }
 
 
         }else {
             finish();
         }
+    }
 
+    private void saveToDatabase() {
+        //wstawienie do bazy i pobranei nowo wygenerowanegoo klucza id
+        Long idQuestion=dbHelper.addQuestion(question_save);
+
+        optionList.forEach(option->{
+            option.setQuestion_id(idQuestion);
+            dbHelper.addOption(option);
+        });
     }
 
     private void updateOptionNr() {

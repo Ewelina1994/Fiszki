@@ -6,7 +6,7 @@ import android.os.Parcelable;
 //będzie można potem usunąc tą percable
 public class Option implements Parcelable {
     //metoda do generowania id
-    private static long idCounter=0;
+//    private static long idCounter=0;
 
     protected Option(Parcel in) {
         id = in.readLong();
@@ -28,10 +28,10 @@ public class Option implements Parcelable {
         }
     };
 
-    public static synchronized Long createID()
-    {
-        return (idCounter++);
-    }
+//    public static synchronized Long createID()
+//    {
+//        return (idCounter++);
+//    }
 
     long id;
     long question_id;
@@ -40,8 +40,13 @@ public class Option implements Parcelable {
     String language;
 
     public Option(long question_id, String option, int is_right, String language) {
-        this.id=createID();
+        //this.id=createID();
         this.question_id = question_id;
+        this.name = option;
+        this.is_right = is_right;
+        this.language = language;
+    }
+    public Option(String option, int is_right, String language) {
         this.name = option;
         this.is_right = is_right;
         this.language = language;

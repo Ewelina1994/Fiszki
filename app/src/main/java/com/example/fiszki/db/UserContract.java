@@ -16,7 +16,7 @@ public class UserContract {
 
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + UserTable.TABLE_NAME + " (" +
-                    UserTable._ID + " INTEGER PRIMARY KEY, " +
+                    UserTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     UserTable.COLUMN_NICK + " TEXT, " +
                     UserTable.COLUMN_LEVEL + " TEXT, " +
                     UserTable.COLUMN_YEARS_OF_STUDY + " INTEGER)";

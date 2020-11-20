@@ -16,7 +16,7 @@ public class OptionContract {
 
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + OptionTable.TABLE_NAME + " (" +
-                    OptionTable._ID + " INTEGER PRIMARY KEY, " +
+                    OptionTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     OptionTable.COLUMN_QUESTION_ID + " INTEGER, " +
                     OptionTable.COLUMN_OPTION + " TEXT, " +
                     OptionTable.COLUMN_IS_RIGHT + " BOOLEAN, " +

@@ -13,7 +13,7 @@ public class RepeatQuestionContract {
 
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + RepeatQuestionTable.TABLE_NAME + " (" +
-                    RepeatQuestionTable._ID + " INTEGER PRIMARY KEY, " +
+                    RepeatQuestionTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     RepeatQuestionTable.COLUMN_question + " INTEGER, "+
                     "FOREIGN KEY (question_id) REFERENCES question (_id));";
 

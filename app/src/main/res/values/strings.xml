@@ -63,5 +63,10 @@
     <string name="repeat">Add to repeat</string>
     <string name="btnAddFotoGalery">Add a photo from the gallery cell</string>
     <string name="btnAddFotoInternet">Add a photo from the internet</string>
+    <string name="finishRepeatBoard">The end</string>
+    <string name="previo_question">Previous question</string>
+    <string name="path_to_Internet_img">" Enter the path to the picture from the internet"</string>
+    <string name="add_pat_img_btn">Add path to image</string>
+    <string name="validationPath">" The source for the photo is not correct"</string>
 
 </resources>
