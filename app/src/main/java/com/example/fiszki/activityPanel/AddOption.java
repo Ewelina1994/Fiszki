@@ -91,8 +91,15 @@ public class AddOption extends AppCompatActivity {
                 addCheckboxAnswerttOlIST();
 
                 if(option_nr==3){
-                    saveToDatabase();
-                    finish();
+                    //jeśłi w ostatnim pytaniu lista z odpowiedziami nie będzie zawierała odpowiedzi zaznaczonej jako odp poprawna
+                    if(!listRightAnswer.contains(1)){
+                        saveOption.setEnabled(true);
+                        Toast.makeText(this, R.string.no_answer_is_marked_as_correct, Toast.LENGTH_LONG).show();
+                    }else {
+                        saveToDatabase();
+                        finish();
+                    }
+
                 }else{
                     clearInput();
                     updateOptionNr();

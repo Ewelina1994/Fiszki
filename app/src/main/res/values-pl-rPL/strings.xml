@@ -40,4 +40,5 @@
     <string name="path_to_Internet_img">Wpisz ścieżkę do obrazka z internetu</string>
     <string name="add_pat_img_btn">Dodaj źródło do zdjecia</string>
     <string name="validationPath">Źródło do zdjecia jest nie prawidłowe</string>
+    <string name="no_answer_is_marked_as_correct">Żadna z 3 opcji odpowiedzi nie jest ustawiona jako poprawna</string>
 </resources>

@@ -19,7 +19,7 @@ public class Question implements Parcelable {
     }
 
     public Question(Parcel in) {
-       // id=in.readLong();
+        id=in.readLong();
         name=in.readString();
         name_image = new byte[in.readInt()];
         in.readByteArray(name_image);
@@ -74,7 +74,7 @@ public class Question implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-       // dest.writeLong(id);
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeInt(name_image.length);
         dest.writeByteArray(name_image);
@@ -88,7 +88,6 @@ public class Question implements Parcelable {
 
         @Override
         public Question[] newArray(int size) {
-
             return new Question[size];
         }
     };

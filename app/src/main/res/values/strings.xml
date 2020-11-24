@@ -68,5 +68,6 @@
     <string name="path_to_Internet_img">" Enter the path to the picture from the internet"</string>
     <string name="add_pat_img_btn">Add path to image</string>
     <string name="validationPath">" The source for the photo is not correct"</string>
+    <string name="no_answer_is_marked_as_correct">" None of the 3 answer options are set as valid"</string>
 
 </resources>
