@@ -278,7 +278,7 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
     private long insertOption(Option o) {
         ContentValues cv= new ContentValues();
-        //cv.put(OptionContract.OptionTable.COLUMN_QUESTION_ID, o.getQuestion_id());
+        cv.put(OptionContract.OptionTable.COLUMN_QUESTION_ID, o.getQuestion_id());
         cv.put(OptionContract.OptionTable.COLUMN_OPTION, o.getName());
         cv.put(OptionContract.OptionTable.COLUMN_IS_RIGHT, o.getIs_right());
         cv.put(OptionContract.OptionTable.COLUMN_LANGUAGE, o.getLanguage());
