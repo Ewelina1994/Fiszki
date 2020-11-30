@@ -1,5 +1,6 @@
 package com.example.fiszki.entity;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,7 +14,8 @@ public class Question implements Parcelable {
 
     long id;
     private String name;
-    private byte[]  name_image;
+    private Uri  name_image;
+    String extensionImg;
 
     public Question() {
     }
@@ -21,8 +23,8 @@ public class Question implements Parcelable {
     public Question(Parcel in) {
         id=in.readLong();
         name=in.readString();
-        name_image = new byte[in.readInt()];
-        in.readByteArray(name_image);
+        name_image = in.readParcelable(Uri.class.getClassLoader());
+        extensionImg=in.readString();
     }
 
     public Question(String question) {
@@ -30,13 +32,13 @@ public class Question implements Parcelable {
        // this.id=createID();
     }
 
-    public Question(String question, byte[] image) {
+    public Question(String question, Uri image, String extensionImg) {
         this.name_image=image;
         this.name = question;
+        this.extensionImg=extensionImg;
        // this.id=createID();
     }
-    public Question(Long id, String question, byte[] image) {
-        this.id=id;
+    public Question(String question, Uri image) {
         this.name_image=image;
         this.name = question;
         //this.id=createID();
@@ -59,12 +61,20 @@ public class Question implements Parcelable {
         this.id = id;
     }
 
-    public byte[] getName_image() {
+    public Uri getName_image() {
         return name_image;
     }
 
-    public void setName_image(byte[] name_image) {
+    public void setName_image(Uri name_image) {
         this.name_image = name_image;
+    }
+
+    public String getExtensionImg() {
+        return extensionImg;
+    }
+
+    public void setExtensionImg(String extensionImg) {
+        this.extensionImg = extensionImg;
     }
 
     @Override
@@ -76,16 +86,16 @@ public class Question implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(name);
-        dest.writeInt(name_image.length);
-        dest.writeByteArray(name_image);
+        dest.writeParcelable(name_image, flags);
+        dest.writeString(extensionImg);
     }
 
     public static final Creator<Question> CREATOR = new Creator<Question>() {
         @Override
-        public Question createFromParcel(Parcel in) {
+        public Question createFromParcel(Parcel in)
+        {
             return new Question((in));
         }
-
         @Override
         public Question[] newArray(int size) {
             return new Question[size];

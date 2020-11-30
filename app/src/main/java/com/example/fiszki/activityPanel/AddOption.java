@@ -11,10 +11,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
+import com.example.fiszki.StorageFirebase;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,8 @@ public class AddOption extends AppCompatActivity {
     CheckBox checkBox;
     int is_Right;
     Question question_save;
-    List<Option> optionList;
+    List<Option> optionListPL;
+    List<Option> optionListEN;
     int option_nr;
 
     Button saveOption;
@@ -47,7 +51,8 @@ public class AddOption extends AppCompatActivity {
         //lista do której będziemy zapisywać zaznaczone checkboxy tak żeby ktoś 2 razy nie zaznaczył że odp jest prawidłowa
         listRightAnswer= new ArrayList<>();
         saveOption = (Button) findViewById(R.id.btnAddOption);
-        optionList= new ArrayList<>();
+        optionListPL= new ArrayList<>();
+        optionListEN= new ArrayList<>();
         saveOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,28 +83,26 @@ public class AddOption extends AppCompatActivity {
             //jeśliwcześneijsza opcja została ustawiona na poprawną odpowiedz a user drugi raz prubuję ystawić nast opcję na prawdziwą
             if(is_Right==1 && listRightAnswer.contains(is_Right)){
                 Toast.makeText(this, "You cannot set the answer to true a second time", Toast.LENGTH_LONG).show();
-            }else {
+            }
+            //jeśłi w ostatnim pytaniu lista z odpowiedziami nie będzie zawierała odpowiedzi zaznaczonej jako odp poprawna
+             else if(option_nr==3 && !listRightAnswer.contains(1) && !checkBox.isChecked()){
+                saveOption.setEnabled(true);
+                Toast.makeText(this, R.string.no_answer_is_marked_as_correct, Toast.LENGTH_LONG).show();
+            } else{
                 saveOption.setEnabled(false);
-                Option optionPL= new Option(optionPLEditText.getText().toString(), is_Right, "PL");
+                Option optionPL= new Option(question_save.getId(), optionPLEditText.getText().toString(), is_Right, "PL");
                 //dbHelper.addOption(optionPL);
-                optionList.add(optionPL);
+                optionListPL.add(optionPL);
 
-                Option optionEN= new Option(optionENEditText.getText().toString(), is_Right, "EN");
+                Option optionEN= new Option(question_save.getId(), optionENEditText.getText().toString(), is_Right, "EN");
                 //dbHelper.addOption(optionEN);
-                optionList.add(optionEN);
+                optionListEN.add(optionEN);
 
                 addCheckboxAnswerttOlIST();
 
-                if(option_nr==3){
-                    //jeśłi w ostatnim pytaniu lista z odpowiedziami nie będzie zawierała odpowiedzi zaznaczonej jako odp poprawna
-                    if(!listRightAnswer.contains(1)){
-                        saveOption.setEnabled(true);
-                        Toast.makeText(this, R.string.no_answer_is_marked_as_correct, Toast.LENGTH_LONG).show();
-                    }else {
-                        saveToDatabase();
-                        finish();
-                    }
-
+                if(option_nr==3) {
+                    saveToDatabase();
+                    finish();
                 }else{
                     clearInput();
                     updateOptionNr();
@@ -113,13 +116,15 @@ public class AddOption extends AppCompatActivity {
     }
 
     private void saveToDatabase() {
-        //wstawienie do bazy i pobranei nowo wygenerowanegoo klucza id
-        Long idQuestion=dbHelper.addQuestion(question_save);
+        StorageFirebase storageFirebase= new StorageFirebase();
+        String imageId=storageFirebase.fileuploader(question_save.getName_image(), question_save.getExtensionImg());
 
-        optionList.forEach(option->{
-            option.setQuestion_id(idQuestion);
-            dbHelper.addOption(option);
-        });
+       FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration();
+        firebaseConfiguration.addQuestion(question_save, imageId);
+
+        firebaseConfiguration.addOptionsPL(optionListPL);
+        firebaseConfiguration.addOptionsEN(optionListEN);
+
     }
 
     private void updateOptionNr() {

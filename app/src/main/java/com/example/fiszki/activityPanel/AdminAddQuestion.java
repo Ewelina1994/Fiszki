@@ -1,23 +1,22 @@
 package com.example.fiszki.activityPanel;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import static xdroid.toaster.Toaster.toast;
 import static xdroid.toaster.Toaster.toastLong;
+
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,7 +31,6 @@ import com.example.fiszki.entity.Question;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -40,7 +38,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class AdminAddQuestion extends AppCompatActivity {
-    public static final String QUIZ_NR="quiz_nr";
     private EditText questionEditT;
     Button addImageGallery;
     Button addImageInternet;
@@ -49,7 +46,7 @@ public class AdminAddQuestion extends AppCompatActivity {
     ImageView imageView;
     QuizDbHelper dbHelper;
 
-    Bitmap bitmap = null;
+    Uri selectedImage;
 
     byte imgByByte[];
 
@@ -67,7 +64,8 @@ public class AdminAddQuestion extends AppCompatActivity {
         addImageGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadImageGallery();
+                
+                choseImageInGallery();
             }
         });
         addImageInternet.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +98,7 @@ public class AdminAddQuestion extends AppCompatActivity {
         }
     }
 
+
     private void showDialogWindow() {
         View view = View.inflate(this, R.layout.path_internet_img_window, null);
         final Dialog dialog = new Dialog(this);
@@ -131,41 +130,33 @@ public class AdminAddQuestion extends AppCompatActivity {
         new Pobranie().execute(path);
     }
 
-    private void loadImageGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK,  MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent,0);
+    private void choseImageInGallery() {
+       // Intent intent = new Intent(Intent.ACTION_PICK,  MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+       // startActivityForResult(intent,0);
+        Intent intent= new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
     }
 
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                Uri selectedImage = data.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-
-                    imgByByte = bos.toByteArray();
-
-                    imageView.setImageBitmap(bitmap);
-
-                } catch (FileNotFoundException e) {
-
-                    e.printStackTrace();
-
-                } catch (IOException e) {
-
-                    e.printStackTrace();
-                }
+            if (resultCode == -1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                selectedImage = data.getData();
+                imageView.setImageURI(selectedImage);
 
             }
         }
 
+    private String getExtension(Uri uri){
+        ContentResolver contentResolver= getContentResolver();
+        MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
     private void saveQuestion(){
-        Question newQuestion=new Question(questionEditT.getText().toString(), imgByByte);
+        Question newQuestion=new Question(questionEditT.getText().toString(), selectedImage, getExtension(selectedImage));
 
         openNewActivity(newQuestion);
     }

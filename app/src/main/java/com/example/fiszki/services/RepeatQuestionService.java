@@ -33,7 +33,7 @@ public class RepeatQuestionService {
             Option optionEN=quizDbHelper.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
 
             repeatQuestionDTO.setQuestion(question.getName());
-            repeatQuestionDTO.setName_image(question.getName_image());
+           // repeatQuestionDTO.setName_image(question.getName_image());
             repeatQuestionDTO.setOptionPL(optionPL.getName());
             repeatQuestionDTO.setOptionEN(optionEN.getName());
             repeatQuestionDTO.setAddToRepeatBoard(isAddQuestionToRepeatBoard(question.getId()));

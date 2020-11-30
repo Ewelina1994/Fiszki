@@ -56,14 +56,6 @@ public class QuizService {
         }
     }
 
-    public QuizDbHelper getDbHelper() {
-        return quizDbHelper;
-    }
-
-    public void setDbHelper(QuizDbHelper dbHelper) {
-        this.quizDbHelper = dbHelper;
-    }
-
     public List<Question> getQuestionListAll() {
         return questionListAll;
     }

@@ -179,10 +179,13 @@ public class RepeatBoard extends AppCompatActivity {
             }
             //nowa katywność żaden przycisk wstecz lub do przodu nie jest kliknięty
             else if(value==0){
-                byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
-                Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
-                //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
-                image.setImageBitmap(bmp);
+                if(repeatQuestionDTOList.get(currentQuestion).getName_image()!=null){
+                    byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
+                    Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
+                    //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
+                    image.setImageBitmap(bmp);
+                }
+
                 questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion());
                 answerTextViewEN.setText(repeatQuestionDTOList.get(currentQuestion).getOptionEN());
                 answerTextViewPL.setText(repeatQuestionDTOList.get(currentQuestion).getOptionPL());
