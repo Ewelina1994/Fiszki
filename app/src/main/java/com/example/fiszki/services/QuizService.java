@@ -1,5 +1,6 @@
 package com.example.fiszki.services;
 
+import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.entity.Option;
@@ -19,9 +20,10 @@ public class QuizService {
     private QuizDbHelper quizDbHelper;
     LanguageEnum language;
 
-    public QuizService(QuizDbHelper dbHelper, DifficultyEnum difficulty){
-        quizDbHelper=dbHelper;
-        questionListAll = dbHelper.getAllQuestions();
+    public QuizService(FirebaseConfiguration firebaseConfiguration, DifficultyEnum difficulty){
+        //quizDbHelper=dbHelper;
+        //questionListAll = dbHelper.getAllQuestions();
+        questionListAll= firebaseConfiguration.getQuestions();
         Collections.shuffle(questionListAll);
         language=checkWhatLanguage(difficulty);
         listQuestionDTO=getRandomQuestionInQuiz(questionListAll);

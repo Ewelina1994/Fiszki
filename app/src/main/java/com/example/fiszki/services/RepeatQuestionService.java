@@ -1,7 +1,6 @@
 package com.example.fiszki.services;
 
-import com.example.fiszki.QuestionDTO;
-import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.RepeatQuestionDTO;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
@@ -13,10 +12,10 @@ import java.util.List;
 public class RepeatQuestionService {
     private List<RepeatQuestionDTO> repeatQuestionDTOList;
     private List<RepeatQuestion> repeatQuestionList;
-    private QuizDbHelper quizDbHelper;
+    private FirebaseConfiguration firebaseConfiguration;
 
-    public RepeatQuestionService(QuizDbHelper dbHelper) {
-        this.quizDbHelper=dbHelper;
+    public RepeatQuestionService(FirebaseConfiguration firebaseConfiguration) {
+        this.firebaseConfiguration =firebaseConfiguration;
         repeatQuestionList=getAllQuestionOnRepeatBoard();
         repeatQuestionDTOList= new ArrayList<>();
     }
@@ -28,9 +27,9 @@ public class RepeatQuestionService {
         for(int i=0; i<repeatQuestionList.size(); i++){
             RepeatQuestionDTO repeatQuestionDTO= new RepeatQuestionDTO();
 
-            Question question=quizDbHelper.getQuestionById(repeatQuestionList.get(i).getQuestion());
-            Option optionPL=quizDbHelper.getGoodOptionPL(repeatQuestionList.get(i).getQuestion());
-            Option optionEN=quizDbHelper.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
+            Question question= firebaseConfiguration.getQuestionById(repeatQuestionList.get(i).getQuestion());
+            Option optionPL= firebaseConfiguration.getGoodOptionPL(repeatQuestionList.get(i).getQuestion());
+            Option optionEN= firebaseConfiguration.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
 
             repeatQuestionDTO.setQuestion(question.getName());
            // repeatQuestionDTO.setName_image(question.getName_image());
@@ -53,18 +52,18 @@ public class RepeatQuestionService {
         boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question.getQuestion());
         //spr czy pytenie nie jest w tablicy powtórek
         if(isAddToRepeatBoard==false){
-            return quizDbHelper.addQuestionToRepeatTable(repeatQuestion.getQuestion());
+            return firebaseConfiguration.addQuestionToRepeatTable(repeatQuestion.getQuestion());
         }
         return -1;
     }
 
     //???
     public long deleteQuestionToDBRepeatTable(RepeatQuestion question){
-        return quizDbHelper.deleteQuestionFromRepeatTable(question.getQuestion());
+        return firebaseConfiguration.deleteQuestionFromRepeatTable(question.getQuestion());
     }
 
     public List<RepeatQuestion> getAllQuestionOnRepeatBoard(){
-        return quizDbHelper.getAllQuestionFromRepeatTable();
+        return firebaseConfiguration.getAllQuestionFromRepeatTable();
     }
 
     //sprawdzenie czy pytanie jest juz w tablicy powtórek

@@ -1,6 +1,6 @@
 package com.example.fiszki.activityPanel;
 
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fiszki.FirebaseConfiguration;
@@ -17,7 +18,8 @@ import com.example.fiszki.R;
 import com.example.fiszki.StorageFirebase;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,10 +119,12 @@ public class AddOption extends AppCompatActivity {
 
     private void saveToDatabase() {
         StorageFirebase storageFirebase= new StorageFirebase();
-        String imageId=storageFirebase.fileuploader(question_save.getName_image(), question_save.getExtensionImg());
+        FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration(this);
+        String imageId=storageFirebase.fileuploaderfromUri(question_save.getName_image(), question_save.getExtensionImg());
 
-       FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration();
         firebaseConfiguration.addQuestion(question_save, imageId);
+
+
 
         firebaseConfiguration.addOptionsPL(optionListPL);
         firebaseConfiguration.addOptionsEN(optionListEN);

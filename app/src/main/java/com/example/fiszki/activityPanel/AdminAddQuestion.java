@@ -9,9 +9,12 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
@@ -31,8 +34,11 @@ import com.example.fiszki.entity.Question;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -112,7 +118,7 @@ public class AdminAddQuestion extends AppCompatActivity {
         addPathBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path=pathEditText.getText().toString();
+                String path=pathEditText.getText().toString().trim();
                 String treeLatesLetter=path.substring(path.length()-3);
                 if(treeLatesLetter.equals("jpg")||treeLatesLetter.equals("png")||treeLatesLetter.equals("gif")){
                     loadImageInternet(path);
@@ -150,13 +156,19 @@ public class AdminAddQuestion extends AppCompatActivity {
         }
 
     private String getExtension(Uri uri){
-        ContentResolver contentResolver= getContentResolver();
-        MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+        if (uri != null) {
+
+            ContentResolver contentResolver= getContentResolver();
+            MimeTypeMap mimeTypeMap=MimeTypeMap.getSingleton();
+            return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+        }else {
+            return "";
+        }
+
     }
 
     private void saveQuestion(){
-        Question newQuestion=new Question(questionEditT.getText().toString(), selectedImage, getExtension(selectedImage));
+        Question newQuestion=new Question(questionEditT.getText().toString().trim(), selectedImage, getExtension(selectedImage));
 
         openNewActivity(newQuestion);
     }
@@ -205,7 +217,7 @@ public class AdminAddQuestion extends AppCompatActivity {
     public class Pobranie extends AsyncTask<String, Integer, String> {
 
         boolean isGoodPathImg = false;
-
+        String path= null;
         @Override
         protected void onPreExecute() {
             progressBarAT.setMax(100);
@@ -218,32 +230,41 @@ public class AdminAddQuestion extends AppCompatActivity {
         @SuppressLint("LongLogTag")
         @Override
         protected String doInBackground(String... strings) {
-            String path = strings[0];
+            File new_folder;
+            path = strings[0];
             int file_length = 0;
             try {
                 URL url = new URL(path);
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.connect();
                 file_length = urlConnection.getContentLength();
-                InputStream is = urlConnection.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
-
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                byte[] data = new byte[50];
-                //We create an array of bytes
+                if (Build.VERSION.SDK_INT > 23) {
+                    String path2 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator;
+                    new_folder = new File(path2, "archiwum");
+                    Log.v("Wersja > 23. Jestem i tworze archiwum", String.valueOf(new_folder));
+                } else {
+                    new_folder = new File("sdcard/archiwum/");
+                    Log.v("Wersja >23. Jestem i tworze archiwum", String.valueOf(new_folder));
+                }
+                if (!new_folder.exists()) {
+                    new_folder.mkdirs();
+                    Log.v("Folder nie istnieje ale go tworze", String.valueOf(new_folder));
+                }
+                File input_file = new File(new_folder, "przyroda.jpg");
+                InputStream inputStream = new BufferedInputStream(url.openStream(), 8192);
+                byte[] data = new byte[1024];
                 int total = 0;
                 int count = 0;
 
-                while ((count = bis.read(data, 0, data.length)) != -1) {
+                OutputStream outputStream = new FileOutputStream(input_file);
+                while ((count = inputStream.read(data)) != -1) {
                     total += count;
-                    buffer.write(data, 0, count);
+                    outputStream.write(data, 0, count);
                     int progress = (int) total * 100 / file_length;
                     publishProgress(progress);
                 }
-                imgByByte = buffer.toByteArray();
-                is.close();
-                setImage();
-                isGoodPathImg = true;
+                inputStream.close();
+                outputStream.close();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 setToastWrongPath();
@@ -262,6 +283,14 @@ public class AdminAddQuestion extends AppCompatActivity {
         protected void onPostExecute(String s) {
             progressBarAT.setVisibility(View.INVISIBLE);
             Log.v("Ustawiam pasek", String.valueOf(progressBarAT));
+
+            if(Build.VERSION.SDK_INT > 23){
+                path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "/archiwum/przyroda.jpg";
+                Log.v("Jestem w folderze", String.valueOf(path));
+            } else {
+                path = "sdcard/archiwum/przyroda.jpg";
+            }
+            imageView.setImageDrawable(Drawable.createFromPath(path));
 
             // imageView.setImageDrawable(Drawable.createFromPath(path));
             addImageInternet.setEnabled(true);

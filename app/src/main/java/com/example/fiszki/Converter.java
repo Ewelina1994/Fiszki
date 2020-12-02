@@ -5,9 +5,9 @@ import com.example.fiszki.entity.Question;
 import com.example.fiszki.entity.RepeatQuestion;
 
 public class Converter {
-    QuizDbHelper dbHelper;
-    public Converter(QuizDbHelper db) {
-        dbHelper=db;
+    FirebaseConfiguration firebaseConfiguration;
+    public Converter(FirebaseConfiguration firebaseConfiguration) {
+        this.firebaseConfiguration=firebaseConfiguration;
     }
 
     public static RepeatQuestion questionDTOtoRepeatQuestion(QuestionDTO questionDTO){
@@ -18,7 +18,7 @@ public class Converter {
 
     public RepeatQuestion repeatQuestionDTOtoRepeatQuestion(RepeatQuestionDTO repeatQuestionDTO) {
         RepeatQuestion repeatQuestion= new RepeatQuestion();
-        Question question=dbHelper.getQuestionByName(repeatQuestionDTO.getQuestion());
+        Question question=firebaseConfiguration.getQuestionByName(repeatQuestionDTO.getQuestion());
         repeatQuestion.setQuestion(question.getId());
 
         return repeatQuestion;

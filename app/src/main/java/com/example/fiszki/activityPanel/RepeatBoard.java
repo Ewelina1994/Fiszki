@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.fiszki.Converter;
+import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
 import com.example.fiszki.RepeatQuestionDTO;
@@ -59,9 +60,9 @@ public class RepeatBoard extends AppCompatActivity {
         buttonAddToReplays=findViewById(R.id.btnAddToReplays);
         buttoinNext=findViewById(R.id.btnNextQuestion);
 
-        QuizDbHelper dbHelper = new QuizDbHelper(this);
-        converter= new Converter(dbHelper);
-        repeatQuestionService= new RepeatQuestionService(dbHelper);
+        FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration(this);
+        converter= new Converter(firebaseConfiguration);
+        repeatQuestionService= new RepeatQuestionService(firebaseConfiguration);
         repeatQuestionDTOList=repeatQuestionService.getRepeatQuestionDTOList();
 
         //is_addQuestion_to_replace_board=true;

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fiszki.Converter;
+import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.services.QuizService;
@@ -105,6 +106,7 @@ public class QuizActivity extends AppCompatActivity {
     QuizService quizService;
     static RepeatQuestionService repeatQuestionService;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,15 +145,15 @@ public class QuizActivity extends AppCompatActivity {
         //pobranie randomowych pytań z QuizService
 
         if (savedInstanceState == null) {
-            QuizDbHelper dbHelper = new QuizDbHelper(this);
+            FirebaseConfiguration firebaseConfiguration = new FirebaseConfiguration(this);
             DifficultyEnum difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
-            quizService= new QuizService(dbHelper, difficultyEnum);
+            quizService= new QuizService(firebaseConfiguration, difficultyEnum);
             questionList = quizService.getRandomQuestionInQuiz();
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
             //zainicjowanie serwisu do zapisywania pytań dodanych do powtórek
-            repeatQuestionService = new RepeatQuestionService(dbHelper);
+            repeatQuestionService = new RepeatQuestionService(firebaseConfiguration);
             showNextQuestion();
             //set Event to cardView
             setSingleEvent(linearayoutCardView);
