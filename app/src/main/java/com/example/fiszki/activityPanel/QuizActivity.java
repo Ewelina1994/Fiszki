@@ -29,6 +29,7 @@ import com.example.fiszki.Converter;
 import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.enums.LanguageEnum;
 import com.example.fiszki.services.QuizService;
 import com.example.fiszki.R;
 import com.example.fiszki.entity.StatisticEntiti;
@@ -98,13 +99,12 @@ public class QuizActivity extends AppCompatActivity {
 
     //przychodzi z podrzednej aktywnosci
     String difficulty;
+    DifficultyEnum difficultyEnum;
+    List<Option>listOptionsInQuiz;
 
     //Głos
     TextToSpeech textToSpeech;
     Button speakButton;
-
-    QuizService quizService;
-    static RepeatQuestionService repeatQuestionService;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -145,15 +145,14 @@ public class QuizActivity extends AppCompatActivity {
         //pobranie randomowych pytań z QuizService
 
         if (savedInstanceState == null) {
-            FirebaseConfiguration firebaseConfiguration = new FirebaseConfiguration(this);
-            DifficultyEnum difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
-            quizService= new QuizService(firebaseConfiguration, difficultyEnum);
-            questionList = quizService.getRandomQuestionInQuiz();
+            //FirebaseConfiguration firebaseConfiguration = new FirebaseConfiguration(this);
+           difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
+           QuizService quizService= new QuizService(this);
+            questionList = (ArrayList<QuestionDTO>) quizService.getRandomQuestionInQuiz();
+
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
-            //zainicjowanie serwisu do zapisywania pytań dodanych do powtórek
-            repeatQuestionService = new RepeatQuestionService(firebaseConfiguration);
             showNextQuestion();
             //set Event to cardView
             setSingleEvent(linearayoutCardView);
@@ -191,20 +190,28 @@ public class QuizActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
-                    if(is_addQuestion_to_replace_board==false){
-                        repeatQuestionService.saveQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
+//                    if(is_addQuestion_to_replace_board==false){
+//                        repeatQuestionService.saveQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
+//                        is_addQuestion_to_replace_board=true;
+//                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+//
+//                    }
+//                    //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
+//                     else {
+//                        repeatQuestionService.deleteQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
+//                        is_addQuestion_to_replace_board=false;
+//                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+//
+//                    }
+                    if(questionList.get(questionCount-1).isIs_added_to_repaet_board()==false){
+                        questionList.get(questionCount-1).setIs_added_to_repaet_board(true);
                         is_addQuestion_to_replace_board=true;
                         setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-
-                    }
-                    //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
-                     else {
-                        repeatQuestionService.deleteQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
+                    }else {
+                        questionList.get(questionCount-1).setIs_added_to_repaet_board(false);
                         is_addQuestion_to_replace_board=false;
                         setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-
                     }
-
                 }
                 });
         } else {
@@ -225,6 +232,29 @@ public class QuizActivity extends AppCompatActivity {
                 updateCountDownText();
                 showSolution();
             }
+        }
+    }
+
+    private List<Option> getOptionByLevel(QuestionDTO questionDTO) {
+       // daj dla konkretnego poziomu opcje
+
+            List<Option> newOptionList=new ArrayList<>();
+        for (Option option: questionDTO.getOptions()) {
+            if(option.getLanguage().equals(checkWhatLanguage(difficultyEnum).toString())){
+                newOptionList.add(option);
+            }
+        }
+            return newOptionList;
+
+    }
+    public LanguageEnum checkWhatLanguage(DifficultyEnum difficulty) {
+        switch (difficulty) {
+            case Łatwy:
+                return LanguageEnum.PL;
+            case Średni:
+                return  LanguageEnum.EN;
+            default:
+                return LanguageEnum.EN;
         }
     }
 
@@ -275,7 +305,9 @@ public class QuizActivity extends AppCompatActivity {
                     //spr czy czas już nie minął czy nie udzieliłes odp
                     if(!ansewered){
                         //jeśli klikniemy ustawiamy zaznaczoną opcje na obecnie klikniętą
-                        clickedAnswer=currentQuestion.getOptions().get(index);
+                        //clickedAnswer=currentQuestion.getOptions().get(index);
+                        //clickedAnswer=getOptionByLevel(currentQuestion).get(index);
+                        clickedAnswer=listOptionsInQuiz.get(index);
                         //dla każdej karty ustawiamy kolor żeby przy podwójnym kliknięciu nie było 2 razy zaznaczonej karty
                         cardsView.forEach(card->{
                             if(card==cardsView.get(index)){
@@ -298,10 +330,10 @@ public class QuizActivity extends AppCompatActivity {
 //        linearayoutCardView.clearFocus();
             currentQuestion = questionList.get(questionCount);
 
-            List<Option>listOptionsInQuiz=currentQuestion.getOptions();
+            listOptionsInQuiz=getOptionByLevel(currentQuestion);
             Collections.shuffle(listOptionsInQuiz);
 
-            currentQuestion.setOptions(listOptionsInQuiz);
+            //currentQuestion.setOptions(listOptionsInQuiz);
 
             textViewQuestion.setText(currentQuestion.getQuestion().getName());
             textViewQuestion1.setText(listOptionsInQuiz.get(0).getName());
@@ -320,7 +352,7 @@ public class QuizActivity extends AppCompatActivity {
             startCountDown();
 
             //spr czy pytanie jest w tablicy powtórek
-            is_addQuestion_to_replace_board=repeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion.getQuestion().getId());
+            is_addQuestion_to_replace_board=currentQuestion.isIs_added_to_repaet_board();
             setColorBtnAddToReplace(is_addQuestion_to_replace_board);
         } else {
             finishQuiz();
@@ -390,14 +422,31 @@ public class QuizActivity extends AppCompatActivity {
         cardsView.add((CardView) linearayoutCardView.getChildAt(0));
         cardsView.add((CardView) linearayoutCardView.getChildAt(1));
         cardsView.add((CardView) linearayoutCardView.getChildAt(2));
-//
-       for(int i=0; i<currentQuestion.getOptions().size(); i++){
-           if(currentQuestion.getOptions().get(i).getIs_right()==1){
+
+        //List<Option>listOptionsInQuiz=getOptionByLevel(currentQuestion);
+//       for(int i=0; i<listOptionsInQuiz.size(); i++){
+//           if(listOptionsInQuiz.get(i).getIs_right()==1){
+//               cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#2AFF3F"));
+//           }else{
+//               cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#FF0A0E"));
+//           }
+//       }
+        String goodOption=null;
+        for (Option option : listOptionsInQuiz) {
+            if (option.getIs_right() == 1) {
+                goodOption = option.getName();
+            }
+        }
+
+       for(int i=0; i<listOptionsInQuiz.size(); i++){
+           String textInCardView=((TextView) cardsView.get(i).getChildAt(0)).getText().toString();
+           if(textInCardView.equalsIgnoreCase(goodOption)){
                cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#2AFF3F"));
-           }else{
+           }else {
                cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#FF0A0E"));
            }
        }
+
 
         if (questionCount < questionCountTotal) {
             buttoinNext.setText("Next");
@@ -430,15 +479,6 @@ public class QuizActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Your score: \n" + score + "/" + questionCountTotal);
         alertDialogBuilder.setCancelable(false);
-//        alertDialogBuilder.setPositiveButton("NEW QUIZ", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int i) {
-//                Intent intent = new Intent(Quiz.this, Quiz.class);
-//                intent.putExtra("EXTRA_DIFFICULTY", difficulty);
-//               // startActivityForResult(intent, REQUEST_CODE_QUIZ);
-//                startActivity(intent);
-//            }
-//        });
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {

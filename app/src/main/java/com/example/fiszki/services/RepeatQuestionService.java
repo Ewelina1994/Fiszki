@@ -12,10 +12,8 @@ import java.util.List;
 public class RepeatQuestionService {
     private List<RepeatQuestionDTO> repeatQuestionDTOList;
     private List<RepeatQuestion> repeatQuestionList;
-    private FirebaseConfiguration firebaseConfiguration;
 
-    public RepeatQuestionService(FirebaseConfiguration firebaseConfiguration) {
-        this.firebaseConfiguration =firebaseConfiguration;
+    public RepeatQuestionService() {
         repeatQuestionList=getAllQuestionOnRepeatBoard();
         repeatQuestionDTOList= new ArrayList<>();
     }
@@ -27,9 +25,9 @@ public class RepeatQuestionService {
         for(int i=0; i<repeatQuestionList.size(); i++){
             RepeatQuestionDTO repeatQuestionDTO= new RepeatQuestionDTO();
 
-            Question question= firebaseConfiguration.getQuestionById(repeatQuestionList.get(i).getQuestion());
-            Option optionPL= firebaseConfiguration.getGoodOptionPL(repeatQuestionList.get(i).getQuestion());
-            Option optionEN= firebaseConfiguration.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
+            Question question= FirebaseConfiguration.getQuestionById(repeatQuestionList.get(i).getQuestion());
+            Option optionPL= FirebaseConfiguration.getGoodOptionPL(repeatQuestionList.get(i).getQuestion());
+            Option optionEN= FirebaseConfiguration.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
 
             repeatQuestionDTO.setQuestion(question.getName());
            // repeatQuestionDTO.setName_image(question.getName_image());
@@ -52,18 +50,18 @@ public class RepeatQuestionService {
         boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question.getQuestion());
         //spr czy pytenie nie jest w tablicy powtórek
         if(isAddToRepeatBoard==false){
-            return firebaseConfiguration.addQuestionToRepeatTable(repeatQuestion.getQuestion());
+            return FirebaseConfiguration.addQuestionToRepeatTable(repeatQuestion.getQuestion());
         }
         return -1;
     }
 
     //???
     public long deleteQuestionToDBRepeatTable(RepeatQuestion question){
-        return firebaseConfiguration.deleteQuestionFromRepeatTable(question.getQuestion());
+        return FirebaseConfiguration.deleteQuestionFromRepeatTable(question.getQuestion());
     }
 
     public List<RepeatQuestion> getAllQuestionOnRepeatBoard(){
-        return firebaseConfiguration.getAllQuestionFromRepeatTable();
+        return FirebaseConfiguration.getAllQuestionFromRepeatTable();
     }
 
     //sprawdzenie czy pytanie jest juz w tablicy powtórek

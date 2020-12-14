@@ -12,6 +12,7 @@ import java.util.List;
 public class QuestionDTO implements Parcelable {
     Question question;
     List<Option> options;
+    boolean is_added_to_repaet_board;
 
     public QuestionDTO(Question question, List<Option> options) {
         this.question = question;
@@ -74,4 +75,11 @@ public class QuestionDTO implements Parcelable {
         this.options = options;
     }
 
+    public boolean isIs_added_to_repaet_board() {
+        return is_added_to_repaet_board;
+    }
+
+    public void setIs_added_to_repaet_board(boolean is_added_to_repaet_board) {
+        this.is_added_to_repaet_board = is_added_to_repaet_board;
+    }
 }

@@ -4,12 +4,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,7 +33,7 @@ public class StorageFirebase extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Get a URL to the uploaded content
-                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            //Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -48,10 +44,9 @@ public class StorageFirebase extends AppCompatActivity {
                         }
                     });
             return imageId;
-        } else {
+        } else
             return " ";
         }
 
-    }
 }
 

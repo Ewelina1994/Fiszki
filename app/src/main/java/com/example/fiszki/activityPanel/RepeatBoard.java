@@ -1,9 +1,8 @@
 package com.example.fiszki.activityPanel;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -18,12 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.fiszki.Converter;
-import com.example.fiszki.FirebaseConfiguration;
-import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.R;
-import com.example.fiszki.RepeatQuestionDTO;
-import com.example.fiszki.entity.RepeatQuestion;
-import com.example.fiszki.services.RepeatQuestionService;
+import com.example.fiszki.services.QuizService;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -40,10 +37,9 @@ public class RepeatBoard extends AppCompatActivity {
     boolean is_addQuestion_to_replace_board;
     int currentQuestion;
 
-    RepeatQuestionService repeatQuestionService;
     Converter converter;
-    private List<RepeatQuestionDTO> repeatQuestionDTOList;
-
+    //private List<RepeatQuestionDTO> repeatQuestionDTOList;
+    private List<QuestionDTO>repeatQuestionDTOList;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,10 +56,8 @@ public class RepeatBoard extends AppCompatActivity {
         buttonAddToReplays=findViewById(R.id.btnAddToReplays);
         buttoinNext=findViewById(R.id.btnNextQuestion);
 
-        FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration(this);
-        converter= new Converter(firebaseConfiguration);
-        repeatQuestionService= new RepeatQuestionService(firebaseConfiguration);
-        repeatQuestionDTOList=repeatQuestionService.getRepeatQuestionDTOList();
+        converter= new Converter();
+        repeatQuestionDTOList=QuizService.getListReapeatBoardQuestions();
 
         //is_addQuestion_to_replace_board=true;
         currentQuestion=0;
@@ -104,27 +98,27 @@ public class RepeatBoard extends AppCompatActivity {
         showQuestion(0);
     }
 
-    private void showPrevioQuestion() {
-    }
 
     private void addOrDeleteQuestion() {
         if(repeatQuestionDTOList.size()!=0){
-            RepeatQuestion repeatQuestion=converter.repeatQuestionDTOtoRepeatQuestion(repeatQuestionDTOList.get(currentQuestion));
+            //RepeatQuestion repeatQuestion=converter.repeatQuestionDTOtoRepeatQuestion(repeatQuestionDTOList.get(currentQuestion));
+            QuestionDTO repeatQuestion=repeatQuestionDTOList.get(currentQuestion);
             //spr czy pytanie jest w tablicy powtórek
-            is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).getIsAddToRepeatBoard();
+            is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).isIs_added_to_repaet_board();
             // jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
             if(is_addQuestion_to_replace_board==false){
-                repeatQuestionService.saveQuestionToDBRepeatTable(repeatQuestion);
+                QuizService.addToRepate(repeatQuestion);
+                //repeatQuestionDTOList.saveQuestionToDBRepeatTable(repeatQuestion);
                 is_addQuestion_to_replace_board=true;
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-                repeatQuestionDTOList.get(currentQuestion).setAddToRepeatBoard(is_addQuestion_to_replace_board);
+                repeatQuestionDTOList.get(currentQuestion).setIs_added_to_repaet_board(is_addQuestion_to_replace_board);
             }
             //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
             else {
-                repeatQuestionService.deleteQuestionToDBRepeatTable(repeatQuestion);
+                QuizService.deleteFromToRepate(repeatQuestion);
                 is_addQuestion_to_replace_board=false;
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-                repeatQuestionDTOList.get(currentQuestion).setAddToRepeatBoard(is_addQuestion_to_replace_board);
+                repeatQuestionDTOList.get(currentQuestion).setIs_added_to_repaet_board(is_addQuestion_to_replace_board);
             }
         }
     }
@@ -145,18 +139,27 @@ public class RepeatBoard extends AppCompatActivity {
                    setBtnNextandBtnPrevious();
 
                     //spr czy pytanie jest w tablicy powtórek
-                    is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).getIsAddToRepeatBoard();
+                    is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).isIs_added_to_repaet_board();
                     setColorBtnAddToReplace(is_addQuestion_to_replace_board);
                     //ustaw pola
-                    byte[] byteImg = repeatQuestionDTOList.get(currentQuestion).getName_image();
-                    Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
+                    //byte[] byteImg = repeatQuestionDTOList.get(currentQuestion).getName_image();
+                    //Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
                     //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
-                    image.setImageBitmap(bmp);
-                    questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion());
-                    answerTextViewEN.setText(repeatQuestionDTOList.get(currentQuestion).getOptionEN());
-                    answerTextViewPL.setText(repeatQuestionDTOList.get(currentQuestion).getOptionPL());
+                    //image.setImageBitmap(bmp);
+                    questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion().getName());
+                    setImageFromUri();
+
+                    repeatQuestionDTOList.get(currentQuestion).getOptions().forEach(option->{
+                        if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("EN")){
+                            answerTextViewEN.setText(option.getName());
+                        }
+                        if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("PL")){
+                            answerTextViewPL.setText(option.getName());
+                        }
+                    });
+
                     //spr czy pytanie jest w tablicy powtórek
-                    is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).getIsAddToRepeatBoard();
+                    is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).isIs_added_to_repaet_board();
                     setColorBtnAddToReplace(is_addQuestion_to_replace_board);
                 }
             }
@@ -166,37 +169,59 @@ public class RepeatBoard extends AppCompatActivity {
 
                 setBtnNextandBtnPrevious();
 
-                    byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
-                    Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
+                    //byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
+                    //Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
                     //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
-                    image.setImageBitmap(bmp);
-                    questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion());
-                    answerTextViewEN.setText(repeatQuestionDTOList.get(currentQuestion).getOptionEN());
-                    answerTextViewPL.setText(repeatQuestionDTOList.get(currentQuestion).getOptionPL());
+                    //image.setImageBitmap(bmp);
+                    questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion().getName());
+                setImageFromUri();
+                repeatQuestionDTOList.get(currentQuestion).getOptions().forEach(option->{
+                    if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("EN")){
+                        answerTextViewEN.setText(option.getName());
+                    }
+                    if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("PL")){
+                        answerTextViewPL.setText(option.getName());
+                    }
+                });
                 //spr czy pytanie jest w tablicy powtórek
-                is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).getIsAddToRepeatBoard();
+                is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).isIs_added_to_repaet_board();
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
 
             }
             //nowa katywność żaden przycisk wstecz lub do przodu nie jest kliknięty
             else if(value==0){
-                if(repeatQuestionDTOList.get(currentQuestion).getName_image()!=null){
-                    byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
-                    Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
-                    //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
-                    image.setImageBitmap(bmp);
-                }
+//                if(repeatQuestionDTOList.get(currentQuestion).getName_image()!=null){
+//                    byte[] byteImg=repeatQuestionDTOList.get(currentQuestion).getName_image();
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
+//                    //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
+//                    image.setImageBitmap(bmp);
+//                }
 
-                questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion());
-                answerTextViewEN.setText(repeatQuestionDTOList.get(currentQuestion).getOptionEN());
-                answerTextViewPL.setText(repeatQuestionDTOList.get(currentQuestion).getOptionPL());
+                questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion().getName());
+                setImageFromUri();
+                repeatQuestionDTOList.get(currentQuestion).getOptions().forEach(option->{
+                    if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("EN")){
+                        answerTextViewEN.setText(option.getName());
+                    }
+                    if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("PL")){
+                        answerTextViewPL.setText(option.getName());
+                    }
+                });
                 //spr czy pytanie jest w tablicy powtórek
-                is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).getIsAddToRepeatBoard();
+                is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).isIs_added_to_repaet_board();
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
 
                 setBtnNextandBtnPrevious();
             }
         }
+    }
+
+    private void setImageFromUri() {
+        Uri uriImage=repeatQuestionDTOList.get(currentQuestion).getQuestion().getUploadImageUri();
+        Picasso.get().load(uriImage).into(image);
+//        Glide.with(this)
+//                .load(repeatQuestionDTOList.get(currentQuestion).getQuestion().getUploadImageUri())
+//                .into(image);
     }
 
     private void setBtnNextandBtnPrevious() {

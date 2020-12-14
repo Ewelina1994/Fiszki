@@ -14,7 +14,7 @@ public class Question implements Parcelable {
 
     long id;
     private String name;
-    private Uri  name_image;
+    private Uri uploadImageUri;
     String extensionImg;
 
     public Question() {
@@ -23,7 +23,8 @@ public class Question implements Parcelable {
     public Question(Parcel in) {
         id=in.readLong();
         name=in.readString();
-        name_image = in.readParcelable(Uri.class.getClassLoader());
+//        name_image = in.readParcelable(Uri.class.getClassLoader());
+        uploadImageUri = in.readParcelable(String.class.getClassLoader());
         extensionImg=in.readString();
     }
 
@@ -33,13 +34,13 @@ public class Question implements Parcelable {
     }
 
     public Question(String question, Uri image, String extensionImg) {
-        this.name_image=image;
+        this.uploadImageUri =image;
         this.name = question;
         this.extensionImg=extensionImg;
        // this.id=createID();
     }
     public Question(String question, Uri image) {
-        this.name_image=image;
+        this.uploadImageUri =image;
         this.name = question;
         //this.id=createID();
     }
@@ -61,12 +62,12 @@ public class Question implements Parcelable {
         this.id = id;
     }
 
-    public Uri getName_image() {
-        return name_image;
+    public Uri getUploadImageUri() {
+        return uploadImageUri;
     }
 
-    public void setName_image(Uri name_image) {
-        this.name_image = name_image;
+    public void setUploadImageUri(Uri uploadImageUri) {
+        this.uploadImageUri = uploadImageUri;
     }
 
     public String getExtensionImg() {
@@ -86,7 +87,7 @@ public class Question implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(name);
-        dest.writeParcelable(name_image, flags);
+        dest.writeParcelable(uploadImageUri, flags);
         dest.writeString(extensionImg);
     }
 

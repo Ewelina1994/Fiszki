@@ -1,8 +1,14 @@
 package com.example.fiszki.services;
 
+import android.content.Context;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.activityPanel.QuizActivity;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
 import com.example.fiszki.enums.DifficultyEnum;
@@ -13,64 +19,57 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class QuizService {
-    ArrayList<QuestionDTO> listQuestionDTO;
-    private List<Question> questionListAll;
-    private List<Question> randomQuestionInQuiz=new ArrayList<>();
-    private QuizDbHelper quizDbHelper;
-    LanguageEnum language;
+public final class QuizService {
+    private static List<QuestionDTO> questionDTOList;
+    Context context;
 
-    public QuizService(FirebaseConfiguration firebaseConfiguration, DifficultyEnum difficulty){
-        //quizDbHelper=dbHelper;
-        //questionListAll = dbHelper.getAllQuestions();
-        questionListAll= firebaseConfiguration.getQuestions();
-        Collections.shuffle(questionListAll);
-        language=checkWhatLanguage(difficulty);
-        listQuestionDTO=getRandomQuestionInQuiz(questionListAll);
+    public QuizService(Context context){
+        this.context=context;
+//        questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
+//        Collections.shuffle(questionDTOList);
+
     }
 
-    public ArrayList<QuestionDTO> getRandomQuestionInQuiz(List<Question> list){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<QuestionDTO> getRandomQuestionInQuiz(){
+        //inicjalizacjia
+        questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
+
+        Collections.shuffle(questionDTOList);
+
         Random random= new Random();
-        ArrayList<Question> questionRandom= new ArrayList<>();
-        ArrayList<QuestionDTO>questionsDTO=new ArrayList<>();
+        List<QuestionDTO> questionRandom= new ArrayList<>();
 
         while (questionRandom.size()<5){
-            int randomIndex=random.nextInt(list.size());
-            if(!questionRandom.contains(list.get(randomIndex))){
-                questionRandom.add(list.get(randomIndex));
-                List<Option>options;
-                options=quizDbHelper.getOptionsToQuiz(list.get(randomIndex).getId(), language);
-                questionsDTO.add(new QuestionDTO(list.get(randomIndex), options));
+            int randomIndex=random.nextInt(questionDTOList.size());
+            if(!questionRandom.contains(questionDTOList.get(randomIndex))){
+                questionRandom.add(questionDTOList.get(randomIndex));
             }
-
         }
-        return questionsDTO;
+        return questionRandom;
     }
 
-    public LanguageEnum checkWhatLanguage(DifficultyEnum difficulty) {
-        switch (difficulty) {
-            case Łatwy:
-                return LanguageEnum.PL;
-            case Średni:
-                return  LanguageEnum.EN;
-            default:
-                return LanguageEnum.EN;
+    public static List<QuestionDTO> getListReapeatBoardQuestions() {
+        List<QuestionDTO>repeatListQuestions= new ArrayList<>();
+        for (QuestionDTO questionDTO : questionDTOList) {
+            if(questionDTO.isIs_added_to_repaet_board()){
+
+                repeatListQuestions.add(questionDTO);
+
+            }
         }
+        return repeatListQuestions;
     }
 
-    public List<Question> getQuestionListAll() {
-        return questionListAll;
+    public static void addToRepate(QuestionDTO questionDTO) {
+        int index=questionDTOList.indexOf(questionDTO);
+        questionDTOList.get(index).setIs_added_to_repaet_board(true);
     }
 
-    public void setQuestionListAll(List<Question> questionListAll) {
-        this.questionListAll = questionListAll;
+    public static void deleteFromToRepate(QuestionDTO questionDTO) {
+        int index=questionDTOList.indexOf(questionDTO);
+        questionDTOList.get(index).setIs_added_to_repaet_board(false);
     }
 
-    public ArrayList<QuestionDTO> getRandomQuestionInQuiz() {
-        return listQuestionDTO;
-    }
 
-    public void setRandomQuestionInQuiz(ArrayList<Question> randomQuestionInQuiz) {
-        this.randomQuestionInQuiz = randomQuestionInQuiz;
-    }
 }
