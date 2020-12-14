@@ -61,27 +61,26 @@ public class QuizDbHelper extends SQLiteOpenHelper {
         db.execSQL ("PRAGMA Foreign_keys = ON");
 
         final String SQL_CREATE_USER_TABLE = UserContract.SQL_CREATE_ENTRIES;
-        final String SQL_CREATE_QUESTION_TABLE = QuestionContract.SQL_CREATE_ENTRIES;
-        final String SQL_CREATE_OPTION_TABLE = OptionContract.SQL_CREATE_ENTRIES;
+       // final String SQL_CREATE_QUESTION_TABLE = QuestionContract.SQL_CREATE_ENTRIES;
+       // final String SQL_CREATE_OPTION_TABLE = OptionContract.SQL_CREATE_ENTRIES;
         final String SQL_CREATE_STATISTIC_TABLE = StatisticContract.SQL_CREATE_ENTRIES;
-        final String SQL_CREATE_REPEAT_TABLE = RepeatQuestionContract.SQL_CREATE_ENTRIES;
+        //final String SQL_CREATE_REPEAT_TABLE = RepeatQuestionContract.SQL_CREATE_ENTRIES;
 
         db.execSQL(SQL_CREATE_USER_TABLE);
-        db.execSQL(SQL_CREATE_QUESTION_TABLE);
-        db.execSQL(SQL_CREATE_OPTION_TABLE);
+       // db.execSQL(SQL_CREATE_QUESTION_TABLE);
+       // db.execSQL(SQL_CREATE_OPTION_TABLE);
         db.execSQL(SQL_CREATE_STATISTIC_TABLE);
-        db.execSQL(SQL_CREATE_REPEAT_TABLE);
-        fillQuestionsTable();
-        fillOptionsTable();
+       // db.execSQL(SQL_CREATE_REPEAT_TABLE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(UserContract.SQL_DELETE_ENTRIES);
-        db.execSQL(QuestionContract.SQL_DELETE_ENTRIES);
-        db.execSQL(OptionContract.SQL_DELETE_ENTRIES);
+        //db.execSQL(QuestionContract.SQL_DELETE_ENTRIES);
+       // db.execSQL(OptionContract.SQL_DELETE_ENTRIES);
         db.execSQL(StatisticContract.SQL_CREATE_ENTRIES);
-        db.execSQL(RepeatQuestionContract.SQL_CREATE_ENTRIES);
+        //db.execSQL(RepeatQuestionContract.SQL_CREATE_ENTRIES);
         onCreate(db);
     }
 

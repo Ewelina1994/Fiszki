@@ -30,15 +30,14 @@ public final class FirebaseConfiguration {
      static FirebaseDatabase database = FirebaseDatabase.getInstance();
      static long questionNr=10;
      static DatabaseReference myRef = database.getReference().child("question");
-     static List<Option> optionList;
-     static List<QuestionDTO> questionDTOList;
+     static List<Option> optionList=new ArrayList<>();;
+     static List<QuestionDTO> questionDTOList=new ArrayList<>();;
      static Context context;
     static StorageReference mStorage = FirebaseStorage.getInstance().getReference("Images");
 
     public FirebaseConfiguration(Context context) {
         this.context=context;
-        optionList= new ArrayList<>();
-        questionDTOList= new ArrayList<>();
+
         //pobierz z pamięci tel informacje o liczbie pytań w bazie
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         questionNr = Long.parseLong(settings.getString("count_question", "10"));
@@ -62,13 +61,16 @@ public final class FirebaseConfiguration {
                         long id_question= Long.parseLong(snapshot.getKey());
                         question.setId(id_question);
                         String imagePath = (String) snapshot.child("image").getValue();
-                        mStorage.child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Uri downloadUrl = uri;
-                                question.setUploadImageUri(uri);
-                            }
-                        });
+                        if(imagePath!=null){
+                            mStorage.child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Uri downloadUrl = uri;
+                                    question.setUploadImageUri(uri);
+                                }
+                            });
+                        }
+
 
 
                         int rightAnswer= snapshot.child("optionPL").child("good_ans").getValue(Integer.class);

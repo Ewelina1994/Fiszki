@@ -145,9 +145,10 @@ public class QuizActivity extends AppCompatActivity {
         //pobranie randomowych pytań z QuizService
 
         if (savedInstanceState == null) {
+            QuizDbHelper dbHelper = new QuizDbHelper(this);
             //FirebaseConfiguration firebaseConfiguration = new FirebaseConfiguration(this);
            difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
-           QuizService quizService= new QuizService(this);
+           QuizService quizService= new QuizService();
             questionList = (ArrayList<QuestionDTO>) quizService.getRandomQuestionInQuiz();
 
             questionCountTotal = questionList.size();
@@ -170,7 +171,7 @@ public class QuizActivity extends AppCompatActivity {
                     //JEŚLI nie jest nic zaznaczone
                     if (!ansewered) {
                         //jeśli zaznaczona odp nie zostanie kliknieta czyli na nowo zainicjowana zmienna
-                        if (clickedAnswer.getIs_right() !=-1) //?
+                        if (!(clickedAnswer.getIs_right() ==1)) //?
                         {
                             checkAnswer();
                             clickedAnswer.setIs_right(-1);

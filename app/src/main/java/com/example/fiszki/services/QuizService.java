@@ -21,10 +21,8 @@ import java.util.Random;
 
 public final class QuizService {
     private static List<QuestionDTO> questionDTOList;
-    Context context;
 
-    public QuizService(Context context){
-        this.context=context;
+    public QuizService(){
 //        questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
 //        Collections.shuffle(questionDTOList);
 
