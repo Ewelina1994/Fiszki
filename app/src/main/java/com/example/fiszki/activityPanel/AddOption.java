@@ -32,9 +32,11 @@ public class AddOption extends AppCompatActivity {
     int option_nr;
 
     Button saveOption;
+    Button btnBack;
     QuizDbHelper dbHelper;
 
     List<Integer> listRightAnswer;
+    boolean is_edit_Option;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class AddOption extends AppCompatActivity {
         //lista do której będziemy zapisywać zaznaczone checkboxy tak żeby ktoś 2 razy nie zaznaczył że odp jest prawidłowa
         listRightAnswer= new ArrayList<>();
         saveOption = (Button) findViewById(R.id.btnAddOption);
+        btnBack=(Button) findViewById(R.id.btnPrevius);
         optionListPL= new ArrayList<>();
         optionListEN= new ArrayList<>();
         saveOption.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +62,12 @@ public class AddOption extends AppCompatActivity {
                 saveOption();
             }
         });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backToPreviusOption();
+            }
+        });
 
         if (savedInstanceState == null) {
             dbHelper = new QuizDbHelper(this);
@@ -66,6 +75,27 @@ public class AddOption extends AppCompatActivity {
 
         }else {
             //przywracanie zmiennych po obróceniu telefonu
+        }
+    }
+
+    private void backToPreviusOption() {
+        if(option_nr!=1){
+            option_nr--;
+            displayTextAndCheckboxCurrentOption();
+
+            optionNumber.setText("Option number: "+option_nr);
+            is_edit_Option = true;
+        }
+    }
+
+    private void displayTextAndCheckboxCurrentOption() {
+        optionPLEditText.setText(optionListPL.get(option_nr-1).getName());
+        optionENEditText.setText(optionListEN.get(option_nr-1).getName());
+        //ustaw checkbox
+        if(optionListPL.get(option_nr-1).getIs_right()==1){
+            checkBox.setChecked(true);
+        }else {
+            checkBox.setChecked(false);
         }
     }
 
@@ -89,21 +119,29 @@ public class AddOption extends AppCompatActivity {
             } else{
                 saveOption.setEnabled(false);
                 Option optionPL= new Option(question_save.getId(), optionPLEditText.getText().toString(), is_Right, "PL");
-                //dbHelper.addOption(optionPL);
-                optionListPL.add(optionPL);
-
                 Option optionEN= new Option(question_save.getId(), optionENEditText.getText().toString(), is_Right, "EN");
-                //dbHelper.addOption(optionEN);
-                optionListEN.add(optionEN);
+                 if(is_edit_Option){
+                     optionListPL.set(option_nr-1, optionPL);
+                     optionListEN.set(option_nr-1, optionEN);
+                     listRightAnswer.set(option_nr-1, is_Right);
 
-                addCheckboxAnswerttOlIST();
+                 }else{
+                     optionListPL.add(optionPL);
+                     optionListEN.add(optionEN);
+                     listRightAnswer.add(is_Right);
+                 }
 
                 if(option_nr==3) {
                     saveToDatabase();
                     finish();
-                }else{
-                    clearInput();
+                }else if(is_edit_Option){
                     updateOptionNr();
+                    displayTextAndCheckboxCurrentOption();
+                    is_edit_Option=false;
+                    saveOption.setEnabled(true);
+                }else {
+                    updateOptionNr();
+                    clearInput();
                 }
             }
 
@@ -112,6 +150,7 @@ public class AddOption extends AppCompatActivity {
             finish();
         }
     }
+
 
     private void saveToDatabase() {
         StorageFirebase storageFirebase= new StorageFirebase();
@@ -129,10 +168,6 @@ public class AddOption extends AppCompatActivity {
     private void updateOptionNr() {
         option_nr++;
         optionNumber.setText("Option number: "+option_nr);
-    }
-
-    private void addCheckboxAnswerttOlIST() {
-        listRightAnswer.add(is_Right);
     }
 
     private void clearInput() {
