@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fiszki.Converter;
 import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
@@ -135,7 +134,7 @@ public class QuizActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-       // difficulty = intent.getStringExtra(Quiz.EXTRA_DIFFICULTY);
+        // difficulty = intent.getStringExtra(Quiz.EXTRA_DIFFICULTY);
         difficulty = intent.getStringExtra(QuizActivity.EXTRA_DIFFICULTY);
         textDifficulty.setText("Difficulty: " + difficulty);
 
@@ -146,11 +145,30 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             QuizDbHelper dbHelper = new QuizDbHelper(this);
-            //FirebaseConfiguration firebaseConfiguration = new FirebaseConfiguration(this);
-           difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
-           QuizService quizService= new QuizService();
-            questionList = (ArrayList<QuestionDTO>) quizService.getRandomQuestionInQuiz();
+            difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
 
+           // questionList= (ArrayList<QuestionDTO>) quizService.getRandomQuestionInQuiz(this);
+            FirebaseConfiguration.readAllQuestions(new FirebaseConfiguration.DataStatus() {
+                @Override
+                public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
+                    questionList= (ArrayList<QuestionDTO>) questionDTOList;
+                }
+
+                @Override
+                public void DataIsInserted() {
+
+                }
+
+                @Override
+                public void DataIsUpdated() {
+
+                }
+
+                @Override
+                public void DataIsDeleted() {
+
+                }
+            });
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
@@ -164,7 +182,7 @@ public class QuizActivity extends AppCompatActivity {
                 viewGroup.removeAllViews();
                 viewGroup.addView(View.inflate(this, R.layout.hard_difficulty_change_question_view, null));
             }
-            
+
             buttoinNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -176,7 +194,7 @@ public class QuizActivity extends AppCompatActivity {
                             checkAnswer();
                             clickedAnswer.setIs_right(-1);
                             // showNextQuestion();
-                        } else{
+                        } else {
                             Toast.makeText(QuizActivity.this, "Please select answer", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -190,31 +208,19 @@ public class QuizActivity extends AppCompatActivity {
             buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
-//                    if(is_addQuestion_to_replace_board==false){
-//                        repeatQuestionService.saveQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
-//                        is_addQuestion_to_replace_board=true;
-//                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-//
-//                    }
-//                    //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
-//                     else {
-//                        repeatQuestionService.deleteQuestionToDBRepeatTable(Converter.questionDTOtoRepeatQuestion(currentQuestion));
-//                        is_addQuestion_to_replace_board=false;
-//                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-//
-//                    }
-                    if(questionList.get(questionCount-1).isIs_added_to_repaet_board()==false){
-                        questionList.get(questionCount-1).setIs_added_to_repaet_board(true);
-                        is_addQuestion_to_replace_board=true;
+                    if(RepeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion)){
+                        currentQuestion.setIs_added_to_repaet_board(false);
+                        is_addQuestion_to_replace_board=false;
+                        RepeatQuestionService.deleteQuestionToRepeatBoard(currentQuestion);
                         setColorBtnAddToReplace(is_addQuestion_to_replace_board);
                     }else {
-                        questionList.get(questionCount-1).setIs_added_to_repaet_board(false);
-                        is_addQuestion_to_replace_board=false;
+                        currentQuestion.setIs_added_to_repaet_board(true);
+                        is_addQuestion_to_replace_board=true;
+                        RepeatQuestionService.addQuestionToRepeatBoard(currentQuestion);
                         setColorBtnAddToReplace(is_addQuestion_to_replace_board);
                     }
                 }
-                });
+            });
         } else {
             questionList = savedInstanceState.getParcelableArrayList(KEY_QUESTION_LIST);
 
@@ -237,15 +243,15 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private List<Option> getOptionByLevel(QuestionDTO questionDTO) {
-       // daj dla konkretnego poziomu opcje
+        // daj dla konkretnego poziomu opcje
 
-            List<Option> newOptionList=new ArrayList<>();
+        List<Option> newOptionList=new ArrayList<>();
         for (Option option: questionDTO.getOptions()) {
             if(option.getLanguage().equals(checkWhatLanguage(difficultyEnum).toString())){
                 newOptionList.add(option);
             }
         }
-            return newOptionList;
+        return newOptionList;
 
     }
     public LanguageEnum checkWhatLanguage(DifficultyEnum difficulty) {
@@ -292,12 +298,12 @@ public class QuizActivity extends AppCompatActivity {
 
 
     private void setSingleEvent(LinearLayout linearayoutCardView) {
-       final List<CardView> cardsView=new ArrayList<>();
+        final List<CardView> cardsView=new ArrayList<>();
         //ustawiamy dla każdego cardView nasłuch
         for (int i = 0; i < linearayoutCardView.getChildCount(); i++) {
             cardsView.add((CardView) linearayoutCardView.getChildAt(i));
             final int index=i;
-          //  cardsView.getChildAt(0).setBackgroundColor(R.drawable.bg2);
+            //  cardsView.getChildAt(0).setBackgroundColor(R.drawable.bg2);
             cardsView.get(index).setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @SuppressLint({"ResourceAsColor", "ResourceType"})
@@ -411,7 +417,7 @@ public class QuizActivity extends AppCompatActivity {
             score++;
             textViewCorect.setText("Correct: " + score);}
         //jeśli nie poprawna odp
-         else {
+        else {
             wrong++;
             textViewWrong.setText("Wrong: " + wrong);
         }
@@ -424,14 +430,6 @@ public class QuizActivity extends AppCompatActivity {
         cardsView.add((CardView) linearayoutCardView.getChildAt(1));
         cardsView.add((CardView) linearayoutCardView.getChildAt(2));
 
-        //List<Option>listOptionsInQuiz=getOptionByLevel(currentQuestion);
-//       for(int i=0; i<listOptionsInQuiz.size(); i++){
-//           if(listOptionsInQuiz.get(i).getIs_right()==1){
-//               cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#2AFF3F"));
-//           }else{
-//               cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#FF0A0E"));
-//           }
-//       }
         String goodOption=null;
         for (Option option : listOptionsInQuiz) {
             if (option.getIs_right() == 1) {
@@ -439,14 +437,14 @@ public class QuizActivity extends AppCompatActivity {
             }
         }
 
-       for(int i=0; i<listOptionsInQuiz.size(); i++){
-           String textInCardView=((TextView) cardsView.get(i).getChildAt(0)).getText().toString();
-           if(textInCardView.equalsIgnoreCase(goodOption)){
-               cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#2AFF3F"));
-           }else {
-               cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#FF0A0E"));
-           }
-       }
+        for(int i=0; i<listOptionsInQuiz.size(); i++){
+            String textInCardView=((TextView) cardsView.get(i).getChildAt(0)).getText().toString();
+            if(textInCardView.equalsIgnoreCase(goodOption)){
+                cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#2AFF3F"));
+            }else {
+                cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#FF0A0E"));
+            }
+        }
 
 
         if (questionCount < questionCountTotal) {

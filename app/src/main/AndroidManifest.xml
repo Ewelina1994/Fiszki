@@ -17,38 +17,41 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activityPanel.PanelUser"
-            android:label="Uzupełnij swoje dane"
+            android:label="@string/correct_profil"
             android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".Ustawienia"
             android:parentActivityName=".activityPanel.MainActivity"
-            android:label="Setting"
+            android:label="@string/setting"
             android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.AdminAddQuestion"
             android:parentActivityName=".activityPanel.MainActivity"
-            android:label="Add question"
+            android:label="@string/add_new_idiom"
             android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.AddOption"
             android:parentActivityName=".activityPanel.MainActivity"
-            android:label="Add option"
+            android:label="@string/add_new_option"
             android:theme="@style/MyAppTheme"/>
-
+        <activity android:name=".activityPanel.QuestionListActivity"
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:label="@string/listAdmin"
+            android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.Statystic"
-            android:label="Statistics"
+            android:label="@string/statystyki"
             android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.RepeatBoard"
-            android:label="Board Replace"
+            android:label="@string/repeat"
             android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.StartPageQuiz"
-            android:label="Start the game"
+            android:label="@string/start_page"
             android:parentActivityName=".activityPanel.MainActivity"
             android:theme="@style/MyAppTheme" />
         <activity

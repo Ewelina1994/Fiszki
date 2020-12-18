@@ -1,80 +1,80 @@
 package com.example.fiszki.services;
 
-import com.example.fiszki.FirebaseConfiguration;
+import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.RepeatQuestionDTO;
-import com.example.fiszki.entity.Option;
-import com.example.fiszki.entity.Question;
 import com.example.fiszki.entity.RepeatQuestion;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepeatQuestionService {
-    private List<RepeatQuestionDTO> repeatQuestionDTOList;
-    private List<RepeatQuestion> repeatQuestionList;
+public final class RepeatQuestionService {
+    private static List<QuestionDTO> repeatQuestionDTOList= new ArrayList<>();
 
     public RepeatQuestionService() {
-        repeatQuestionList=getAllQuestionOnRepeatBoard();
-        repeatQuestionDTOList= new ArrayList<>();
     }
 
-    public List<RepeatQuestionDTO> getRepeatQuestionDTOList() {
-        repeatQuestionList=getAllQuestionOnRepeatBoard();
-        repeatQuestionDTOList.clear();
-
-        for(int i=0; i<repeatQuestionList.size(); i++){
-            RepeatQuestionDTO repeatQuestionDTO= new RepeatQuestionDTO();
-
-            Question question= FirebaseConfiguration.getQuestionById(repeatQuestionList.get(i).getQuestion());
-            Option optionPL= FirebaseConfiguration.getGoodOptionPL(repeatQuestionList.get(i).getQuestion());
-            Option optionEN= FirebaseConfiguration.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
-
-            repeatQuestionDTO.setQuestion(question.getName());
-           // repeatQuestionDTO.setName_image(question.getName_image());
-            repeatQuestionDTO.setOptionPL(optionPL.getName());
-            repeatQuestionDTO.setOptionEN(optionEN.getName());
-            repeatQuestionDTO.setAddToRepeatBoard(isAddQuestionToRepeatBoard(question.getId()));
-            // repeatQuestionDTO.setName_image(questionDTO.getQuestion().getName_image()));
-            //  repeatQuestionDTO.setSentence(questionDTO.getQuestion().getSentence());
-
-            repeatQuestionDTOList.add(repeatQuestionDTO);
-        }
-
-        return repeatQuestionDTOList;
-    }
+//    public List<RepeatQuestionDTO> getRepeatQuestionDTOList() {
+//        repeatQuestionList=getAllQuestionOnRepeatBoard();
+//        repeatQuestionDTOList.clear();
+//
+//        for(int i=0; i<repeatQuestionList.size(); i++){
+//            RepeatQuestionDTO repeatQuestionDTO= new RepeatQuestionDTO();
+//
+//            Question question= FirebaseConfiguration.getQuestionById(repeatQuestionList.get(i).getQuestion());
+//            Option optionPL= FirebaseConfiguration.getGoodOptionPL(repeatQuestionList.get(i).getQuestion());
+//            Option optionEN= FirebaseConfiguration.getGoodOptionEN(repeatQuestionList.get(i).getQuestion());
+//
+//            repeatQuestionDTO.setQuestion(question.getName());
+//           // repeatQuestionDTO.setName_image(question.getName_image());
+//            repeatQuestionDTO.setOptionPL(optionPL.getName());
+//            repeatQuestionDTO.setOptionEN(optionEN.getName());
+//            repeatQuestionDTO.setAddToRepeatBoard(isAddQuestionToRepeatBoard(question.getId()));
+//            // repeatQuestionDTO.setName_image(questionDTO.getQuestion().getName_image()));
+//            //  repeatQuestionDTO.setSentence(questionDTO.getQuestion().getSentence());
+//
+//            repeatQuestionDTOList.add(repeatQuestionDTO);
+//        }
+//
+//        return repeatQuestionDTOList;
+   // }
 
     public long saveQuestionToDBRepeatTable(RepeatQuestion question){
         //repeatQuestionList=getAllQuestionOnRepeatBoard();
-        RepeatQuestion repeatQuestion = question;
-
-        boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question.getQuestion());
-        //spr czy pytenie nie jest w tablicy powtórek
-        if(isAddToRepeatBoard==false){
-            return FirebaseConfiguration.addQuestionToRepeatTable(repeatQuestion.getQuestion());
-        }
+//        RepeatQuestion repeatQuestion = question;
+//
+//        boolean isAddToRepeatBoard=isAddQuestionToRepeatBoard(question.getQuestion());
+//        //spr czy pytenie nie jest w tablicy powtórek
+//        if(isAddToRepeatBoard==false){
+//            return 1;//FirebaseConfiguration.addQuestionToRepeatTable(repeatQuestion.getQuestion());
+//        }
         return -1;
     }
 
-    //???
-    public long deleteQuestionToDBRepeatTable(RepeatQuestion question){
-        return FirebaseConfiguration.deleteQuestionFromRepeatTable(question.getQuestion());
+    public static void addQuestionToRepeatBoard(QuestionDTO questionDTO){
+        repeatQuestionDTOList.add(questionDTO);
+    }
+    public static boolean deleteQuestionToRepeatBoard(QuestionDTO question){
+        return repeatQuestionDTOList.remove(question);
     }
 
-    public List<RepeatQuestion> getAllQuestionOnRepeatBoard(){
-        return FirebaseConfiguration.getAllQuestionFromRepeatTable();
+    public static List<QuestionDTO> getAllQuestionOnRepeatBoard(){
+        return repeatQuestionDTOList;
     }
 
     //sprawdzenie czy pytanie jest juz w tablicy powtórek
-    public boolean isAddQuestionToRepeatBoard(long idQuestion){
-        repeatQuestionList=getAllQuestionOnRepeatBoard();
-        boolean isAddToRepeatBoard=false;
-        for (int i=0; i<repeatQuestionList.size(); i++){
-            if(repeatQuestionList.get(i).getQuestion()==idQuestion){
-                isAddToRepeatBoard=true;
-                break;
-            }
+    public static boolean isAddQuestionToRepeatBoard(QuestionDTO questionDTO){
+        repeatQuestionDTOList=getAllQuestionOnRepeatBoard();
+//        for (int i=0; i<repeatQuestionDTOList.size(); i++){
+//            if(repeatQuestionDTOList.get(i).getQuestion().getId()==idQuestion){
+//                isAddToRepeatBoard=true;
+//                break;
+//            }
+//        }
+        if(repeatQuestionDTOList.contains(questionDTO)){
+            return true;
+        }else {
+            return false;
         }
-        return isAddToRepeatBoard;
     }
 
 }

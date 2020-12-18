@@ -81,13 +81,13 @@ public class Statystic extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        cursor = db.query("statistic", new String[] {"_id", "score", "wrong", "level", "date"}, null, null, null, null, null);
+        cursor = db.query("statistic", new String[] {"_id", "score", "wrong", "level", "date"}, null, null, null, null, "date DESC");
 
         if(cursor.moveToFirst()){
             SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this,
                    R.layout.statistic_adapter,
                     cursor, new String[] {"level", "score", "wrong", "date"},
-                    new int[] {R.id.text1, R.id.text2, R.id.text3, R.id.text4}, 0);
+                    new int[] {R.id.levelTxt, R.id.scoreTxt, R.id.wrongTxt, R.id.dataTxt}, 0);
             listViewOrganizacje.setAdapter(listAdapter);
         }
     }

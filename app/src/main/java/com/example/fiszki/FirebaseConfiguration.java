@@ -27,31 +27,44 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class FirebaseConfiguration {
 
-     static FirebaseDatabase database = FirebaseDatabase.getInstance();
-     static long questionNr=10;
-     static DatabaseReference myRef = database.getReference().child("question");
-     static List<Option> optionList=new ArrayList<>();;
-     static List<QuestionDTO> questionDTOList=new ArrayList<>();;
-     static Context context;
-    static StorageReference mStorage = FirebaseStorage.getInstance().getReference("Images");
+      static FirebaseDatabase database = FirebaseDatabase.getInstance();
+      static long questionNr=10;
+      static DatabaseReference myRef = database.getReference().child("question");
+      static List<Option> optionList=new ArrayList<>();;
+      static List<QuestionDTO> questionDTOList=new ArrayList<>();;
+      Context context;
+     static StorageReference mStorage = FirebaseStorage.getInstance().getReference("Images");
+     static SharedPreferences settings;
+    public interface  DataStatus{
+        void DataIsLoaded(List<QuestionDTO>questionDTOList, List<String>keys);
+        void DataIsInserted();
+        void DataIsUpdated();
+        void DataIsDeleted();
+    }
 
     public FirebaseConfiguration(Context context) {
         this.context=context;
 
         //pobierz z pamięci tel informacje o liczbie pytań w bazie
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
         questionNr = Long.parseLong(settings.getString("count_question", "10"));
+    }
+
+    public static void
+    readAllQuestions(final DataStatus dataStatus) {
         //ustaw nasłuchacz
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
+                    questionDTOList.clear();
                     //jeśli usunę coś z bazy zmien liczbe question
                     questionNr=dataSnapshot.getChildrenCount();
                     //zapisz liczbe pytań do pamięci telefonu
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString("count_question", String.valueOf(questionNr));
                     editor.commit();
+                    List<String>keys=new ArrayList<>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         List<Option>optionToOneQuestionDTO=new ArrayList<>();
 
@@ -97,9 +110,11 @@ public final class FirebaseConfiguration {
                             optionToOneQuestionDTO.add(optionPL);
                             optionToOneQuestionDTO.add(optionEN);
                         }
+                        keys.add(dataSnapshot.getKey());
                         questionDTOList.add(new QuestionDTO(question, optionToOneQuestionDTO));
 
                     }
+                    dataStatus.DataIsLoaded(questionDTOList, keys);
                 }
             }
 
@@ -110,7 +125,7 @@ public final class FirebaseConfiguration {
         });
     }
 
-    public static void addQuestion(Question q, String imageUrl, Context context){
+    public void addQuestion(Question q, String imageUrl, Context context){
 //        Map<String, Object> question = new HashMap<>();
 //        question.put("name", q.getName());
 //        question.put("image", q.getName_image());
@@ -128,7 +143,7 @@ public final class FirebaseConfiguration {
         editor.commit();
     }
 
-    public static void addOptionsPL(List<Option> options) {
+    public void addOptionsPL(List<Option> options) {
         AtomicInteger withOptionIsRight = new AtomicInteger();
         for (Option option: options) {
             if(option.getIs_right()==1){
@@ -143,7 +158,7 @@ public final class FirebaseConfiguration {
 
     }
 
-    public static void addOptionsEN(List<Option> options) {
+    public void addOptionsEN(List<Option> options) {
         AtomicInteger withOptionIsRight = new AtomicInteger();
         for (Option option: options) {
             if(option.getIs_right()==1){
@@ -158,66 +173,42 @@ public final class FirebaseConfiguration {
 
     }
 
-//    public static List<Question> getQuestions() {
-        // Read from the database
-//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//               // questionList.clear();
-//                List<String> keys = new ArrayList<>();
-//                for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
-//                    Question question = keyNode.getValue(Question.class);
-//                   // questionList.add(question);
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//               Log.w("Failed to read value.", error.toException());
-//            }
-//        });
-//
-//            return questionDTOList;
-//    }
-
     public static List<QuestionDTO>getAllQuestionDTO(){
 
         return questionDTOList;
     }
 
-    public static Question getQuestionById(long id) {
+    public Question getQuestionById(long id) {
         return null;
     }
 
-    public static Option getGoodOptionPL(long questionNumber) {
+    public Option getGoodOptionPL(long questionNumber) {
         return null;
     }
 
-    public static Option getGoodOptionEN(long questionNumber) {
+    public Option getGoodOptionEN(long questionNumber) {
         return null;
     }
 
-    public static long addQuestionToRepeatTable(long idQuestion){
+    public long addQuestionToRepeatTable(long idQuestion){
 
         return 1;
     }
 
-    public static int deleteQuestionFromRepeatTable(long idQuestion){
+    public int deleteQuestionFromRepeatTable(long idQuestion){
         return 1;
     }
 
-    public static List<RepeatQuestion> getAllQuestionFromRepeatTable(){
+    public List<RepeatQuestion> getAllQuestionFromRepeatTable(){
         List<RepeatQuestion> repeatQuestionList= new ArrayList<>();
         return repeatQuestionList;
     }
 
-    public static Question getQuestionByName(String nameQuestion) {
+    public Question getQuestionByName(String nameQuestion) {
         return null;
     }
 
-    public static List<Option> getOptionsToQuiz(long questionNumber, LanguageEnum l) {
+    public List<Option> getOptionsToQuiz(long questionNumber, LanguageEnum l) {
         List<Option> optionsList = new ArrayList<>();
         for (Option option: optionList) {
             if(option.getQuestion_id()==questionNumber && option.getLanguage()==l.toString()){

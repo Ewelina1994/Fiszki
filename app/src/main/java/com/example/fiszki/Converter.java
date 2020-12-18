@@ -16,8 +16,8 @@ public class Converter {
 
     public RepeatQuestion repeatQuestionDTOtoRepeatQuestion(RepeatQuestionDTO repeatQuestionDTO) {
         RepeatQuestion repeatQuestion= new RepeatQuestion();
-        Question question=FirebaseConfiguration.getQuestionByName(repeatQuestionDTO.getQuestion());
-        repeatQuestion.setQuestion(question.getId());
+       // Question question=FirebaseConfiguration.getQuestionByName(repeatQuestionDTO.getQuestion());
+       // repeatQuestion.setQuestion(question.getId());
 
         return repeatQuestion;
     }

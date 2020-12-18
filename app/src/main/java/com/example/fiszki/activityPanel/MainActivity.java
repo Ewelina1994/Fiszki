@@ -72,14 +72,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
                 return true;
             case R.id.ustawienia:
-               // Toast.makeText(this, getAndroidVersion(), Toast.LENGTH_SHORT).show();
-               // findViewById(R.id.version).setBackgroundColor(Color.parseColor("#FFFF00"));
                 Intent intent2= new Intent(this, Ustawienia.class);
                 startActivity(intent2);
                 return true;
             case R.id.admin:
                 Intent intent3=new Intent(this, AdminAddQuestion.class);
                 startActivity(intent3);
+            case R.id.adminAllList:
+                Intent intent4=new Intent(this, QuestionListActivity.class);
+                startActivity(intent4);
 
             default:
                 return super.onOptionsItemSelected(item);

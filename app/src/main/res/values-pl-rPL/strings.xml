@@ -42,4 +42,8 @@
     <string name="validationPath">Źródło do zdjecia jest nie prawidłowe</string>
     <string name="no_answer_is_marked_as_correct">Żadna z 3 opcji odpowiedzi nie jest ustawiona jako poprawna</string>
     <string name="btnPrevuis">Wstecz</string>
+    <string name="listAdmin">Lista wszytkich pyatń</string>
+    <string name="correct_profil">Uzupełnij swoje dane</string>
+    <string name="add_new_option">Dodaj opcje</string>
+    <string name="start_page">Rozpocznij rozgrywkę</string>
 </resources>

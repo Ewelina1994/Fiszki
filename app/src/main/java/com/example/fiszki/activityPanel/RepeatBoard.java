@@ -20,6 +20,7 @@ import com.example.fiszki.Converter;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.R;
 import com.example.fiszki.services.QuizService;
+import com.example.fiszki.services.RepeatQuestionService;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -57,9 +58,8 @@ public class RepeatBoard extends AppCompatActivity {
         buttoinNext=findViewById(R.id.btnNextQuestion);
 
         converter= new Converter();
-        repeatQuestionDTOList=QuizService.getListReapeatBoardQuestions();
+        repeatQuestionDTOList= RepeatQuestionService.getAllQuestionOnRepeatBoard();
 
-        //is_addQuestion_to_replace_board=true;
         currentQuestion=0;
 
         cardView.setOnTouchListener(new View.OnTouchListener() {
@@ -104,10 +104,10 @@ public class RepeatBoard extends AppCompatActivity {
             //RepeatQuestion repeatQuestion=converter.repeatQuestionDTOtoRepeatQuestion(repeatQuestionDTOList.get(currentQuestion));
             QuestionDTO repeatQuestion=repeatQuestionDTOList.get(currentQuestion);
             //spr czy pytanie jest w tablicy powtórek
-            is_addQuestion_to_replace_board=repeatQuestionDTOList.get(currentQuestion).isIs_added_to_repaet_board();
+            is_addQuestion_to_replace_board=RepeatQuestionService.isAddQuestionToRepeatBoard(repeatQuestionDTOList.get(currentQuestion));
             // jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
             if(is_addQuestion_to_replace_board==false){
-                QuizService.addToRepate(repeatQuestion);
+                RepeatQuestionService.addQuestionToRepeatBoard(repeatQuestion);
                 //repeatQuestionDTOList.saveQuestionToDBRepeatTable(repeatQuestion);
                 is_addQuestion_to_replace_board=true;
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
@@ -115,7 +115,7 @@ public class RepeatBoard extends AppCompatActivity {
             }
             //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
             else {
-                QuizService.deleteFromToRepate(repeatQuestion);
+                RepeatQuestionService.deleteQuestionToRepeatBoard(repeatQuestion);
                 is_addQuestion_to_replace_board=false;
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
                 repeatQuestionDTOList.get(currentQuestion).setIs_added_to_repaet_board(is_addQuestion_to_replace_board);
@@ -219,9 +219,6 @@ public class RepeatBoard extends AppCompatActivity {
     private void setImageFromUri() {
         Uri uriImage=repeatQuestionDTOList.get(currentQuestion).getQuestion().getUploadImageUri();
         Picasso.get().load(uriImage).into(image);
-//        Glide.with(this)
-//                .load(repeatQuestionDTOList.get(currentQuestion).getQuestion().getUploadImageUri())
-//                .into(image);
     }
 
     private void setBtnNextandBtnPrevious() {

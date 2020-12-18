@@ -70,5 +70,9 @@
     <string name="validationPath">" The source for the photo is not correct"</string>
     <string name="no_answer_is_marked_as_correct">" None of the 3 answer options are set as valid"</string>
     <string name="btnPrevuis">Back</string>
+    <string name="listAdmin">All list Question</string>
+    <string name="correct_profil">Correct your accound</string>
+    <string name="add_new_option">Add options</string>
+    <string name="start_page">Start the game</string>
 
 </resources>

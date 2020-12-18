@@ -42,7 +42,6 @@ public class PanelUser extends AppCompatActivity implements AdapterView.OnItemCl
 
         radioGroup=(RadioGroup)findViewById(R.id.poziomRadioGroup);
         datepicker=(EditText) findViewById(R.id.years);
-        togglebtn=(ToggleButton) findViewById(R.id.toggleButton);
         regulamin=(CheckBox)findViewById(R.id.regulami);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -91,8 +90,6 @@ public class PanelUser extends AppCompatActivity implements AdapterView.OnItemCl
                     +rb.getText().toString()
                     +"\nUczy się od: "
                     +datepicker.getText().toString()
-                    +"\nCzy chce być widoczny dla innych użytkowników: "
-                    +togglebtn.getText().toString()
                     +"\nCzy akceptuje regulamin: ";
             if(regulamin.isChecked()){
                 komunikat+="TAK";
