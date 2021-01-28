@@ -46,7 +46,9 @@ public class Option implements Parcelable {
         this.is_right = is_right;
         this.language = language;
     }
-    public Option(String option, int is_right, String language) {
+    public Option(int id, long question_id, String option, int is_right, String language) {
+        this.id=id;
+        this.question_id=question_id;
         this.name = option;
         this.is_right = is_right;
         this.language = language;

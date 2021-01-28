@@ -8,7 +8,7 @@
     android:background="#CCDAE7">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txtAddQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "@string/add_new_idiom"
@@ -38,15 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btnAddFotoGalery"
-        android:layout_weight="1"
         android:background="#EAD1BD"/>
-    <Button
-        android:id="@+id/btnGetImageInternet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btnAddFotoInternet"
-        android:layout_weight="1"
-        android:background="#CAAC93"/>
+<!--    <Button-->
+<!--        android:id="@+id/btnGetImageInternet"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/btnAddFotoInternet"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="#CAAC93"/>-->
     </LinearLayout>
 
     <Button

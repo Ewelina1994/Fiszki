@@ -1,6 +1,5 @@
 package com.example.fiszki.activityPanel;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -15,23 +14,21 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fiszki.FirebaseConfiguration;
+import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
 import com.example.fiszki.StorageFirebase;
 import com.example.fiszki.entity.Option;
-import com.example.fiszki.entity.Question;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddOption extends AppCompatActivity {
-
+public class UpdateOptionsActivity extends AppCompatActivity {
     private TextView optionNumber;
     private EditText optionPLEditText;
     private EditText optionENEditText;
     CheckBox checkBox;
     int is_Right;
-    Question question_save;
     List<Option> optionListPL;
     List<Option> optionListEN;
     int option_nr;
@@ -42,6 +39,9 @@ public class AddOption extends AppCompatActivity {
 
     List<Integer> listRightAnswer;
     boolean is_edit_Option;
+
+    QuestionDTO question_save;
+    int key;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -65,7 +65,7 @@ public class AddOption extends AppCompatActivity {
             public void onClick(View v) {
 
                 //saveOption.setEnabled(false);
-                saveOption();
+                saveOption2();
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -78,12 +78,34 @@ public class AddOption extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             dbHelper = new QuizDbHelper(this);
-                question_save=getIntent().getParcelableExtra("question");
+            question_save=getIntent().getParcelableExtra("questionDTO");
+            key = getIntent().getIntExtra("key", -1);
+            initialzeListsToComeIntent();
 
-            }
-        else {
-        //po odwróceniu ekranu
         }
+        else {
+            //po odwróceniu ekranu
+        }
+    }
+
+    private void initialzeListsToComeIntent() {
+        //ustawienie list opcji po polski i po angielsku
+        question_save.getOptions().forEach(o->{
+            if(o.getLanguage().equalsIgnoreCase("PL")){
+                optionListPL.add(o);
+            }else {
+                optionListEN.add(o);
+            }
+        });
+
+        //ustawienie listy poprawnych odpowiedzi
+        optionListPL.forEach(o->{
+            listRightAnswer.add(o.getIs_right());
+        });
+
+         //ustawienie strony editText
+        setFields();
+
     }
 
 
@@ -108,12 +130,58 @@ public class AddOption extends AppCompatActivity {
                 checkBox.setChecked(false);
             }
         }else {
-            clearInput();
+//            clearInput();
+            saveOption.setEnabled(true);
+        }
+    }
+    private void saveOption2(){
+        if(option_nr<=3) {
+
+            //jeśli checkbox jest zaznaczony ustaw wartość na 1
+            if(checkBox.isChecked()){
+                is_Right=1;
+            }else {
+                is_Right=0;
+            }
+
+                saveOption.setEnabled(false);
+                Option optionPL= new Option(question_save.getQuestion().getId(), optionPLEditText.getText().toString(), is_Right, "PL");
+                Option optionEN= new Option(question_save.getQuestion().getId(), optionENEditText.getText().toString(), is_Right, "EN");
+
+                optionListPL.set(option_nr-1, optionPL);
+                optionListEN.set(option_nr-1, optionEN);
+                listRightAnswer.set(option_nr-1, is_Right);
+
+                if(option_nr==3) {
+                    saveToDatabase();
+                }else if(is_edit_Option){
+                    updateOptionNr();
+                    displayTextAndCheckboxCurrentOption();
+                    is_edit_Option=false;
+                    saveOption.setEnabled(true);
+                }else {
+                    updateOptionNr();
+                    saveOption.setEnabled(true);
+                    setFields();
+                }
+
+        }else {
+            finish();
+        }
+    }
+
+    private void setFields() {
+        optionPLEditText.setText(optionListPL.get(option_nr-1).getName());
+        optionENEditText.setText(optionListEN.get(option_nr-1).getName());
+        if(optionListPL.get(option_nr-1).getIs_right()==1){
+            checkBox.setChecked(true);
+
+        }else {
+            checkBox.setChecked(false);
         }
     }
 
     private void saveOption(){
-
         if(option_nr<=3){
             //jeśli checkbox jest zaznaczony ustaw wartość na 1
             if(checkBox.isChecked()){
@@ -126,13 +194,13 @@ public class AddOption extends AppCompatActivity {
                 Toast.makeText(this, R.string.validator_only_once_good_option_save, Toast.LENGTH_LONG).show();
             }
             //jeśłi w ostatnim pytaniu lista z odpowiedziami nie będzie zawierała odpowiedzi zaznaczonej jako odp poprawna
-             else if(option_nr==3 && !listRightAnswer.contains(1) && !checkBox.isChecked()){
+            else if(option_nr==3 && !listRightAnswer.contains(1) && !checkBox.isChecked()){
                 saveOption.setEnabled(true);
                 Toast.makeText(this, R.string.no_answer_is_marked_as_correct, Toast.LENGTH_LONG).show();
             } else{
                 saveOption.setEnabled(false);
-                Option optionPL= new Option(option_nr, question_save.getId(), optionPLEditText.getText().toString(), is_Right, "PL");
-                Option optionEN= new Option(question_save.getId(), optionENEditText.getText().toString(), is_Right, "EN");
+                Option optionPL= new Option(option_nr, question_save.getQuestion().getId(), optionPLEditText.getText().toString(), is_Right, "PL");
+                Option optionEN= new Option(question_save.getQuestion().getId(), optionENEditText.getText().toString(), is_Right, "EN");
 
                 //spr czy już opdpowiedz istnieje na liście a tylko ją edytujemy
                 optionListPL.forEach(o->{
@@ -141,16 +209,16 @@ public class AddOption extends AppCompatActivity {
                     }
 
                 });
-                 if(is_edit_Option){
-                     optionListPL.set(option_nr-1, optionPL);
-                     optionListEN.set(option_nr-1, optionEN);
-                     listRightAnswer.set(option_nr-1, is_Right);
+                if(is_edit_Option){
+                    optionListPL.set(option_nr-1, optionPL);
+                    optionListEN.set(option_nr-1, optionEN);
+                    listRightAnswer.set(option_nr-1, is_Right);
 
-                 }else{
-                     optionListPL.add(optionPL);
-                     optionListEN.add(optionEN);
-                     listRightAnswer.add(is_Right);
-                 }
+                }else{
+                    optionListPL.add(optionPL);
+                    optionListEN.add(optionEN);
+                    listRightAnswer.add(is_Right);
+                }
 
                 if(option_nr==3) {
                     saveToDatabase();
@@ -162,11 +230,10 @@ public class AddOption extends AppCompatActivity {
                     saveOption.setEnabled(true);
                 }else {
                     updateOptionNr();
-                    clearInput();
+//                    clearInput();
+                    saveOption.setEnabled(true);
                 }
             }
-
-
         }else {
             finish();
         }
@@ -174,12 +241,30 @@ public class AddOption extends AppCompatActivity {
 
 
     private void saveToDatabase() {
+        //jeśłi na liścei poprawnych odpodiwdzi znajduję się więcej niż raz poprawna odpowiedź
+        Integer howMuchRightAnswer= (int) listRightAnswer.stream().filter(item -> item.equals(1)).count();
+        if(howMuchRightAnswer>1){
+            saveOption.setEnabled(true);
+            Toast.makeText(this, R.string.validator_only_once_good_option_save, Toast.LENGTH_LONG).show();
+        }
+
+        //jeśłi w ostatnim pytaniu lista z odpowiedziami nie będzie zawierała odpowiedzi zaznaczonej jako odp poprawna
+        else if(!listRightAnswer.contains(1) && !checkBox.isChecked()){
+            saveOption.setEnabled(true);
+            Toast.makeText(this, R.string.no_answer_is_marked_as_correct, Toast.LENGTH_LONG).show();
+        }
+        //zapisz do bazy danych
+        else{
+            List<Option> allOptions=new ArrayList<>();
+            allOptions.addAll(optionListEN);
+            allOptions.addAll(optionListPL);
+            question_save.setOptions(allOptions);
+
         FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration(this);
-        firebaseConfiguration.addQuestion(question_save, this);
+        firebaseConfiguration.updateQuestionDTO(question_save.getQuestion(), key, optionListPL, optionListEN);
 
-
-        firebaseConfiguration.addOptions(optionListPL, "PL");
-        firebaseConfiguration.addOptions(optionListEN, "EN");
+            finish();
+        }
 
     }
 
@@ -188,12 +273,6 @@ public class AddOption extends AppCompatActivity {
         optionNumber.setText("Option number: "+option_nr);
     }
 
-    private void clearInput() {
-        optionPLEditText.getText().clear();
-        optionENEditText.getText().clear();
-        checkBox.setChecked(false);
-        saveOption.setEnabled(true);
-    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

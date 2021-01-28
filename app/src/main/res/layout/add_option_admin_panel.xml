@@ -25,10 +25,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text= "@string/add_new_option_PL"
-    android:textSize="30dp"
+    android:textSize="20dp"
     android:gravity="center"
-    android:padding="10dp"
-        android:layout_marginTop="20dp"/>
+    android:padding="5dp"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/option_et_PL"
@@ -39,18 +39,17 @@
         android:gravity="center"
         android:background="@android:color/white"
         android:padding="10dp"
-        android:layout_marginTop="20dp"/>
-
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/option_tv_EN"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "@string/add_new_option_EN"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:gravity="center"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"/>
+        android:padding="5dp"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/option_et_EN"
@@ -61,30 +60,40 @@
         android:gravity="center"
         android:background="@android:color/white"
         android:padding="10dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="10dp"/>
 
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/checkBoxGoodOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Is the answer correct?" />
+        android:layout_marginLeft="20dp"
+        android:text="@string/checkbox_is_right_answer"
+        android:layout_marginTop="10dp"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxTranslate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="@string/checkbox_translate"
+        android:layout_marginTop="10dp"/>
 
     <Button
-    android:id="@+id/btnAddOption"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/btnAdminSave"
-    android:background="#E78230"
-    android:padding="20dp"
-    android:layout_marginTop="20dp"/>
+        android:id="@+id/btnAddOption"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_next_question"
+        android:padding="20dp"
+        android:text="@string/btnAdminSave" />
 
     <Button
         android:id="@+id/btnPrevius"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btnPrevuis"
+        android:layout_height="65dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/btn_add_to_repeat"
         android:padding="20dp"
-        android:layout_marginTop="20dp"/>
+        android:text="@string/btnPrevuis" />
 </LinearLayout>

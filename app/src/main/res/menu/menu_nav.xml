@@ -7,19 +7,19 @@
         <item
             android:id="@+id/quiz"
             android:checkable="true"
-            android:icon="@android:drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_new_game"
             android:title="@string/quiz">
             @color/overflow_background</item>
         <item
             android:id="@+id/statistic"
             android:checkable="true"
-            android:icon="@android:drawable/ic_menu_info_details"
+            android:icon="@drawable/ic_statistic"
             android:title="@string/statystyki"
             >@color/overflow_background</item>
         <item
             android:id="@+id/repeat"
             android:checkable="true"
-            android:icon="@android:drawable/ic_menu_directions"
+            android:icon="@drawable/ic_repeat_board"
             android:title="@string/powtorki" >
             @color/overflow_background</item>
         <item
@@ -35,12 +35,12 @@
             <item
                 android:id="@+id/temat"
                 android:title="@string/nav_projekt_temat"
-                android:icon="@android:drawable/stat_notify_chat">
+                android:icon="@drawable/ic_o_grze">
                 @color/overflow_background</item>
             <item
                 android:id="@+id/autor"
                 android:title="@string/nav_autor"
-                android:icon="@android:drawable/btn_star" >
+                android:icon="@drawable/ic_author" >
                 @color/overflow_background</item>
 
         </menu>

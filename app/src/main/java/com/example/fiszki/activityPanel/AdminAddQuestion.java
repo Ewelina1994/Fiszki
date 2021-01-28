@@ -46,7 +46,6 @@ import java.net.URLConnection;
 public class AdminAddQuestion extends AppCompatActivity {
     private EditText questionEditT;
     Button addImageGallery;
-    Button addImageInternet;
     Button btnsaveQuestion;
     ProgressBar progressBarAT;
     ImageView imageView;
@@ -62,7 +61,6 @@ public class AdminAddQuestion extends AppCompatActivity {
         setContentView(R.layout.activity_add_question);
         questionEditT = findViewById(R.id.txtQuestion);
         addImageGallery=findViewById(R.id.btnGetImageGallery);
-        addImageInternet=findViewById(R.id.btnGetImageInternet);
         btnsaveQuestion = findViewById(R.id.btnAddQuestion);
         progressBarAT=findViewById(R.id.progresBar);
         imageView=findViewById(R.id.imageQuestion);
@@ -74,13 +72,13 @@ public class AdminAddQuestion extends AppCompatActivity {
                 choseImageInGallery();
             }
         });
-        addImageInternet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showDialogWindow();
-            }
-        });
+//        addImageInternet.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                showDialogWindow();
+//            }
+//        });
         btnsaveQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +148,8 @@ public class AdminAddQuestion extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode == -1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
                 selectedImage = data.getData();
+                progressBarAT.setVisibility(View.INVISIBLE);
+                
                 imageView.setImageURI(selectedImage);
 
             }
@@ -223,7 +223,7 @@ public class AdminAddQuestion extends AppCompatActivity {
             progressBarAT.setMax(100);
             progressBarAT.setProgress(0);
             progressBarAT.setVisibility(View.VISIBLE);
-            addImageInternet.setEnabled(false);
+            //addImageInternet.setEnabled(false);
             btnsaveQuestion.setEnabled(false);
         }
 
@@ -293,7 +293,7 @@ public class AdminAddQuestion extends AppCompatActivity {
             imageView.setImageDrawable(Drawable.createFromPath(path));
 
             // imageView.setImageDrawable(Drawable.createFromPath(path));
-            addImageInternet.setEnabled(true);
+            //addImageInternet.setEnabled(true);
             btnsaveQuestion.setEnabled(true);
         }
 

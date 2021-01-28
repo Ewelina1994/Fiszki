@@ -2,28 +2,27 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
-    <item
-        android:id="@+id/share"
-        android:icon="@drawable/share"
-        android:title="@string/share"
-        app:showAsAction="ifRoom"
-        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider" />
+<!--    <item-->
+<!--        android:id="@+id/share"-->
+<!--        android:icon="@drawable/share"-->
+<!--        android:title="@string/share"-->
+<!--        app:showAsAction="ifRoom"-->
+<!--        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider" />-->
     <item
         android:id="@+id/user"
-        android:icon="@drawable/send"
+        android:icon="@drawable/ic_user_panel"
         android:title="@string/uesr_panel"
         app:showAsAction="never" />
     <item
         android:id="@+id/ustawienia"
         android:title="@string/setting"
+        android:icon="@drawable/ic_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/admin"
+        android:icon="@drawable/ic_admin_panel"
         android:title="@string/panel_admin"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/adminAllList"
-        android:title="@string/listAdmin"
-        app:showAsAction="never" />
+    
 
 </menu>

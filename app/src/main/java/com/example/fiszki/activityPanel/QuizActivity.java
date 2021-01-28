@@ -147,34 +147,40 @@ public class QuizActivity extends AppCompatActivity {
             QuizDbHelper dbHelper = new QuizDbHelper(this);
             difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
 
-           // questionList= (ArrayList<QuestionDTO>) quizService.getRandomQuestionInQuiz(this);
-            FirebaseConfiguration.readAllQuestions(new FirebaseConfiguration.DataStatus() {
-                @Override
-                public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
-                    questionList= (ArrayList<QuestionDTO>) questionDTOList;
-                }
+            questionList= (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(this);
+//            FirebaseConfiguration.setFirstQuestion();
+//            questionList= (ArrayList<QuestionDTO>) FirebaseConfiguration.displayAllQuestion();
+//
+//            new FirebaseConfiguration(this).readAllQuestions(new FirebaseConfiguration.DataStatus() {
+//            @Override
+//            public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
+//                questionList= (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(QuizActivity.this, questionDTOList);;
+//            }
+//
+//            @Override
+//            public void DataIsInserted() {
+//
+//            }
+//
+//            @Override
+//            public void DataIsUpdated() {
+//
+//            }
+//
+//            @Override
+//            public void DataIsDeleted() {
+//
+//            }
+//        });
 
-                @Override
-                public void DataIsInserted() {
-
-                }
-
-                @Override
-                public void DataIsUpdated() {
-
-                }
-
-                @Override
-                public void DataIsDeleted() {
-
-                }
-            });
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
-            showNextQuestion();
+
             //set Event to cardView
             setSingleEvent(linearayoutCardView);
+
+            showNextQuestion();
 
             //ustawienie dla poziomu trudnego nie wyświetlanai textu pytania
             if(difficultyEnum==DifficultyEnum.Zaawansowany){
@@ -189,14 +195,19 @@ public class QuizActivity extends AppCompatActivity {
                     //JEŚLI nie jest nic zaznaczone
                     if (!ansewered) {
                         //jeśli zaznaczona odp nie zostanie kliknieta czyli na nowo zainicjowana zmienna
-                        if (!(clickedAnswer.getIs_right() ==1)) //?
-                        {
+//                        if (!(clickedAnswer.getIs_right() ==1)) //?
+//                        {
+                        if (clickedAnswer != null) {
                             checkAnswer();
-                            clickedAnswer.setIs_right(-1);
-                            // showNextQuestion();
-                        } else {
-                            Toast.makeText(QuizActivity.this, "Please select answer", Toast.LENGTH_LONG).show();
+                        }else {
+                             Toast.makeText(QuizActivity.this, "Please select answer", Toast.LENGTH_LONG).show();
+
                         }
+                          //  clickedAnswer.setIs_right(-1);
+                            // showNextQuestion();
+//                        } else {
+//                            Toast.makeText(QuizActivity.this, "Please select answer", Toast.LENGTH_LONG).show();
+//                        }
                     }
                     //JEŚŁI ODP została zaznaczona
                     else {
@@ -330,6 +341,8 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void showNextQuestion() {
+        //ustaw kliknieto odp na null
+        clickedAnswer=null;
         if (questionCount < questionCountTotal) {
             textViewQuestion1.setBackgroundColor(Color.parseColor("#CCDAE7"));
             textViewQuestion2.setBackgroundColor(Color.parseColor("#CCDAE7"));
@@ -471,7 +484,6 @@ public class QuizActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
 
         showSummary();
-        //finish();
     }
 
     private void showSummary() {
@@ -511,19 +523,6 @@ public class QuizActivity extends AppCompatActivity {
             textToSpeech.stop();
             textToSpeech.shutdown();
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(KEY_SCORE, score);
-        outState.putInt(KEY_WRONG, wrong);
-        outState.putInt(KEY_QUESTION_COUNT, questionCount);
-        outState.putInt(KEY_QUESTION_COUNT_TOTAL, questionCount);
-        outState.putLong(KEY_MILIS_LEFT, timeLeftInMillis);
-        outState.putBoolean(KEY_ANSWER, ansewered);
-        outState.putParcelableArrayList(KEY_QUESTION_LIST, questionList);
-        outState.putString(BUTTON_NEXT_NAME, buttoinNext.getText().toString());
     }
 
     @Override

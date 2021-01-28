@@ -49,7 +49,7 @@
     <string name="add_new_idiom">Add new idiom</string>
     <string name="btnAdminNext">Next</string>
     <string name="validationPanelUser">Nick or language or year are empty. Please  complete.</string>
-    <string name="add_new_option_PL">Enter your answer in Polish</string>
+    <string name="add_new_option_PL">Enter answer in Polish</string>
     <string name="btnAdminSave">Save option</string>
     <string name="add_new_option_EN">Enter answer in English</string>
     <string name="option_number">Option number 1</string>
@@ -74,5 +74,18 @@
     <string name="correct_profil">Correct your accound</string>
     <string name="add_new_option">Add options</string>
     <string name="start_page">Start the game</string>
+    <string name="confirm_added_question_to_database">Question is upload sucessful</string>
+    <string name="learn_en_idiom">Learn English Idiom</string>
+    <string name="checkbox_is_right_answer">Is the answer correct?</string>
+    <string name="validator_only_once_good_option_save">You cannot set the answer to true a second time</string>
+    <string name="checkbox_translate">Translate option to English</string>
+    <string name="add_update_idiom">Update question</string>
+    <string name="what_do_you_do_admin">What do you want to do?</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="updateQuestion">Edit idiom</string>
+    <string name="edit_options">Edit options</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete this idiom?</string>
+    <string name="sucessfull_delete_idiom">Suessfull delete idiom</string>
 
 </resources>

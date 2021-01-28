@@ -25,6 +25,10 @@
             android:parentActivityName=".activityPanel.MainActivity"
             android:label="@string/setting"
             android:theme="@style/MyAppTheme"/>
+        <activity android:name=".activityPanel.AdminPanel"
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:label="@string/panel_admin"
+            android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.AdminAddQuestion"
             android:parentActivityName=".activityPanel.MainActivity"
@@ -38,6 +42,16 @@
         <activity android:name=".activityPanel.QuestionListActivity"
             android:parentActivityName=".activityPanel.MainActivity"
             android:label="@string/listAdmin"
+            android:theme="@style/MyAppTheme"/>
+        <activity
+            android:name=".activityPanel.UpdateQuestionActivity"
+            android:parentActivityName=".activityPanel.QuestionListActivity"
+            android:label="@string/add_update_idiom"
+            android:theme="@style/MyAppTheme"/>
+        <activity
+            android:name=".activityPanel.UpdateOptionsActivity"
+            android:parentActivityName=".activityPanel.QuestionListActivity"
+            android:label="@string/edit_options"
             android:theme="@style/MyAppTheme"/>
         <activity
             android:name=".activityPanel.Statystic"

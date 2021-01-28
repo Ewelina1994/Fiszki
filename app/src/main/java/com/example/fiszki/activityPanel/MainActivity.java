@@ -58,10 +58,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem menuItem = menu.findItem(R.id.share);
-        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        setShareIntent("Zapraszamy na stronę uczelni");
-        return super.onCreateOptionsMenu(menu);
+//        MenuItem menuItem = menu.findItem(R.id
+//                .share);
+//        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+//        setShareIntent("Zapraszamy na stronę uczelni");
+          return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -76,11 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent2);
                 return true;
             case R.id.admin:
-                Intent intent3=new Intent(this, AdminAddQuestion.class);
+                Intent intent3=new Intent(MainActivity.this, AdminPanel.class);
                 startActivity(intent3);
-            case R.id.adminAllList:
-                Intent intent4=new Intent(this, QuestionListActivity.class);
-                startActivity(intent4);
 
             default:
                 return super.onOptionsItemSelected(item);

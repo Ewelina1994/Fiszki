@@ -42,8 +42,21 @@
     <string name="validationPath">Źródło do zdjecia jest nie prawidłowe</string>
     <string name="no_answer_is_marked_as_correct">Żadna z 3 opcji odpowiedzi nie jest ustawiona jako poprawna</string>
     <string name="btnPrevuis">Wstecz</string>
-    <string name="listAdmin">Lista wszytkich pyatń</string>
+    <string name="listAdmin">Lista wszystkich pytań</string>
     <string name="correct_profil">Uzupełnij swoje dane</string>
     <string name="add_new_option">Dodaj opcje</string>
     <string name="start_page">Rozpocznij rozgrywkę</string>
+    <string name="confirm_added_question_to_database">Dodano pytanie do bazy</string>
+    <string name="learn_en_idiom">Ucz się angielskich idiomów</string>
+    <string name="checkbox_is_right_answer">Czy to jest poprawna odpowiedź?</string>
+    <string name="validator_only_once_good_option_save">Nie możesz ustawić opcję na poprawną drugi raz</string>
+    <string name="checkbox_translate">Przetłumacz opcję na język angielski</string>
+    <string name="add_update_idiom">Edytuj pytanie</string>
+    <string name="what_do_you_do_admin">Co zamierzasz zrobić?</string>
+    <string name="update">Edytuj</string>
+    <string name="delete">Usuń</string>
+    <string name="updateQuestion">Edytuj idiom</string>
+    <string name="edit_options">Edytuj opcję</string>
+    <string name="are_you_sure_you_want_to_delete">Czy na pewno chcesz usunąć idiom?</string>
+    <string name="sucessfull_delete_idiom">Idiom został usunięty</string>
 </resources>

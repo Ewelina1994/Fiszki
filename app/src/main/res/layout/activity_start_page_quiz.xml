@@ -134,7 +134,13 @@
                     android:background="#E78230"
                     android:freezesText="true"
                     android:text="START QUIZ" />
-            </LinearLayout>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Switch" />
+    </LinearLayout>
 
         </RelativeLayout>
             </ScrollView>
