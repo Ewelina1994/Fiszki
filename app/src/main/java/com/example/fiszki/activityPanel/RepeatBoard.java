@@ -5,6 +5,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +21,14 @@ import androidx.cardview.widget.CardView;
 import com.example.fiszki.Converter;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.R;
+import com.example.fiszki.TextToSpeachImpl;
+import com.example.fiszki.entity.Option;
 import com.example.fiszki.services.QuizService;
 import com.example.fiszki.services.RepeatQuestionService;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RepeatBoard extends AppCompatActivity {
     ImageView image;
@@ -34,12 +39,14 @@ public class RepeatBoard extends AppCompatActivity {
     private Button buttonBackQuestion;
     private Button buttonAddToReplays;
     private Button buttoinNext;
+    private Button btnGiveVoice;
+
+    TextToSpeachImpl textToSpeach;
 
     boolean is_addQuestion_to_replace_board;
     int currentQuestion;
 
     Converter converter;
-    //private List<RepeatQuestionDTO> repeatQuestionDTOList;
     private List<QuestionDTO>repeatQuestionDTOList;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -56,6 +63,7 @@ public class RepeatBoard extends AppCompatActivity {
         buttonBackQuestion=findViewById(R.id.backQuestion);
         buttonAddToReplays=findViewById(R.id.btnAddToReplays);
         buttoinNext=findViewById(R.id.btnNextQuestion);
+        btnGiveVoice=findViewById(R.id.speakBtn);
 
         converter= new Converter();
         repeatQuestionDTOList= RepeatQuestionService.getAllQuestionOnRepeatBoard();
@@ -95,7 +103,15 @@ public class RepeatBoard extends AppCompatActivity {
                 showQuestion(1);
             }
         });
+        btnGiveVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                giveVoice();
+            }
+        });
         showQuestion(0);
+
+        initialTextToSpech();
     }
 
 
@@ -107,7 +123,7 @@ public class RepeatBoard extends AppCompatActivity {
             is_addQuestion_to_replace_board=RepeatQuestionService.isAddQuestionToRepeatBoard(repeatQuestionDTOList.get(currentQuestion));
             // jeśli pytanie nie jest dodane do powtórek i chcemy je dodać
             if(is_addQuestion_to_replace_board==false){
-                RepeatQuestionService.addQuestionToRepeatBoard(repeatQuestion);
+                //RepeatQuestionService.addQuestionToRepeatBoard(repeatQuestion);
                 //repeatQuestionDTOList.saveQuestionToDBRepeatTable(repeatQuestion);
                 is_addQuestion_to_replace_board=true;
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
@@ -115,7 +131,7 @@ public class RepeatBoard extends AppCompatActivity {
             }
             //jeśli pytanie jest dodane do powtórek i chcemy usunć z tablicy powtórek
             else {
-                RepeatQuestionService.deleteQuestionToRepeatBoard(repeatQuestion);
+                //RepeatQuestionService.deleteQuestionToRepeatBoard(repeatQuestion);
                 is_addQuestion_to_replace_board=false;
                 setColorBtnAddToReplace(is_addQuestion_to_replace_board);
                 repeatQuestionDTOList.get(currentQuestion).setIs_added_to_repaet_board(is_addQuestion_to_replace_board);
@@ -125,6 +141,7 @@ public class RepeatBoard extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void showQuestion(int value) {
+        giveVoice();
 
         if (currentQuestion<repeatQuestionDTOList.size() && currentQuestion>=0){
             buttonBackQuestion.setEnabled(true);
@@ -213,7 +230,11 @@ public class RepeatBoard extends AppCompatActivity {
 
                 setBtnNextandBtnPrevious();
             }
+        }else{
+            //jeśłi jest 0 pytań na liście powtórek ustaw inny layout
+            setContentView(R.layout.no_question_in_repeat_board);
         }
+
     }
 
     private void setImageFromUri() {
@@ -248,5 +269,29 @@ public class RepeatBoard extends AppCompatActivity {
             bgShape1.setColor(Color.parseColor("#C0C0C0"));
             buttonAddToReplays.setText(R.string.no_added_to_replace);
         }
+    }
+
+    private void initialTextToSpech() {
+        textToSpeach = new TextToSpeachImpl(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = textToSpeach.setLanguage(Locale.ENGLISH);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("textToSpeek", "Language not supported");
+                    } else {
+
+                    }
+                } else {
+                    Log.e("textToSpeek", "Initialization faild");
+                }
+            }
+        });
+    }
+
+    private void giveVoice() {
+        String text = questionTextView.getText().toString();
+        textToSpeach.audio(text);
     }
 }

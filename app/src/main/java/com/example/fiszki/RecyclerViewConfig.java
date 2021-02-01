@@ -122,7 +122,7 @@ public class RecyclerViewConfig {
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                deleteSHowDialog(key, alertD);
+                deleteSHowDialog(questionDTO, key, alertD);
 
             }
         });
@@ -130,7 +130,7 @@ public class RecyclerViewConfig {
         alertD.show();
     }
 
-    private void deleteSHowDialog(int key, AlertDialog dialogBig) {
+    private void deleteSHowDialog(QuestionDTO questionDTO,int key, AlertDialog dialogBig) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
         alertDialogBuilder.setTitle(R.string.are_you_sure_you_want_to_delete);
         alertDialogBuilder.setCancelable(true);
@@ -144,6 +144,7 @@ public class RecyclerViewConfig {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 FirebaseConfiguration.deleteIdiom(key, mContext);
+                StorageFirebase.deleteImage(questionDTO.getQuestion().getUploadImageUri());
                 dialogBig.cancel();
             }
         });

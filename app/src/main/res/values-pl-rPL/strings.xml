@@ -61,4 +61,5 @@
     <string name="sucessfull_delete_idiom">Idiom został usunięty</string>
     <string name="setting_button">Ustaw</string>
     <string name="how_many_question_in_quiz">Ile pytań w quizie?</string>
+    <string name="no_question_in_repeat_board">Nie ma dodanych idiomów w tablicy powtórek</string>
 </resources>

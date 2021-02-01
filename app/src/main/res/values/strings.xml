@@ -89,5 +89,6 @@
     <string name="sucessfull_delete_idiom">Suessfull delete idiom</string>
     <string name="setting_button">Set</string>
     <string name="how_many_question_in_quiz">How many question in quiz?</string>
+    <string name="no_question_in_repeat_board">No question in this board</string>
 
 </resources>

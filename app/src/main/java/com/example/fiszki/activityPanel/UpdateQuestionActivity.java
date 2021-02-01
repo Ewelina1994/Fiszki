@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
+import com.example.fiszki.StorageFirebase;
 import com.example.fiszki.entity.Question;
 import com.squareup.picasso.Picasso;
 
@@ -162,8 +163,14 @@ public class UpdateQuestionActivity extends AppCompatActivity {
             progressBarAT.setVisibility(View.INVISIBLE);
 
             imageView.setImageURI(selectedImage);
+            deleteOldImageInFirebase();
 
         }
+    }
+
+    private void deleteOldImageInFirebase() {
+        Uri deleteImage = question_save.getQuestion().getUploadImageUri();
+        StorageFirebase.deleteImage(deleteImage);
     }
 
     private String getExtension(Uri uri){
