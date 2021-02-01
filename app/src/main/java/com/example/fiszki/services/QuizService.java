@@ -21,6 +21,7 @@ import java.util.Random;
 
 public final class QuizService {
     private static List<QuestionDTO> questionDTOList;
+    public static int NUMBER_QUESTIONS = 10;
 
     public QuizService(){
 //        questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
@@ -58,10 +59,12 @@ public final class QuizService {
         Random random= new Random();
         List<QuestionDTO> questionRandom= new ArrayList<>();
 
-        while (questionRandom.size()<5){
-            int randomIndex=random.nextInt(questionDTOList.size());
-            if(!questionRandom.contains(questionDTOList.get(randomIndex))){
-                questionRandom.add(questionDTOList.get(randomIndex));
+        while (questionRandom.size()<NUMBER_QUESTIONS){
+            if(!questionDTOList.isEmpty()){
+                int randomIndex=random.nextInt(questionDTOList.size());
+                if(!questionRandom.contains(questionDTOList.get(randomIndex))){
+                    questionRandom.add(questionDTOList.get(randomIndex));
+                }
             }
         }
         return questionRandom;

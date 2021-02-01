@@ -15,11 +15,9 @@ import android.widget.Toast;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.fiszki.R;
-import com.example.fiszki.Ustawienia;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -68,10 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.user:
-            Intent intent= new Intent(this, PanelUser.class);
-            startActivity(intent);
-                return true;
             case R.id.ustawienia:
                 Intent intent2= new Intent(this, Ustawienia.class);
                 startActivity(intent2);

@@ -20,6 +20,4 @@ public class QuestionContract {
                     QuestionTable.COLUMN_QUESTION + " TEXT, "+
                     QuestionTable.COLUMN_IMG + " BLOB);";
 
-    public static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + UserContract.UserTable.TABLE_NAME + ";";
 }

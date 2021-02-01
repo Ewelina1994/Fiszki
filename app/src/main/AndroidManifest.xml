@@ -16,12 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activityPanel.PanelUser"
-            android:label="@string/correct_profil"
-            android:parentActivityName=".activityPanel.MainActivity"
-            android:theme="@style/MyAppTheme" />
-        <activity
-            android:name=".Ustawienia"
+            android:name=".activityPanel.Ustawienia"
             android:parentActivityName=".activityPanel.MainActivity"
             android:label="@string/setting"
             android:theme="@style/MyAppTheme"/>

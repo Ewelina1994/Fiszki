@@ -9,13 +9,10 @@ import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
 
-import com.example.fiszki.activityPanel.AdminAddQuestion;
-import com.example.fiszki.activityPanel.RepeatBoard;
 import com.example.fiszki.db.OptionContract;
 import com.example.fiszki.db.QuestionContract;
 import com.example.fiszki.db.RepeatQuestionContract;
 import com.example.fiszki.db.StatisticContract;
-import com.example.fiszki.db.UserContract;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
 import com.example.fiszki.entity.RepeatQuestion;
@@ -60,13 +57,11 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
         db.execSQL ("PRAGMA Foreign_keys = ON");
 
-        final String SQL_CREATE_USER_TABLE = UserContract.SQL_CREATE_ENTRIES;
        // final String SQL_CREATE_QUESTION_TABLE = QuestionContract.SQL_CREATE_ENTRIES;
        // final String SQL_CREATE_OPTION_TABLE = OptionContract.SQL_CREATE_ENTRIES;
         final String SQL_CREATE_STATISTIC_TABLE = StatisticContract.SQL_CREATE_ENTRIES;
         final String SQL_CREATE_REPEAT_TABLE = RepeatQuestionContract.SQL_CREATE_ENTRIES;
 
-        db.execSQL(SQL_CREATE_USER_TABLE);
        // db.execSQL(SQL_CREATE_QUESTION_TABLE);
        // db.execSQL(SQL_CREATE_OPTION_TABLE);
         db.execSQL(SQL_CREATE_STATISTIC_TABLE);
@@ -76,7 +71,6 @@ public class QuizDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(UserContract.SQL_DELETE_ENTRIES);
         //db.execSQL(QuestionContract.SQL_DELETE_ENTRIES);
        // db.execSQL(OptionContract.SQL_DELETE_ENTRIES);
         db.execSQL(StatisticContract.SQL_CREATE_ENTRIES);

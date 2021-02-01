@@ -1,6 +1,5 @@
 package com.example.fiszki.activityPanel;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -17,19 +16,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
-import com.example.fiszki.StorageFirebase;
+import com.example.fiszki.TranslateGoogle;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javazoom.jl.decoder.JavaLayerException;
 
 public class AddOption extends AppCompatActivity {
 
     private TextView optionNumber;
     private EditText optionPLEditText;
     private EditText optionENEditText;
-    CheckBox checkBox;
+    CheckBox checkBoxIsRightAnswer;
+    CheckBox checkBoxTranslate;
     int is_Right;
     Question question_save;
     List<Option> optionListPL;
@@ -51,7 +54,8 @@ public class AddOption extends AppCompatActivity {
         optionNumber = (TextView) findViewById(R.id.option_number);
         optionPLEditText = (EditText) findViewById(R.id.option_et_PL);
         optionENEditText = (EditText) findViewById(R.id.option_et_EN);
-        checkBox=(CheckBox) findViewById(R.id.checkBoxGoodOption);
+        checkBoxIsRightAnswer =(CheckBox) findViewById(R.id.checkBoxGoodOption);
+        checkBoxTranslate = findViewById(R.id.checkBoxTranslate);
         //ustawienei ze wpisujemy 1 opcje do pytania
         option_nr=1;
         //lista do której będziemy zapisywać zaznaczone checkboxy tak żeby ktoś 2 razy nie zaznaczył że odp jest prawidłowa
@@ -75,6 +79,18 @@ public class AddOption extends AppCompatActivity {
                 backToPreviusOption();
             }
         });
+        checkBoxTranslate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    translateOptionToEn();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JavaLayerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         if (savedInstanceState == null) {
             dbHelper = new QuizDbHelper(this);
@@ -84,6 +100,12 @@ public class AddOption extends AppCompatActivity {
         else {
         //po odwróceniu ekranu
         }
+    }
+
+    private void translateOptionToEn() throws IOException, JavaLayerException {
+        TranslateGoogle translateGoogle= new TranslateGoogle();
+        String resultat = translateGoogle.translatePolishToEnglish(optionPLEditText.getText().toString());
+        optionENEditText.setText(resultat);
     }
 
 
@@ -103,9 +125,9 @@ public class AddOption extends AppCompatActivity {
             optionENEditText.setText(optionListEN.get(option_nr-1).getName());
             //ustaw checkbox
             if(optionListPL.get(option_nr-1).getIs_right()==1){
-                checkBox.setChecked(true);
+                checkBoxIsRightAnswer.setChecked(true);
             }else {
-                checkBox.setChecked(false);
+                checkBoxIsRightAnswer.setChecked(false);
             }
         }else {
             clearInput();
@@ -116,7 +138,7 @@ public class AddOption extends AppCompatActivity {
 
         if(option_nr<=3){
             //jeśli checkbox jest zaznaczony ustaw wartość na 1
-            if(checkBox.isChecked()){
+            if(checkBoxIsRightAnswer.isChecked()){
                 is_Right=1;
             }else {
                 is_Right=0;
@@ -126,7 +148,7 @@ public class AddOption extends AppCompatActivity {
                 Toast.makeText(this, R.string.validator_only_once_good_option_save, Toast.LENGTH_LONG).show();
             }
             //jeśłi w ostatnim pytaniu lista z odpowiedziami nie będzie zawierała odpowiedzi zaznaczonej jako odp poprawna
-             else if(option_nr==3 && !listRightAnswer.contains(1) && !checkBox.isChecked()){
+             else if(option_nr==3 && !listRightAnswer.contains(1) && !checkBoxIsRightAnswer.isChecked()){
                 saveOption.setEnabled(true);
                 Toast.makeText(this, R.string.no_answer_is_marked_as_correct, Toast.LENGTH_LONG).show();
             } else{
@@ -191,7 +213,7 @@ public class AddOption extends AppCompatActivity {
     private void clearInput() {
         optionPLEditText.getText().clear();
         optionENEditText.getText().clear();
-        checkBox.setChecked(false);
+        checkBoxIsRightAnswer.setChecked(false);
         saveOption.setEnabled(true);
     }
 

@@ -23,6 +23,4 @@ public class OptionContract {
                     OptionTable.COLUMN_LANGUAGE + " TEXT, "+
                     "FOREIGN KEY (question_id) REFERENCES question (_id));";
 
-    public static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + UserContract.UserTable.TABLE_NAME + ";";
 }

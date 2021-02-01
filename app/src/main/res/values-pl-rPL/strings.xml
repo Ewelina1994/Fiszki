@@ -59,4 +59,6 @@
     <string name="edit_options">Edytuj opcję</string>
     <string name="are_you_sure_you_want_to_delete">Czy na pewno chcesz usunąć idiom?</string>
     <string name="sucessfull_delete_idiom">Idiom został usunięty</string>
+    <string name="setting_button">Ustaw</string>
+    <string name="how_many_question_in_quiz">Ile pytań w quizie?</string>
 </resources>

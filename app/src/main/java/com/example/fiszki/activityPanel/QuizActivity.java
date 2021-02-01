@@ -1,6 +1,5 @@
 package com.example.fiszki.activityPanel;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,9 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
+import com.example.fiszki.TextToSpeachImpl;
 import com.example.fiszki.enums.LanguageEnum;
 import com.example.fiszki.services.QuizService;
 import com.example.fiszki.R;
@@ -45,7 +44,7 @@ import java.util.Locale;
 
 public class QuizActivity extends AppCompatActivity {
     public static final String EXTRA_SCORE = "extraScore";
-    public static final String EXTRA_WRONG = "extraWrong";
+    public static final String EXTRA_TOTAL = "extraTotal";
     private static final String KEY_SCORE = "keyScore";
     private static final String KEY_WRONG = "keyWrong";
     private static final String KEY_QUESTION_COUNT="keyQuestionCount" ;
@@ -101,9 +100,8 @@ public class QuizActivity extends AppCompatActivity {
     DifficultyEnum difficultyEnum;
     List<Option>listOptionsInQuiz;
 
-    //Głos
-    TextToSpeech textToSpeech;
     Button speakButton;
+    TextToSpeachImpl textToSpeach;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -127,9 +125,6 @@ public class QuizActivity extends AppCompatActivity {
 
         clickedAnswer=new Option();
         speakButton = findViewById(R.id.speakBtn);
-        //głos do przysłowia
-        giveVoice();
-
         textColorDefaultCd = textViewCountDown.getTextColors();
 
         Intent intent = getIntent();
@@ -232,6 +227,13 @@ public class QuizActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            speakButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    giveVoice();
+                }
+            });
         } else {
             questionList = savedInstanceState.getParcelableArrayList(KEY_QUESTION_LIST);
 
@@ -277,11 +279,11 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void initialTextToSpech() {
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        textToSpeach = new TextToSpeachImpl(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-                    int result = textToSpeech.setLanguage(Locale.ENGLISH);
+                    int result = textToSpeach.setLanguage(Locale.ENGLISH);
 
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("textToSpeek", "Language not supported");
@@ -296,15 +298,8 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void giveVoice() {
-
-        speakButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = textViewQuestion.getText().toString();
-                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-            }
-        });
-
+        String text = textViewQuestion.getText().toString();
+        textToSpeach.audio(text);
     }
 
 
@@ -426,7 +421,8 @@ public class QuizActivity extends AppCompatActivity {
             countDownTimer.cancel();
         }
         //jeśli poprawna odp
-        if (clickedAnswer.getIs_right()==1) {
+        if (clickedAnswer!=null
+                && clickedAnswer.getIs_right()==1) {
             score++;
             textViewCorect.setText("Correct: " + score);}
         //jeśli nie poprawna odp
@@ -480,7 +476,7 @@ public class QuizActivity extends AppCompatActivity {
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EXTRA_SCORE, score);
-        resultIntent.putExtra(EXTRA_WRONG, wrong);
+        resultIntent.putExtra(EXTRA_TOTAL, questionCountTotal);
         setResult(RESULT_OK, resultIntent);
 
         showSummary();
@@ -519,18 +515,18 @@ public class QuizActivity extends AppCompatActivity {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-            textToSpeech.shutdown();
+        if (textToSpeach != null) {
+            textToSpeach.stop();
+            textToSpeach.shutdown();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(textToSpeech !=null){
-            textToSpeech.stop();
-            textToSpeech.shutdown();
+        if(textToSpeach!=null){
+            textToSpeach.stop();
+            textToSpeach.shutdown();
         }
     }
 

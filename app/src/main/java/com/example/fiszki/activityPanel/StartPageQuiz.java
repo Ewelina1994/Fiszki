@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.fiszki.R;
-import com.example.fiszki.activityPanel.QuizActivity;
 
 public class StartPageQuiz extends AppCompatActivity {
 
@@ -23,6 +22,9 @@ public class StartPageQuiz extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String KEY_HIGHSCORE = "keyHighScore";
     public static final String KEY_LASTCORE = "keyLastScore";
+    private static final String KEY_TOTAL_QUESTIONS_HIGHT = "keyTotal";
+    private static final String KEY_TOTAL_QUESTIONS_LAST = "keyTotal";
+
 
 
     private int highscore;
@@ -74,47 +76,50 @@ public class StartPageQuiz extends AppCompatActivity {
         if(requestCode == REQUEST_CODE_QUIZ){
             if(resultCode==RESULT_OK){
                 int score = data.getIntExtra(QuizActivity.EXTRA_SCORE, 0);
-                int wrong = data.getIntExtra(QuizActivity.EXTRA_WRONG, 0);
-                updateLastResult(score);
+                int totalQuestion = data.getIntExtra(QuizActivity.EXTRA_TOTAL, 0);
+                updateLastResult(score, totalQuestion);
 
                 if(score>highscore){
-                    updateHighScore(score);
+                    updateHighScore(score, totalQuestion);
                 }
             }
         }
     }
 
-    private void updateLastResult(int score) {
+    private void updateLastResult(int score, int totalQuestion) {
         SharedPreferences prefs= getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         lastResult=prefs.getInt(KEY_LASTCORE, 0);
-        textViewLastResult.setText(score+"/5");
+        //lastResult=prefs.getInt(KEY_LASTCORE, 0);
+        lastResult=score;
+        textViewLastResult.setText(score+"/"+totalQuestion);
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(KEY_LASTCORE, lastResult);
+        editor.putInt(KEY_LASTCORE, score);
+        editor.putInt(KEY_TOTAL_QUESTIONS_LAST, totalQuestion);
         editor.apply();
     }
 
     private void loadHighScore(){
         SharedPreferences prefs= getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         highscore = prefs.getInt(KEY_HIGHSCORE, 0);
-        textViewHighScore.setText(highscore+"/5");
+        int totalQuestionHight = prefs.getInt(KEY_TOTAL_QUESTIONS_HIGHT, 10);
+
+        textViewHighScore.setText(highscore+"/"+totalQuestionHight);
     }
     private void loadLastResult(){
         SharedPreferences prefs= getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         lastResult = prefs.getInt(KEY_LASTCORE, 0);
-        textViewLastResult.setText(lastResult+"/5");
+        int totalQUESTIONLast = prefs.getInt(KEY_TOTAL_QUESTIONS_LAST, 0);
+        textViewLastResult.setText(lastResult+"/"+totalQUESTIONLast);
 
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.putInt(KEY_LASTCORE, lastResult);
-//        editor.apply();
     }
-    private void updateHighScore(int hightScoreNew) {
-        highscore=hightScoreNew;
-        textViewHighScore.setText(highscore+"/5");
+    private void updateHighScore(int hightScoreNew, int totalQuestionInQuiz) {
+        textViewHighScore.setText(hightScoreNew+"/"+totalQuestionInQuiz);
 
         SharedPreferences prefs=getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(KEY_HIGHSCORE, highscore);
+        editor.putInt(KEY_HIGHSCORE, hightScoreNew);
+        editor.putInt(KEY_TOTAL_QUESTIONS_HIGHT, totalQuestionInQuiz);
         editor.apply();
     }
 }

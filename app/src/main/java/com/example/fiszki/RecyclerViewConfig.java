@@ -9,20 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fiszki.activityPanel.AdminPanel;
-import com.example.fiszki.activityPanel.DeleteQuestionActivity;
-import com.example.fiszki.activityPanel.MainActivity;
 import com.example.fiszki.activityPanel.UpdateQuestionActivity;
 import com.squareup.picasso.Picasso;
 
