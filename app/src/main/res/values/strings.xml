@@ -90,5 +90,12 @@
     <string name="setting_button">Set</string>
     <string name="how_many_question_in_quiz">How many question in quiz?</string>
     <string name="no_question_in_repeat_board">No question in this board</string>
+    <string name="pitch">Set pitch</string>
+    <string name="speed">Set speech</string>
+    <string name="valid_to_big_number_setting_question">" too large number. The maximum  is 20"</string>
+    <string name="question">Question</string>
+    <string name="score">Score</string>
+    <string name="wrong">Wrong</string>
+    <string name="difficulty">Difficulty</string>
 
 </resources>

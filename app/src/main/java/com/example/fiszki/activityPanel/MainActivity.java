@@ -17,14 +17,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.R;
+import com.example.fiszki.entity.QuestionDTO;
+import com.example.fiszki.services.QuizService;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private ShareActionProvider shareActionProvider;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -49,6 +52,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //załąduj pytanai do bazy
+        if(FirebaseConfiguration.getAllQuestionDTO().isEmpty()){
+            new FirebaseConfiguration(this).readAllQuestions(new FirebaseConfiguration.DataStatus() {
+                @Override
+                public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
+                    //QuizService.setQuestionDTOList(questionDTOList);
+                }
+
+                @Override
+                public void DataIsInserted() {
+
+                }
+
+                @Override
+                public void DataIsUpdated() {
+
+                }
+
+                @Override
+                public void DataIsDeleted() {
+
+                }
+            });
+        }
 
 
     }
@@ -79,12 +107,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setShareIntent(String text) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        shareActionProvider.setShareIntent(intent);
-    }
+//    private void setShareIntent(String text) {
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType("text/plain");
+//        intent.putExtra(Intent.EXTRA_TEXT, text);
+//        shareActionProvider.setShareIntent(intent);
+//    }
 
 
     @Override

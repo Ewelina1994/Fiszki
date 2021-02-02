@@ -1,7 +1,6 @@
 package com.example.fiszki;
 
-import com.example.fiszki.entity.Option;
-import com.example.fiszki.entity.Question;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.entity.RepeatQuestion;
 
 public class Converter {

@@ -1,18 +1,9 @@
 package com.example.fiszki.services;
 
 import android.content.Context;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.fiszki.FirebaseConfiguration;
-import com.example.fiszki.QuestionDTO;
-import com.example.fiszki.QuizDbHelper;
-import com.example.fiszki.activityPanel.QuizActivity;
-import com.example.fiszki.entity.Option;
-import com.example.fiszki.entity.Question;
-import com.example.fiszki.enums.DifficultyEnum;
-import com.example.fiszki.enums.LanguageEnum;
+import com.example.fiszki.entity.QuestionDTO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +18,10 @@ public final class QuizService {
 //        questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
 //        Collections.shuffle(questionDTOList);
 
+    }
+
+    public static void setQuestionDTOList(List<QuestionDTO> questionDTOList) {
+        QuizService.questionDTOList = questionDTOList;
     }
 
     public static List<QuestionDTO> getRandomQuestionInQuiz(Context context){

@@ -19,11 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.fiszki.Converter;
-import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.R;
 import com.example.fiszki.TextToSpeachImpl;
-import com.example.fiszki.entity.Option;
-import com.example.fiszki.services.QuizService;
 import com.example.fiszki.services.RepeatQuestionService;
 import com.squareup.picasso.Picasso;
 

@@ -2,8 +2,7 @@ package com.example.fiszki.services;
 
 import android.annotation.SuppressLint;
 
-import com.example.fiszki.QuestionDTO;
-import com.example.fiszki.RepeatQuestionDTO;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.entity.RepeatQuestion;
 
 import java.util.ArrayList;

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 
 public class TextToSpeachImpl extends TextToSpeech {
-    static public int PITCH;
-    static public int SPEED;
+    static public float PITCH;
+    static public float SPEED;
 
     public TextToSpeachImpl(Context context, OnInitListener listener) {
         super(context, listener);

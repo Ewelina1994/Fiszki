@@ -24,7 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.TextToSpeachImpl;
 import com.example.fiszki.enums.LanguageEnum;

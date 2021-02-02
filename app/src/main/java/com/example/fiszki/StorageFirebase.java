@@ -21,6 +21,10 @@ public final class StorageFirebase extends AppCompatActivity {
     private static String extensionImg;
 
 
+    public static StorageReference getmStorageRef() {
+        return mStorageRef;
+    }
+
     public static String fileuploaderfromUri(Uri uri, String getExtensionImg) {
         if (uri != null && !getExtensionImg.equals(" ")) {
             uriImage = uri;

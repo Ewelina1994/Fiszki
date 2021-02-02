@@ -14,10 +14,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fiszki.FirebaseConfiguration;
-import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
-import com.example.fiszki.StorageFirebase;
 import com.example.fiszki.entity.Option;
 
 import java.util.ArrayList;

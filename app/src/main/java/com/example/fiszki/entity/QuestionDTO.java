@@ -1,10 +1,7 @@
-package com.example.fiszki;
+package com.example.fiszki.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.example.fiszki.entity.Option;
-import com.example.fiszki.entity.Question;
 
 import java.util.ArrayList;
 import java.util.List;

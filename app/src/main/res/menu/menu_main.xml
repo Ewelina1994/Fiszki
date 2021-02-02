@@ -9,11 +9,6 @@
 <!--        app:showAsAction="ifRoom"-->
 <!--        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider" />-->
     <item
-        android:id="@+id/user"
-        android:icon="@drawable/ic_user_panel"
-        android:title="@string/uesr_panel"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/ustawienia"
         android:title="@string/setting"
         android:icon="@drawable/ic_settings"

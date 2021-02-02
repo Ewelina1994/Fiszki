@@ -1,6 +1,5 @@
 package com.example.fiszki.activityPanel;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -8,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fiszki.FirebaseConfiguration;
-import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.R;
 import com.example.fiszki.RecyclerViewConfig;
 

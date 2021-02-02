@@ -3,16 +3,14 @@ package com.example.fiszki;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.fiszki.activityPanel.MainActivity;
-import com.example.fiszki.activityPanel.UpdateOptionsActivity;
 import com.example.fiszki.entity.Option;
 import com.example.fiszki.entity.Question;
+import com.example.fiszki.entity.QuestionDTO;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -21,10 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,7 +32,6 @@ public final class FirebaseConfiguration {
       static List<Option> optionList=new ArrayList<>();;
       static List<QuestionDTO> questionDTOList=new ArrayList<>();;
       Context context;
-     static StorageReference mStorage = FirebaseStorage.getInstance().getReference("Images");
      static SharedPreferences settings;
 
     public interface DataStatus{
@@ -79,7 +73,7 @@ public final class FirebaseConfiguration {
                         question.setId(id_question);
                         String imagePath = (String) snapshot.child("image").getValue();
                         if(imagePath!=null){
-                            mStorage.child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            StorageFirebase.getmStorageRef().child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     Uri downloadUrl = uri;
@@ -214,8 +208,7 @@ public final class FirebaseConfiguration {
     }
 
     private String saveToStorageImg(Question question_save) {
-        StorageFirebase storageFirebase= new StorageFirebase();
-        String imageUrl=storageFirebase.fileuploaderfromUri(question_save.getUploadImageUri(), question_save.getExtensionImg());
+        String imageUrl=StorageFirebase.fileuploaderfromUri(question_save.getUploadImageUri(), question_save.getExtensionImg());
         return imageUrl;
     }
 
@@ -251,7 +244,7 @@ public final class FirebaseConfiguration {
                         question.setId(id_question);
                         String imagePath = (String) dt.child("image").getValue();
                         if(imagePath!=null){
-                            mStorage.child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            StorageFirebase.getmStorageRef().child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     Uri downloadUrl = uri;

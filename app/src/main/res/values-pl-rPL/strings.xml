@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Idiom Quiz</string>
-    <string name="send">Wyślin wiadomość</string>
+    <string name="send">Wyślij wiadomość</string>
     <string name="share">Udostępnij</string>
     <string name="about">O programie</string>
     <string name="quiz">Nowa gra</string>
@@ -62,4 +62,11 @@
     <string name="setting_button">Ustaw</string>
     <string name="how_many_question_in_quiz">Ile pytań w quizie?</string>
     <string name="no_question_in_repeat_board">Nie ma dodanych idiomów w tablicy powtórek</string>
+    <string name="pitch">Ustaw wysokosć tonu lektora</string>
+    <string name="speed">Ustaw szybkość mowy lektora</string>
+    <string name="valid_to_big_number_setting_question">Za duża liczba. Maksymalna to 20.</string>
+    <string name="question">Pytanie</string>
+    <string name="score">Dobrze</string>
+    <string name="wrong">Źle</string>
+    <string name="difficulty">Poziom</string>
 </resources>

@@ -1,21 +1,12 @@
 package com.example.fiszki.activityPanel;
 
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -23,27 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fiszki.QuestionDTO;
+import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.QuizDbHelper;
 import com.example.fiszki.R;
 import com.example.fiszki.StorageFirebase;
-import com.example.fiszki.entity.Question;
 import com.squareup.picasso.Picasso;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
 public class UpdateQuestionActivity extends AppCompatActivity {
     private EditText questionEditT;

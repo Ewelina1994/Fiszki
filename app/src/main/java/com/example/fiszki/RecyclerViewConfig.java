@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fiszki.activityPanel.UpdateQuestionActivity;
+import com.example.fiszki.entity.QuestionDTO;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
