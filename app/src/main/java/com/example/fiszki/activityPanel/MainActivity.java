@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //załąduj pytanai do bazy
         if(FirebaseConfiguration.getAllQuestionDTO().isEmpty()){
-            new FirebaseConfiguration(this).readAllQuestions(new FirebaseConfiguration.DataStatus() {
+            FirebaseConfiguration.readAllQuestions(new FirebaseConfiguration.DataStatus() {
                 @Override
-                public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
+                public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<Integer> keys) {
                     //QuizService.setQuestionDTOList(questionDTOList);
                 }
 

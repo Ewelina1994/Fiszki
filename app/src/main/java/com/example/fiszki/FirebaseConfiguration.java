@@ -1,10 +1,6 @@
 package com.example.fiszki;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,8 +17,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import xdroid.toaster.Toaster;
 
 public final class FirebaseConfiguration {
 
@@ -31,22 +30,13 @@ public final class FirebaseConfiguration {
       static DatabaseReference myRef = database.getReference().child("question");
       static List<Option> optionList=new ArrayList<>();;
       static List<QuestionDTO> questionDTOList=new ArrayList<>();;
-      Context context;
-     static SharedPreferences settings;
+      static List<Integer>keys;
 
     public interface DataStatus{
-        void DataIsLoaded(List<QuestionDTO>questionDTOList, List<String>keys);
+        void DataIsLoaded(List<QuestionDTO>questionDTOList, List<Integer>keys);
         void DataIsInserted();
         void DataIsUpdated();
         void DataIsDeleted();
-    }
-
-    public FirebaseConfiguration(Context context) {
-        this.context=context;
-
-        //pobierz z pamięci tel informacje o liczbie pytań w bazie
-        settings = PreferenceManager.getDefaultSharedPreferences(context);
-        questionNr = Long.parseLong(settings.getString("count_question", "10"));
     }
 
     public static void readAllQuestions(final DataStatus dataStatus) {
@@ -56,13 +46,8 @@ public final class FirebaseConfiguration {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     questionDTOList.clear();
-                    //jeśli usunę coś z bazy zmien liczbe question
-                    questionNr=dataSnapshot.getChildrenCount();
-                    //zapisz liczbe pytań do pamięci telefonu
-//                    SharedPreferences.Editor editor = settings.edit();
-//                    editor.putString("count_question", String.valueOf(questionNr));
-//                    editor.commit();
-                    List<String>keys=new ArrayList<>();
+
+                    keys=new ArrayList<>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         List<Option>optionToOneQuestionDTO=new ArrayList<>();
 
@@ -106,10 +91,15 @@ public final class FirebaseConfiguration {
                             optionToOneQuestionDTO.add(optionPL);
                             optionToOneQuestionDTO.add(optionEN);
                         }
-                        keys.add(snapshot.getKey());
+                        keys.add(Integer.valueOf(snapshot.getKey()));
+
                         questionDTOList.add(new QuestionDTO(question, optionToOneQuestionDTO));
 
                     }
+                    //ustaw najwyższy key Jako index
+                    Collections.sort(keys);
+                    questionNr= keys.get(keys.size()-1);
+
                     dataStatus.DataIsLoaded(questionDTOList, keys);
                 }
             }
@@ -121,17 +111,19 @@ public final class FirebaseConfiguration {
         });
     }
 
-    public void addQuestion(Question question, Context context){
-        context=context;
+    public static List<Integer> getKeys() {
+        return keys;
+    }
+
+    public static void addQuestion(Question question){
         questionNr++;
-        Context finalContext = context;
         String imageUrlName = saveToStorageImg(question);
 
         myRef.child(String.valueOf(questionNr)).child("name").setValue(question.getName()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(finalContext, R.string.confirm_added_question_to_database, Toast.LENGTH_LONG);
+                    Toaster.toast(R.string.confirm_added_question_to_database);
                 }
             }
         });
@@ -139,14 +131,9 @@ public final class FirebaseConfiguration {
             myRef.child(String.valueOf(questionNr)).child("image").setValue(imageUrlName);
         }
 
-        //zapisz liczbe pytań do pamięci telefonu
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("count_question", String.valueOf(questionNr));
-        editor.commit();
     }
 
-    public void addOptions(List<Option> options, String language) {
+    public static void addOptions(List<Option> options, String language) {
         AtomicInteger withOptionIsRight = withNrOptionsIsRight(options);
 
         String optionLanguage="";
@@ -161,7 +148,7 @@ public final class FirebaseConfiguration {
         myRef.child(String.valueOf(questionNr)).child(optionLanguage).child("good_ans").setValue(Integer.parseInt(withOptionIsRight.toString()));
 
     }
-    public void editOptions(List<Option> options, String language, int key) {
+    public static void editOptions(List<Option> options, String language, int key) {
         AtomicInteger withOptionIsRight = withNrOptionsIsRight(options);
 
         String optionLanguage="";
@@ -177,7 +164,7 @@ public final class FirebaseConfiguration {
 
     }
 
-    private AtomicInteger withNrOptionsIsRight(List<Option> options) {
+    private static AtomicInteger withNrOptionsIsRight(List<Option> options) {
         AtomicInteger withOptionIsRight = new AtomicInteger();
         for (Option option: options) {
             if(option.getIs_right()==1){
@@ -188,14 +175,13 @@ public final class FirebaseConfiguration {
         return withOptionIsRight;
     }
 
-    public void updateQuestionDTO(Question question_save, int key, List<Option>optionPL, List<Option>optionEN) {
-        Context finalContext = context;
+    public static void updateQuestionDTO(Question question_save, int key, List<Option> optionPL, List<Option> optionEN) {
         String imageUrlName = saveToStorageImg(question_save);
         myRef.child(String.valueOf(key)).child("name").setValue(question_save.getName()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(finalContext, R.string.confirm_added_question_to_database, Toast.LENGTH_LONG);
+                    Toaster.toast(R.string.confirm_added_question_to_database);
                 }
             }
         });
@@ -207,94 +193,24 @@ public final class FirebaseConfiguration {
         editOptions(optionPL, "EN", key);
     }
 
-    private String saveToStorageImg(Question question_save) {
+    private static String saveToStorageImg(Question question_save) {
         String imageUrl=StorageFirebase.fileuploaderfromUri(question_save.getUploadImageUri(), question_save.getExtensionImg());
         return imageUrl;
     }
 
-    public static boolean deleteIdiom(int key, Context context) {
-        Context finalContext = context;
+    public static boolean deleteIdiom(int key) {
         myRef.child(String.valueOf(key)).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(context, R.string.sucessfull_delete_idiom, Toast.LENGTH_LONG);
+                Toaster.toast(R.string.sucessfull_delete_idiom);
             }
         });
         return true;
         }
 
-
     public static List<QuestionDTO>getAllQuestionDTO(){
         return questionDTOList;
     }
 
-    public static List<QuestionDTO> displayAllQuestion(){
-        List<QuestionDTO> questionDTOS= new ArrayList<>();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot dt: dataSnapshot.getChildren()){
-                        List<Option>optionToOneQuestionDTO=new ArrayList<>();
-
-                        Question question= new Question();
-                        String name = (String) dt.child("name").getValue();
-                        question.setName(name);
-                        long id_question= Long.parseLong(dt.getKey());
-                        question.setId(id_question);
-                        String imagePath = (String) dt.child("image").getValue();
-                        if(imagePath!=null){
-                            StorageFirebase.getmStorageRef().child(imagePath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Uri downloadUrl = uri;
-                                    question.setUploadImageUri(uri);
-                                }
-                            });
-                        }
-
-
-
-                        int rightAnswer= dt.child("optionPL").child("good_ans").getValue(Integer.class);
-                        for(int i=0; i<3; i++){
-                            Option optionPL=new Option();
-                            Option optionEN=new Option();
-                            if(rightAnswer==i+1){
-                                optionPL.setIs_right(1);
-                                optionEN.setIs_right(1);
-                            }else {
-                                optionPL.setIs_right(0);
-                                optionEN.setIs_right(0);
-                            }
-                            optionPL.setQuestion_id(Long.parseLong(dt.getKey()));
-                            optionPL.setLanguage("PL");
-                            optionPL.setName(dt.child("optionPL").child(String.valueOf(i+1)).getValue(String.class));
-
-                            optionEN.setQuestion_id(Long.parseLong(dt.getKey()));
-                            optionEN.setLanguage("EN");
-                            optionEN.setName(dt.child("optionEN").child(String.valueOf(i+1)).getValue(String.class));
-
-                            optionList.add(optionPL);
-                            optionList.add(optionEN);
-                            optionToOneQuestionDTO.add(optionPL);
-                            optionToOneQuestionDTO.add(optionEN);
-                        }
-                        questionDTOS.add(new QuestionDTO(question, optionToOneQuestionDTO));
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return questionDTOS;
-    }
-
-    public static void setFirstQuestion() {
-        myRef.child(String.valueOf(1)).child("optionPL").child("good_ans").setValue(2);
-    }
 
 }

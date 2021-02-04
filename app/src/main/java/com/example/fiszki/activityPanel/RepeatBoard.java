@@ -104,12 +104,13 @@ public class RepeatBoard extends AppCompatActivity {
         btnGiveVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                giveVoice();
+                giveVoice(questionTextView.getText().toString()
+                );
             }
         });
+        initialTextToSpech();
         showQuestion(0);
 
-        initialTextToSpech();
     }
 
 
@@ -139,7 +140,6 @@ public class RepeatBoard extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void showQuestion(int value) {
-        giveVoice();
 
         if (currentQuestion<repeatQuestionDTOList.size() && currentQuestion>=0){
             buttonBackQuestion.setEnabled(true);
@@ -163,7 +163,7 @@ public class RepeatBoard extends AppCompatActivity {
                     //image.setImageBitmap(bmp);
                     questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion().getName());
                     setImageFromUri();
-
+                    giveVoice(repeatQuestionDTOList.get(currentQuestion).getQuestion().getName().toString());
                     repeatQuestionDTOList.get(currentQuestion).getOptions().forEach(option->{
                         if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("EN")){
                             answerTextViewEN.setText(option.getName());
@@ -188,8 +188,10 @@ public class RepeatBoard extends AppCompatActivity {
                     //Bitmap bmp = BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
                     //image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(), image.getHeight(), false));
                     //image.setImageBitmap(bmp);
-                    questionTextView.setText(repeatQuestionDTOList.get(currentQuestion).getQuestion().getName());
+                String idiom = repeatQuestionDTOList.get(currentQuestion).getQuestion().getName();
+                    questionTextView.setText(idiom);
                 setImageFromUri();
+                giveVoice(idiom.toString());
                 repeatQuestionDTOList.get(currentQuestion).getOptions().forEach(option->{
                     if(option.getIs_right()==1 && option.getLanguage().equalsIgnoreCase("EN")){
                         answerTextViewEN.setText(option.getName());
@@ -288,8 +290,7 @@ public class RepeatBoard extends AppCompatActivity {
         });
     }
 
-    private void giveVoice() {
-        String text = questionTextView.getText().toString();
+    private void giveVoice(String text) {
         textToSpeach.audio(text);
     }
 }

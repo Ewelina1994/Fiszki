@@ -259,8 +259,7 @@ public class UpdateOptionsActivity extends AppCompatActivity {
             allOptions.addAll(optionListPL);
             question_save.setOptions(allOptions);
 
-        FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration(this);
-        firebaseConfiguration.updateQuestionDTO(question_save.getQuestion(), key, optionListPL, optionListEN);
+        FirebaseConfiguration.updateQuestionDTO(question_save.getQuestion(), key, optionListPL, optionListEN);
 
             finish();
         }

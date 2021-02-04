@@ -97,5 +97,9 @@
     <string name="score">Score</string>
     <string name="wrong">Wrong</string>
     <string name="difficulty">Difficulty</string>
+    <string name="valid_exit_in_quiz">Press back again to finish</string>
+    <string name="valid_check_answer">Please select answer</string>
+    <string name="finishQuiz">Finish</string>
+    <string name="your_score">Your score</string>
 
 </resources>

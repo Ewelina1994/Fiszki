@@ -27,28 +27,6 @@ public final class QuizService {
     public static List<QuestionDTO> getRandomQuestionInQuiz(Context context){
         //inicjalizacjia
         questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
-//        new FirebaseConfiguration(context).readAllQuestions(new FirebaseConfiguration.DataStatus() {
-//            @Override
-//            public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
-//                questionDTOList=questionDTOList;
-//            }
-//
-//            @Override
-//            public void DataIsInserted() {
-//
-//            }
-//
-//            @Override
-//            public void DataIsUpdated() {
-//
-//            }
-//
-//            @Override
-//            public void DataIsDeleted() {
-//
-//            }
-//        });
-
         Collections.shuffle(questionDTOList);
 
         Random random= new Random();

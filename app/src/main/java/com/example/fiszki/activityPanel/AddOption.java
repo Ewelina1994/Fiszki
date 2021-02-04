@@ -187,8 +187,6 @@ public class AddOption extends AppCompatActivity {
                     clearInput();
                 }
             }
-
-
         }else {
             finish();
         }
@@ -196,12 +194,11 @@ public class AddOption extends AppCompatActivity {
 
 
     private void saveToDatabase() {
-        FirebaseConfiguration firebaseConfiguration= new FirebaseConfiguration(this);
-        firebaseConfiguration.addQuestion(question_save, this);
+        FirebaseConfiguration.addQuestion(question_save);
 
 
-        firebaseConfiguration.addOptions(optionListPL, "PL");
-        firebaseConfiguration.addOptions(optionListEN, "EN");
+        FirebaseConfiguration.addOptions(optionListPL, "PL");
+        FirebaseConfiguration.addOptions(optionListEN, "EN");
 
     }
 

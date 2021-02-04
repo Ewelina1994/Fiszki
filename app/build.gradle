@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.github.vegidio:google-translate:1.0.1'
     implementation files('lib/jl1.0 (1).jar')
     implementation files('lib/gtranslateapi-1.0.jar')
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 }

@@ -17,6 +17,7 @@ import android.os.CountDownTimer;
 
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -61,13 +62,13 @@ public class QuizActivity extends AppCompatActivity {
     private TextView textViewCorect;
     private TextView textViewWrong;
     private TextView textDifficulty;
-    private TextView textViewQuestionCount;
     private TextView textViewCountDown;
 
     private TextView textViewQuestion1;
     private TextView textViewQuestion2;
     private TextView textViewQuestion3;
     private LinearLayout linearayoutCardView;
+    private List<CardView> cardsView;
 
     private Button buttonAddToReplays;
     private Button buttoinNext;
@@ -78,8 +79,8 @@ public class QuizActivity extends AppCompatActivity {
     private QuestionDTO currentQuestion;
 
 
-    private int score;
-    private int wrong;
+    private int score=0;
+    private int wrong=0;
     private String date;
 
     boolean is_addQuestion_to_replace_board;
@@ -111,7 +112,6 @@ public class QuizActivity extends AppCompatActivity {
         countQuestion = findViewById(R.id.txtTotalQuestion);
         textViewQuestion = (TextView) findViewById(R.id.txtQuestion);
         textViewCorect = findViewById(R.id.txtCore);
-        textViewQuestionCount = findViewById(R.id.txtCore);
         textViewCountDown = findViewById(R.id.txtViewTimer);
         textViewWrong = findViewById(R.id.txtWrong);
         textDifficulty = findViewById(R.id.txtdifficulty);
@@ -131,10 +131,13 @@ public class QuizActivity extends AppCompatActivity {
 
         // difficulty = intent.getStringExtra(Quiz.EXTRA_DIFFICULTY);
         difficulty = intent.getStringExtra(QuizActivity.EXTRA_DIFFICULTY);
-        textDifficulty.setText("Difficulty: " + difficulty);
+        textDifficulty.setText(getString(R.string.difficulty) +": " + difficulty);
 
         //inicjalizacja textToSpeach
         initialTextToSpech();
+
+        //inicjalizacja array cardViews
+        initialCardsView();
 
         //pobranie randomowych pytań z QuizService
 
@@ -143,37 +146,13 @@ public class QuizActivity extends AppCompatActivity {
             difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
 
             questionList= (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(this);
-//            FirebaseConfiguration.setFirstQuestion();
-//            questionList= (ArrayList<QuestionDTO>) FirebaseConfiguration.displayAllQuestion();
-//
-//            new FirebaseConfiguration(this).readAllQuestions(new FirebaseConfiguration.DataStatus() {
-//            @Override
-//            public void DataIsLoaded(List<QuestionDTO> questionDTOList, List<String> keys) {
-//                questionList= (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(QuizActivity.this, questionDTOList);;
-//            }
-//
-//            @Override
-//            public void DataIsInserted() {
-//
-//            }
-//
-//            @Override
-//            public void DataIsUpdated() {
-//
-//            }
-//
-//            @Override
-//            public void DataIsDeleted() {
-//
-//            }
-//        });
 
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
 
             //set Event to cardView
-            setSingleEvent(linearayoutCardView);
+            setSingleEvent();
 
             showNextQuestion();
 
@@ -195,14 +174,9 @@ public class QuizActivity extends AppCompatActivity {
                         if (clickedAnswer != null) {
                             checkAnswer();
                         }else {
-                             Toast.makeText(QuizActivity.this, "Please select answer", Toast.LENGTH_LONG).show();
+                             Toast.makeText(QuizActivity.this, R.string.valid_check_answer, Toast.LENGTH_LONG).show();
 
                         }
-                          //  clickedAnswer.setIs_right(-1);
-                            // showNextQuestion();
-//                        } else {
-//                            Toast.makeText(QuizActivity.this, "Please select answer", Toast.LENGTH_LONG).show();
-//                        }
                     }
                     //JEŚŁI ODP została zaznaczona
                     else {
@@ -255,6 +229,16 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
+    private void initialCardsView() {
+        cardsView=new ArrayList<>();
+        cardsView.add(findViewById(R.id.cardView1));
+        cardsView.add(findViewById(R.id.cardView2));
+        cardsView.add(findViewById(R.id.cardView3));
+        for(CardView card: cardsView){
+            card.setRadius(25.0f);
+        }
+    }
+
     private List<Option> getOptionByLevel(QuestionDTO questionDTO) {
         // daj dla konkretnego poziomu opcje
 
@@ -303,30 +287,25 @@ public class QuizActivity extends AppCompatActivity {
     }
 
 
-    private void setSingleEvent(LinearLayout linearayoutCardView) {
-        final List<CardView> cardsView=new ArrayList<>();
+    private void setSingleEvent() {
         //ustawiamy dla każdego cardView nasłuch
-        for (int i = 0; i < linearayoutCardView.getChildCount(); i++) {
-            cardsView.add((CardView) linearayoutCardView.getChildAt(i));
+        for (int i = 0; i < cardsView.size(); i++) {
             final int index=i;
-            //  cardsView.getChildAt(0).setBackgroundColor(R.drawable.bg2);
-            cardsView.get(index).setOnClickListener(new View.OnClickListener() {
+            cardsView.get(i).setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @SuppressLint({"ResourceAsColor", "ResourceType"})
                 @Override
                 public void onClick(View v) {
                     //spr czy czas już nie minął czy nie udzieliłes odp
                     if(!ansewered){
-                        //jeśli klikniemy ustawiamy zaznaczoną opcje na obecnie klikniętą
-                        //clickedAnswer=currentQuestion.getOptions().get(index);
-                        //clickedAnswer=getOptionByLevel(currentQuestion).get(index);
                         clickedAnswer=listOptionsInQuiz.get(index);
                         //dla każdej karty ustawiamy kolor żeby przy podwójnym kliknięciu nie było 2 razy zaznaczonej karty
                         cardsView.forEach(card->{
                             if(card==cardsView.get(index)){
-                                card.getChildAt(0).setBackgroundColor(Color.parseColor("#E78230"));
+                                card.setBackgroundColor(Color.parseColor("#E78230"));
+
                             }else {
-                                card.getChildAt(0).setBackgroundColor(Color.parseColor("#CCDAE7"));
+                                card.setBackgroundColor(Color.parseColor("#CCDAE7"));
                             }
                         });
                     }
@@ -339,10 +318,7 @@ public class QuizActivity extends AppCompatActivity {
         //ustaw kliknieto odp na null
         clickedAnswer=null;
         if (questionCount < questionCountTotal) {
-            textViewQuestion1.setBackgroundColor(Color.parseColor("#CCDAE7"));
-            textViewQuestion2.setBackgroundColor(Color.parseColor("#CCDAE7"));
-            textViewQuestion3.setBackgroundColor(Color.parseColor("#CCDAE7"));
-//        linearayoutCardView.clearFocus();
+            cleanColorCardView();
             currentQuestion = questionList.get(questionCount);
 
             listOptionsInQuiz=getOptionByLevel(currentQuestion);
@@ -359,7 +335,7 @@ public class QuizActivity extends AppCompatActivity {
             giveVoice();
 
             questionCount++;
-            countQuestion.setText("Question: " + questionCount + "/" + questionCountTotal);
+            countQuestion.setText(getString(R.string.question) + ": " + questionCount + "/" + questionCountTotal);
             //ustawienie że nie została wybrana żadna odpowiedz
             ansewered = false;
             buttoinNext.setText(R.string.confirm);
@@ -371,6 +347,12 @@ public class QuizActivity extends AppCompatActivity {
             setColorBtnAddToReplace(is_addQuestion_to_replace_board);
         } else {
             finishQuiz();
+        }
+    }
+
+    private void cleanColorCardView() {
+        for(CardView card: cardsView){
+            card.setBackgroundColor(Color.parseColor("#CCDAE7"));
         }
     }
 
@@ -424,21 +406,18 @@ public class QuizActivity extends AppCompatActivity {
         if (clickedAnswer!=null
                 && clickedAnswer.getIs_right()==1) {
             score++;
-            textViewCorect.setText("Correct: " + score);}
+            String scoreTxt = getString(R.string.score);
+            textViewCorect.setText(scoreTxt+": " + score);}
         //jeśli nie poprawna odp
         else {
             wrong++;
-            textViewWrong.setText("Wrong: " + wrong);
+            String wrongTxt = getString(R.string.wrong);
+            textViewWrong.setText(wrongTxt +": " + wrong);
         }
         showSolution();
     }
 
     private void showSolution() {
-        List<CardView> cardsView=new ArrayList<>();
-        cardsView.add((CardView) linearayoutCardView.getChildAt(0));
-        cardsView.add((CardView) linearayoutCardView.getChildAt(1));
-        cardsView.add((CardView) linearayoutCardView.getChildAt(2));
-
         String goodOption=null;
         for (Option option : listOptionsInQuiz) {
             if (option.getIs_right() == 1) {
@@ -449,17 +428,17 @@ public class QuizActivity extends AppCompatActivity {
         for(int i=0; i<listOptionsInQuiz.size(); i++){
             String textInCardView=((TextView) cardsView.get(i).getChildAt(0)).getText().toString();
             if(textInCardView.equalsIgnoreCase(goodOption)){
-                cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#2AFF3F"));
+                cardsView.get(i).setBackgroundColor(Color.parseColor("#2AFF3F"));
             }else {
-                cardsView.get(i).getChildAt(0).setBackgroundColor(Color.parseColor("#FF0A0E"));
+                cardsView.get(i).setBackgroundColor(Color.parseColor("#FF0A0E"));
             }
         }
 
 
         if (questionCount < questionCountTotal) {
-            buttoinNext.setText("Next");
+            buttoinNext.setText(R.string.nextQuestion);
         } else {
-            buttoinNext.setText("Finish");
+            buttoinNext.setText(R.string.finishQuiz);
         }
     }
 
@@ -484,7 +463,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void showSummary() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Your score: \n" + score + "/" + questionCountTotal);
+        alertDialogBuilder.setMessage(getString(R.string.your_score) + "\n" + score + "/" + questionCountTotal);
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -496,6 +475,9 @@ public class QuizActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+        TextView messageText = (TextView) alertDialog.findViewById(android.R.id.message);
+        messageText.setGravity(Gravity.CENTER);
+        messageText.setTextSize(25f);
     }
 
     //po kliknięciu przycisku wstecz spr czy w czasie 2 sekund był 2 raz kliknięty przycisk wstecz jesli tak to konczy quiz
@@ -504,7 +486,7 @@ public class QuizActivity extends AppCompatActivity {
         if (backPressTime + 2000 > System.currentTimeMillis()) {
             finishQuiz();
         } else {
-            Toast.makeText(this, "Press back again to finish", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.valid_exit_in_quiz, Toast.LENGTH_LONG).show();
         }
         backPressTime = System.currentTimeMillis();
     }

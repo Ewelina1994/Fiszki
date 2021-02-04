@@ -69,4 +69,8 @@
     <string name="score">Dobrze</string>
     <string name="wrong">Źle</string>
     <string name="difficulty">Poziom</string>
+    <string name="valid_exit_in_quiz">Naciśnij jeszcze raz wstecz żeby wyjść z quizu</string>
+    <string name="valid_check_answer">Proszę zaznacz odpowiedź</string>
+    <string name="finishQuiz">Koniec</string>
+    <string name="your_score">Twój wynik</string>
 </resources>

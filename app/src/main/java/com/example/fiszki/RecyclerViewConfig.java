@@ -26,7 +26,7 @@ import java.util.List;
 public class RecyclerViewConfig {
     private Context mContext;
     private QuestionAdapter mQuestionAdapter;
-    public void setConfig(RecyclerView recyclerView, Context context, List<QuestionDTO>questions, List<String>keys){
+    public void setConfig(RecyclerView recyclerView, Context context, List<QuestionDTO>questions, List<Integer>keys){
         mContext=context;
         mQuestionAdapter=new QuestionAdapter(questions, keys);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -39,7 +39,7 @@ public class RecyclerViewConfig {
         private TextView optionENtxt;
         private ImageView imageQuestion;
 
-        private String key;
+        private int key;
 
         public QuestionItemView(ViewGroup parent){
             super(LayoutInflater.from(mContext).inflate(R.layout.question_list_item, parent, false));
@@ -50,7 +50,7 @@ public class RecyclerViewConfig {
             imageQuestion=itemView.findViewById(R.id.imageQuestion);
         }
 
-        public void bind(QuestionDTO questionDTO, String key) {
+        public void bind(QuestionDTO questionDTO, Integer key) {
             question.setText(questionDTO.getQuestion().getName());
             Uri uriImage=questionDTO.getQuestion().getUploadImageUri();
             if(uriImage!=null){
@@ -73,9 +73,9 @@ public class RecyclerViewConfig {
 
     class QuestionAdapter extends RecyclerView.Adapter<QuestionItemView>{
         private List<QuestionDTO> mQuestionList;
-        private List<String> mKeys;
+        private List<Integer> mKeys;
 
-        public QuestionAdapter(List<QuestionDTO> mQuestionList, List<String> keys) {
+        public QuestionAdapter(List<QuestionDTO> mQuestionList, List<Integer> keys) {
             this.mQuestionList = mQuestionList;
             this.mKeys = keys;
         }
@@ -92,7 +92,7 @@ public class RecyclerViewConfig {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDialog(mQuestionList.get(position), Integer.parseInt(mKeys.get(position)));
+                    showDialog(mQuestionList.get(position), mKeys.get(position));
                 }
             });
         }
@@ -144,7 +144,7 @@ public class RecyclerViewConfig {
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                FirebaseConfiguration.deleteIdiom(key, mContext);
+                FirebaseConfiguration.deleteIdiom(key);
                 StorageFirebase.deleteImage(questionDTO.getQuestion().getUploadImageUri());
                 dialogBig.cancel();
             }
