@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public final class QuizService {
+public class QuizService {
     private static List<QuestionDTO> questionDTOList;
     public static int NUMBER_QUESTIONS = 10;
 
@@ -24,15 +24,18 @@ public final class QuizService {
         QuizService.questionDTOList = questionDTOList;
     }
 
+    public static List<QuestionDTO> getAllQuestionFromDatabase() {
+        return FirebaseConfiguration.getAllQuestionDTO();
+    }
     public static List<QuestionDTO> getRandomQuestionInQuiz(Context context){
+        questionDTOList=getAllQuestionFromDatabase();
         //inicjalizacjia
-        questionDTOList=FirebaseConfiguration.getAllQuestionDTO();
         Collections.shuffle(questionDTOList);
 
         Random random= new Random();
         List<QuestionDTO> questionRandom= new ArrayList<>();
 
-        while (questionRandom.size()<NUMBER_QUESTIONS){
+        while (questionRandom.size()<getNumberQuestion()){
             if(!questionDTOList.isEmpty()){
                 int randomIndex=random.nextInt(questionDTOList.size());
                 if(!questionRandom.contains(questionDTOList.get(randomIndex))){
@@ -43,27 +46,7 @@ public final class QuizService {
         return questionRandom;
     }
 
-    public static List<QuestionDTO> getListReapeatBoardQuestions() {
-        List<QuestionDTO>repeatListQuestions= new ArrayList<>();
-        for (QuestionDTO questionDTO : questionDTOList) {
-            if(questionDTO.isIs_added_to_repaet_board()){
-
-                repeatListQuestions.add(questionDTO);
-
-            }
-        }
-        return repeatListQuestions;
+    public static int getNumberQuestion() {
+        return NUMBER_QUESTIONS;
     }
-
-    public static void addToRepate(QuestionDTO questionDTO) {
-        int index=questionDTOList.indexOf(questionDTO);
-        questionDTOList.get(index).setIs_added_to_repaet_board(true);
-    }
-
-    public static void deleteFromToRepate(QuestionDTO questionDTO) {
-        int index=questionDTOList.indexOf(questionDTO);
-        questionDTOList.get(index).setIs_added_to_repaet_board(false);
-    }
-
-
 }

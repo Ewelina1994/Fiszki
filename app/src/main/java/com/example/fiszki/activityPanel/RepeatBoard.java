@@ -293,4 +293,12 @@ public class RepeatBoard extends AppCompatActivity {
     private void giveVoice(String text) {
         textToSpeach.audio(text);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (textToSpeach != null) {
+            textToSpeach.shutdown();
+        }
+    }
 }

@@ -131,12 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent2= new Intent(this, RepeatBoard.class);
                 startActivity(intent2);
                 break;
-            case R.id.help:
 
-                break;
-            case R.id.autor:
-            Toast.makeText(this, "by Ewelina Kłobut", LENGTH_LONG).show();
-                break;
             default:
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

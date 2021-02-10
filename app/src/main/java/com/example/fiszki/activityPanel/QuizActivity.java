@@ -1,5 +1,6 @@
 package com.example.fiszki.activityPanel;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,7 +68,6 @@ public class QuizActivity extends AppCompatActivity {
     private TextView textViewQuestion1;
     private TextView textViewQuestion2;
     private TextView textViewQuestion3;
-    private LinearLayout linearayoutCardView;
     private List<CardView> cardsView;
 
     private Button buttonAddToReplays;
@@ -115,7 +115,6 @@ public class QuizActivity extends AppCompatActivity {
         textViewCountDown = findViewById(R.id.txtViewTimer);
         textViewWrong = findViewById(R.id.txtWrong);
         textDifficulty = findViewById(R.id.txtdifficulty);
-        linearayoutCardView = (LinearLayout) findViewById(R.id.cardViewGroup);
 
         textViewQuestion1 = findViewById(R.id.textViewQuestion1);
         textViewQuestion2 = findViewById(R.id.textViewQuestion2);

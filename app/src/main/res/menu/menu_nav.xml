@@ -22,12 +22,7 @@
             android:icon="@drawable/ic_repeat_board"
             android:title="@string/powtorki" >
             @color/overflow_background</item>
-        <item
-            android:id="@+id/help"
-            android:checkable="true"
-            android:icon="@android:drawable/ic_menu_help"
-            android:title="@string/pomoc" >
-            @color/overflow_background</item>
+
     </group>
 
     <item android:title="@string/nav_projekt">
@@ -36,11 +31,6 @@
                 android:id="@+id/temat"
                 android:title="@string/nav_projekt_temat"
                 android:icon="@drawable/ic_o_grze">
-                @color/overflow_background</item>
-            <item
-                android:id="@+id/autor"
-                android:title="@string/nav_autor"
-                android:icon="@drawable/ic_author" >
                 @color/overflow_background</item>
 
         </menu>

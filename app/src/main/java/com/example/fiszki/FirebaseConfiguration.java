@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import xdroid.toaster.Toaster;
 
-public final class FirebaseConfiguration {
+public class FirebaseConfiguration {
 
       static FirebaseDatabase database = FirebaseDatabase.getInstance();
       static long questionNr=10;
