@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateOptionsActivity extends AppCompatActivity {
+    private TextView idiomName;
     private TextView optionNumber;
     private EditText optionPLEditText;
     private EditText optionENEditText;
@@ -47,6 +48,7 @@ public class UpdateOptionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_option_admin_panel);
+        idiomName = findViewById(R.id.idiom_name);
         optionNumber = (TextView) findViewById(R.id.option_number);
         optionPLEditText = (EditText) findViewById(R.id.option_et_PL);
         optionENEditText = (EditText) findViewById(R.id.option_et_EN);
@@ -85,6 +87,7 @@ public class UpdateOptionsActivity extends AppCompatActivity {
         else {
             //po odwróceniu ekranu
         }
+        idiomName.setText(question_save.getQuestion().getName());
     }
 
     private void initialzeListsToComeIntent() {

@@ -29,6 +29,7 @@ import javazoom.jl.decoder.JavaLayerException;
 public class AddOption extends AppCompatActivity {
 
     private TextView optionNumber;
+    private TextView idiomText;
     private EditText optionPLEditText;
     private EditText optionENEditText;
     CheckBox checkBoxIsRightAnswer;
@@ -51,10 +52,11 @@ public class AddOption extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_option_admin_panel);
-        optionNumber = (TextView) findViewById(R.id.option_number);
-        optionPLEditText = (EditText) findViewById(R.id.option_et_PL);
-        optionENEditText = (EditText) findViewById(R.id.option_et_EN);
-        checkBoxIsRightAnswer =(CheckBox) findViewById(R.id.checkBoxGoodOption);
+        idiomText = findViewById(R.id.idiom_name);
+        optionNumber = findViewById(R.id.option_number);
+        optionPLEditText =  findViewById(R.id.option_et_PL);
+        optionENEditText = findViewById(R.id.option_et_EN);
+        checkBoxIsRightAnswer = findViewById(R.id.checkBoxGoodOption);
         checkBoxTranslate = findViewById(R.id.checkBoxTranslate);
         //ustawienei ze wpisujemy 1 opcje do pytania
         option_nr=1;
@@ -64,6 +66,7 @@ public class AddOption extends AppCompatActivity {
         btnBack=(Button) findViewById(R.id.btnPrevius);
         optionListPL= new ArrayList<>();
         optionListEN= new ArrayList<>();
+
         saveOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +103,7 @@ public class AddOption extends AppCompatActivity {
         else {
         //po odwróceniu ekranu
         }
+        idiomText.setText(question_save.getName().toString());
     }
 
     private void translateOptionToEn() throws IOException, JavaLayerException {
@@ -195,8 +199,6 @@ public class AddOption extends AppCompatActivity {
 
     private void saveToDatabase() {
         FirebaseConfiguration.addQuestion(question_save);
-
-
         FirebaseConfiguration.addOptions(optionListPL, "PL");
         FirebaseConfiguration.addOptions(optionListEN, "EN");
 

@@ -3,51 +3,56 @@
     package="com.example.fiszki">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@drawable/idiom"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activityPanel.ui.login.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+        <activity
             android:name=".activityPanel.Ustawienia"
-            android:parentActivityName=".activityPanel.MainActivity"
             android:label="@string/setting"
-            android:theme="@style/MyAppTheme"/>
-        <activity android:name=".activityPanel.AdminPanel"
             android:parentActivityName=".activityPanel.MainActivity"
+            android:theme="@style/MyAppTheme" />
+        <activity
+            android:name=".activityPanel.AdminPanel"
             android:label="@string/panel_admin"
-            android:theme="@style/MyAppTheme"/>
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.AdminAddQuestion"
-            android:parentActivityName=".activityPanel.MainActivity"
             android:label="@string/add_new_idiom"
-            android:theme="@style/MyAppTheme"/>
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.AddOption"
-            android:parentActivityName=".activityPanel.MainActivity"
             android:label="@string/add_new_option"
-            android:theme="@style/MyAppTheme"/>
-        <activity android:name=".activityPanel.QuestionListActivity"
             android:parentActivityName=".activityPanel.MainActivity"
+            android:theme="@style/MyAppTheme" />
+        <activity
+            android:name=".activityPanel.QuestionListActivity"
             android:label="@string/listAdmin"
-            android:theme="@style/MyAppTheme"/>
+            android:parentActivityName=".activityPanel.MainActivity"
+            android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.UpdateQuestionActivity"
-            android:parentActivityName=".activityPanel.QuestionListActivity"
             android:label="@string/add_update_idiom"
-            android:theme="@style/MyAppTheme"/>
+            android:parentActivityName=".activityPanel.QuestionListActivity"
+            android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.UpdateOptionsActivity"
-            android:parentActivityName=".activityPanel.QuestionListActivity"
             android:label="@string/edit_options"
-            android:theme="@style/MyAppTheme"/>
+            android:parentActivityName=".activityPanel.QuestionListActivity"
+            android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.Statystic"
             android:label="@string/statystyki"
@@ -65,7 +70,10 @@
             android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activityPanel.QuizActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/login"
+            android:parentActivityName=".activityPanel.Ustawienia"
+            android:theme="@style/MyAppTheme"/>
         <activity android:name=".activityPanel.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,4 +82,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

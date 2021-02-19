@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.fiszki.FirebaseConfiguration;
 import com.example.fiszki.R;
+import com.example.fiszki.activityPanel.ui.login.LoginActivity;
 import com.example.fiszki.entity.QuestionDTO;
 import com.example.fiszki.services.QuizService;
 import com.google.android.material.navigation.NavigationView;
@@ -84,15 +85,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-//        MenuItem menuItem = menu.findItem(R.id
-//                .share);
-//        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-//        setShareIntent("Zapraszamy na stronę uczelni");
+
           return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.ustawienia:
                 Intent intent2= new Intent(this, Ustawienia.class);
@@ -106,14 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    private void setShareIntent(String text) {
-//        Intent intent = new Intent(Intent.ACTION_SEND);
-//        intent.setType("text/plain");
-//        intent.putExtra(Intent.EXTRA_TEXT, text);
-//        shareActionProvider.setShareIntent(intent);
-//    }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

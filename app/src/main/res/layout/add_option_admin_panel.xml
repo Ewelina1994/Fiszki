@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,11 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "@string/option_number"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:padding="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:background="#2C4158"/>
+
+    <TextView
+        android:id="@+id/idiom_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text= ""
+        android:textSize="20dp"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
         android:textStyle="bold"
         android:background="#2C4158"/>
 
@@ -25,10 +37,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text= "@string/add_new_option_PL"
-    android:textSize="20dp"
+    android:textSize="15dp"
     android:gravity="center"
     android:padding="5dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"/>
 
     <EditText
         android:id="@+id/option_et_PL"
@@ -39,17 +51,17 @@
         android:gravity="center"
         android:background="@android:color/white"
         android:padding="10dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/option_tv_EN"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "@string/add_new_option_EN"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:gravity="center"
         android:padding="5dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"/>
 
     <EditText
         android:id="@+id/option_et_EN"
@@ -60,7 +72,7 @@
         android:gravity="center"
         android:background="@android:color/white"
         android:padding="10dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="5dp"/>
 
 
     <CheckBox
