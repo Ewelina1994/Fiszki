@@ -24,16 +24,4 @@
             @color/overflow_background</item>
 
     </group>
-
-    <item android:title="@string/nav_projekt">
-        <menu>
-            <item
-                android:id="@+id/temat"
-                android:title="@string/nav_projekt_temat"
-                android:icon="@drawable/ic_o_grze">
-                @color/overflow_background</item>
-
-        </menu>
-
-    </item>
 </menu>

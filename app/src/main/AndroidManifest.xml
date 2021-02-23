@@ -71,7 +71,7 @@
         <activity
             android:name=".activityPanel.QuizActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/login"
+            android:label="@string/quiz"
             android:parentActivityName=".activityPanel.Ustawienia"
             android:theme="@style/MyAppTheme"/>
         <activity android:name=".activityPanel.MainActivity">

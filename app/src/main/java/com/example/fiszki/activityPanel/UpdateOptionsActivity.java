@@ -2,6 +2,8 @@ package com.example.fiszki.activityPanel;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,7 +24,7 @@ import com.example.fiszki.entity.Option;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateOptionsActivity extends AppCompatActivity {
+public class UpdateOptionsActivity extends AppCompatActivity implements TextWatcher {
     private TextView idiomName;
     private TextView optionNumber;
     private EditText optionPLEditText;
@@ -51,6 +53,7 @@ public class UpdateOptionsActivity extends AppCompatActivity {
         idiomName = findViewById(R.id.idiom_name);
         optionNumber = (TextView) findViewById(R.id.option_number);
         optionPLEditText = (EditText) findViewById(R.id.option_et_PL);
+        optionPLEditText.addTextChangedListener(this);
         optionENEditText = (EditText) findViewById(R.id.option_et_EN);
         checkBox=(CheckBox) findViewById(R.id.checkBoxGoodOption);
         //ustawienei ze wpisujemy 1 opcje do pytania
@@ -146,7 +149,6 @@ public class UpdateOptionsActivity extends AppCompatActivity {
                 is_Right=0;
             }
 
-                saveOption.setEnabled(false);
                 Option optionPL= new Option(question_save.getQuestion().getId(), optionPLEditText.getText().toString(), is_Right, "PL");
                 Option optionEN= new Option(question_save.getQuestion().getId(), optionENEditText.getText().toString(), is_Right, "EN");
 
@@ -279,5 +281,34 @@ public class UpdateOptionsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(optionPLEditText.getText().toString().isEmpty() || optionPLEditText.getText().toString()==null ){
+            optionPLEditText.setError(getText(R.string.nameIsEmpty));
+            saveOption.setEnabled(false);
+        }else if(optionPLEditText.getText().toString().length()<6){
+            optionPLEditText.setError(getText(R.string.nameIsToSmall));
+            saveOption.setEnabled(false);
+        }else if(optionENEditText.getText().toString().isEmpty() || optionENEditText.getText().toString()==null) {
+            optionENEditText.setError(getText(R.string.nameIsEmpty));
+            saveOption.setEnabled(false);
+        }else if(optionENEditText.getText().toString().length()<6){
+            optionENEditText.setError(getText(R.string.nameIsToSmall));
+            saveOption.setEnabled(false);
+        } else{
+            saveOption.setEnabled(true);
+        }
     }
 }

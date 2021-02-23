@@ -35,11 +35,11 @@ public class QuizServiceTest {
 
     @Before
     public void init() {
-        given(quizService.getAllQuestionFromDatabase()).willReturn(prepareMockDate());
+        given(quizService.getAllQuestionFromDatabase()).willReturn        //given(FirebaseApp.getInstance()).willReturn(new FirebaseApp(context, null, null));
+                (prepareMockDate());
 
         given(quizService.getNumberQuestion()).willReturn(3);
         mock(FirebaseConfiguration.class);
-        //given(FirebaseApp.getInstance()).willReturn(new FirebaseApp(context, null, null));
 
     }
 

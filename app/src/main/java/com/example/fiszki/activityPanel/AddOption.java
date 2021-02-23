@@ -2,6 +2,8 @@ package com.example.fiszki.activityPanel;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,7 +28,7 @@ import java.util.List;
 
 import javazoom.jl.decoder.JavaLayerException;
 
-public class AddOption extends AppCompatActivity {
+public class AddOption extends AppCompatActivity implements TextWatcher {
 
     private TextView optionNumber;
     private TextView idiomText;
@@ -55,7 +57,9 @@ public class AddOption extends AppCompatActivity {
         idiomText = findViewById(R.id.idiom_name);
         optionNumber = findViewById(R.id.option_number);
         optionPLEditText =  findViewById(R.id.option_et_PL);
+        optionPLEditText.addTextChangedListener(this);
         optionENEditText = findViewById(R.id.option_et_EN);
+        optionENEditText.addTextChangedListener(this);
         checkBoxIsRightAnswer = findViewById(R.id.checkBoxGoodOption);
         checkBoxTranslate = findViewById(R.id.checkBoxTranslate);
         //ustawienei ze wpisujemy 1 opcje do pytania
@@ -75,6 +79,8 @@ public class AddOption extends AppCompatActivity {
                 saveOption();
             }
         });
+        saveOption.setEnabled(false);
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,6 +216,7 @@ public class AddOption extends AppCompatActivity {
     }
 
     private void clearInput() {
+        saveOption.setEnabled(false);
         optionPLEditText.getText().clear();
         optionENEditText.getText().clear();
         checkBoxIsRightAnswer.setChecked(false);
@@ -220,5 +227,34 @@ public class AddOption extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(optionPLEditText.getText().toString().isEmpty() || optionPLEditText.getText().toString()==null ){
+            optionPLEditText.setError(getText(R.string.nameIsEmpty));
+            saveOption.setEnabled(false);
+        }else if(optionPLEditText.getText().toString().length()<6){
+            optionPLEditText.setError(getText(R.string.nameIsToSmall));
+            saveOption.setEnabled(false);
+        }else if(optionENEditText.getText().toString().isEmpty() || optionENEditText.getText().toString()==null) {
+            optionENEditText.setError(getText(R.string.nameIsEmpty));
+            saveOption.setEnabled(false);
+        }else if(optionENEditText.getText().toString().length()<6){
+            optionENEditText.setError(getText(R.string.nameIsToSmall));
+            saveOption.setEnabled(false);
+        } else{
+            saveOption.setEnabled(true);
+        }
     }
 }

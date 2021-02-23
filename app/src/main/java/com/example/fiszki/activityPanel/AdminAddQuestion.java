@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -26,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fiszki.QuizDbHelper;
@@ -43,7 +47,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class AdminAddQuestion extends AppCompatActivity {
+import xdroid.toaster.Toaster;
+
+public class AdminAddQuestion extends AppCompatActivity implements TextWatcher {
+
     private EditText questionEditT;
     Button addImageGallery;
     Button btnsaveQuestion;
@@ -64,6 +71,7 @@ public class AdminAddQuestion extends AppCompatActivity {
         btnsaveQuestion = findViewById(R.id.btnAddQuestion);
         progressBarAT=findViewById(R.id.progresBar);
         imageView=findViewById(R.id.imageQuestion);
+        questionEditT.addTextChangedListener(this);
 
         addImageGallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +94,8 @@ public class AdminAddQuestion extends AppCompatActivity {
             }
         });
 
+        btnsaveQuestion.setEnabled(false);
+
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
         {
@@ -102,41 +112,12 @@ public class AdminAddQuestion extends AppCompatActivity {
         }
     }
 
-
-    private void showDialogWindow() {
-        View view = View.inflate(this, R.layout.path_internet_img_window, null);
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(view);
-        //dialog.setTitle("Title");
-        TextView text = (TextView) dialog.findViewById(R.id.pathImgTV);
-
-        EditText pathEditText = (EditText) dialog.findViewById(R.id.pathImgET);
-
-        Button addPathBTN=(Button) dialog.findViewById(R.id.addPathImgBTN);
-        addPathBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String path=pathEditText.getText().toString().trim();
-                String treeLatesLetter=path.substring(path.length()-3);
-                if(treeLatesLetter.equals("jpg")||treeLatesLetter.equals("png")||treeLatesLetter.equals("gif")){
-                    loadImageInternet(path);
-                    dialog.cancel();
-                }else {
-                    //nie działa :(
-                    Toast.makeText(AdminAddQuestion.this, R.string.validationPath, Toast.LENGTH_LONG);
-                }
-            }
-        });
-        dialog.show();
-    }
-
     private void loadImageInternet(String path) {
         new Pobranie().execute(path);
     }
 
     private void choseImageInGallery() {
-       // Intent intent = new Intent(Intent.ACTION_PICK,  MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-       // startActivityForResult(intent,0);
+
         Intent intent= new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -212,6 +193,29 @@ public class AdminAddQuestion extends AppCompatActivity {
             e.printStackTrace();
         }
         return imgByByte;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(questionEditT.getText().toString().isEmpty() || questionEditT.getText().toString()==null){
+            questionEditT.setError(getText(R.string.nameIsEmpty));
+            btnsaveQuestion.setEnabled(false);
+        }else if(questionEditT.getText().toString().length()<6){
+            questionEditT.setError(getText(R.string.nameIsToSmall));
+            btnsaveQuestion.setEnabled(false);
+        }else {
+            btnsaveQuestion.setEnabled(true);
+        }
     }
 
     public class Pobranie extends AsyncTask<String, Integer, String> {

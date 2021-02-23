@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fiszki.R;
+import com.example.fiszki.activityPanel.AdminPanel;
 import com.example.fiszki.activityPanel.ui.login.LoginViewModel;
 import com.example.fiszki.activityPanel.ui.login.LoginViewModelFactory;
 
@@ -113,8 +115,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                if(loginViewModel.login(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString())){
+                    Intent panelIntent = new Intent(LoginActivity.this, AdminPanel.class);
+                    startActivity(panelIntent);
+                }
             }
         });
     }

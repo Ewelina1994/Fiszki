@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -23,7 +25,7 @@ import com.example.fiszki.R;
 import com.example.fiszki.StorageFirebase;
 import com.squareup.picasso.Picasso;
 
-public class UpdateQuestionActivity extends AppCompatActivity {
+public class UpdateQuestionActivity extends AppCompatActivity implements TextWatcher {
     private EditText questionEditT;
     Button addImageGallery;
     Button btnsaveQuestion;
@@ -42,6 +44,7 @@ public class UpdateQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_question);
         questionEditT = findViewById(R.id.txtQuestion);
+        questionEditT.addTextChangedListener(this);
         addImageGallery=findViewById(R.id.btnGetImageGallery);
         btnsaveQuestion = findViewById(R.id.btnAddQuestion);
         progressBarAT=findViewById(R.id.progresBar);
@@ -180,5 +183,28 @@ public class UpdateQuestionActivity extends AppCompatActivity {
         startActivity(intent);
         // btnsaveQuestion.setEnabled(false);
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if(questionEditT.getText().toString().isEmpty() || questionEditT.getText().toString()==null){
+            questionEditT.setError(getText(R.string.nameIsEmpty));
+            btnsaveQuestion.setEnabled(false);
+        }else if(questionEditT.getText().toString().length()<6){
+            questionEditT.setError(getText(R.string.nameIsToSmall));
+            btnsaveQuestion.setEnabled(false);
+        }else {
+            btnsaveQuestion.setEnabled(true);
+        }
     }
 }

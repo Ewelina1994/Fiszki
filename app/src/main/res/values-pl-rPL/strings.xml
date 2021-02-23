@@ -73,4 +73,14 @@
     <string name="valid_check_answer">Proszę zaznacz odpowiedź</string>
     <string name="finishQuiz">Koniec</string>
     <string name="your_score">Twój wynik</string>
+    <string name="nameIsEmpty">Nazwa nie może być pusta</string>
+    <string name="nameIsToSmall">Nazwa nie może być mniejsza niż 6 znaków</string>
+    <string name="title_activity_login">Zaloguj się</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="action_sign_in">Zaloguj się lub zarejestruj</string>
+    <string name="action_sign_in_short">Zaloguj się</string>
+    <string name="welcome">Witamy!</string>
+    <string name="invalid_username">Niepoprawna nazwa użytkownika</string>
+    <string name="invalid_password">Hasło musi mieć > 5 znaków</string>
+    <string name="login_failed">Login błędny</string>
 </resources>

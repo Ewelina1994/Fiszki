@@ -111,5 +111,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
+    <string name="nameIsEmpty">The name cannot be empty</string>
+    <string name="nameIsToSmall">The name cannot be less than 6 characters</string>
 
 </resources>

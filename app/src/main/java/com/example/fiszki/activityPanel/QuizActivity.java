@@ -57,6 +57,7 @@ public class QuizActivity extends AppCompatActivity {
     private static final String EXTRA_DIFFICULTY = "extraDifficulty";
     private static final String BUTTON_NEXT_NAME = "buttonNextName";
     private static final long COUNTDOWN_IN_MILLIS = 30000;
+    private static final String BUTTON_ADD_TO_REPEAT = "buttonAddToRepeat";
 
     private TextView countQuestion;
     private TextView textViewQuestion;
@@ -89,8 +90,6 @@ public class QuizActivity extends AppCompatActivity {
     private Option clickedAnswer;
 
     private long backPressTime;
-
-    //    private Drawable textColorDefault;
     private ColorStateList textColorDefaultCd;
 
     private CountDownTimer countDownTimer;
@@ -141,14 +140,12 @@ public class QuizActivity extends AppCompatActivity {
         //pobranie randomowych pytań z QuizService
 
         if (savedInstanceState == null) {
-            QuizDbHelper dbHelper = new QuizDbHelper(this);
             difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
 
             questionList= (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(this);
 
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
-
 
             //set Event to cardView
             setSingleEvent();
@@ -167,9 +164,7 @@ public class QuizActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //JEŚLI nie jest nic zaznaczone
                     if (!ansewered) {
-                        //jeśli zaznaczona odp nie zostanie kliknieta czyli na nowo zainicjowana zmienna
-//                        if (!(clickedAnswer.getIs_right() ==1)) //?
-//                        {
+
                         if (clickedAnswer != null) {
                             checkAnswer();
                         }else {
@@ -212,12 +207,17 @@ public class QuizActivity extends AppCompatActivity {
 
             questionCountTotal = savedInstanceState.getInt(KEY_QUESTION_COUNT_TOTAL);
             questionCount = savedInstanceState.getInt(KEY_QUESTION_COUNT);
-            currentQuestion = questionList.get(questionCount - 1);
+
             score = savedInstanceState.getInt(KEY_SCORE);
             wrong=savedInstanceState.getInt(KEY_WRONG);
             timeLeftInMillis = savedInstanceState.getLong(KEY_MILIS_LEFT);
             ansewered = savedInstanceState.getBoolean(KEY_ANSWER);
             buttoinNext.setText(savedInstanceState.getString(BUTTON_NEXT_NAME));
+            buttonAddToReplays.setText(savedInstanceState.getString(BUTTON_ADD_TO_REPEAT));
+            countQuestion.setText(getString(R.string.question) + ": " + questionCount + "/" + questionCountTotal);
+
+            currentQuestion = questionList.get(questionCount - 1);
+
 
             if (!ansewered) {
                 startCountDown();
@@ -333,7 +333,7 @@ public class QuizActivity extends AppCompatActivity {
             //daj głos do pytania automatycznie ale nie działa :(
             giveVoice();
 
-            questionCount++;
+
             countQuestion.setText(getString(R.string.question) + ": " + questionCount + "/" + questionCountTotal);
             //ustawienie że nie została wybrana żadna odpowiedz
             ansewered = false;
@@ -344,6 +344,7 @@ public class QuizActivity extends AppCompatActivity {
             //spr czy pytanie jest w tablicy powtórek
             is_addQuestion_to_replace_board=currentQuestion.isIs_added_to_repaet_board();
             setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+            questionCount++;
         } else {
             finishQuiz();
         }
@@ -418,6 +419,8 @@ public class QuizActivity extends AppCompatActivity {
 
     private void showSolution() {
         String goodOption=null;
+        listOptionsInQuiz=getOptionByLevel(currentQuestion);
+        
         for (Option option : listOptionsInQuiz) {
             if (option.getIs_right() == 1) {
                 goodOption = option.getName();
@@ -510,6 +513,21 @@ public class QuizActivity extends AppCompatActivity {
             textToSpeach.shutdown();
         }
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(KEY_QUESTION_LIST, questionList);
+        outState.putInt(KEY_QUESTION_COUNT_TOTAL, questionCountTotal);
+        outState.putInt(KEY_QUESTION_COUNT, questionCount);
+        outState.putInt(KEY_SCORE, score);
+        outState.putInt(KEY_WRONG, wrong);
+        outState.putLong(KEY_MILIS_LEFT, timeLeftInMillis);
+        outState.putBoolean(KEY_ANSWER, ansewered);
+        outState.putString(BUTTON_NEXT_NAME,  buttoinNext.getText().toString());
+        outState.putString(BUTTON_ADD_TO_REPEAT,  buttoinNext.getText().toString());
+
+        super.onSaveInstanceState(outState);
+    }
+
 
 }
 

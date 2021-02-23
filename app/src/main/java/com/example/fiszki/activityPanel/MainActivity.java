@@ -97,9 +97,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent2= new Intent(this, Ustawienia.class);
                 startActivity(intent2);
                 return true;
-            case R.id.admin:
-                Intent intent3=new Intent(MainActivity.this, AdminPanel.class);
-                startActivity(intent3);
 
             default:
                 return super.onOptionsItemSelected(item);
