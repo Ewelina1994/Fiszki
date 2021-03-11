@@ -7,6 +7,8 @@ The application connects to a database located on the cloud - firebase.
 The application works offline.
 
 In the new game section, after selecting the gameplay level, English idioms are displayed in the form of a quiz. The user must indicate the appropriate answer from among the three selected within the given time. After each question, the answer result is saved. The question may be added to the revision board.
+![idiom](https://github.com/[Ewelina1994]/[englis_idioms]/blob/[master]/app.pictures/1.png?raw=true)
+
 
 There are three levels of advancement, in the first, the easiest answer is in Polish. In the middle level, the answers are displayed in English. In the most difficult level, the answers are in English, you cannot see the content and the idiom, only the voice of the teacher is heard.
 
