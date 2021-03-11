@@ -29,6 +29,9 @@ import java.util.List;
 import javazoom.jl.decoder.JavaLayerException;
 
 public class AddOption extends AppCompatActivity implements TextWatcher {
+    public static final String OPTION_1 = "option1";
+    public static final String OPTION_2 = "option2";
+
 
     private TextView optionNumber;
     private TextView idiomText;
@@ -107,7 +110,11 @@ public class AddOption extends AppCompatActivity implements TextWatcher {
 
             }
         else {
-        //po odwróceniu ekranu
+            optionPLEditText.setText(OPTION_1);
+            optionENEditText.setText(OPTION_2);
+//         optionPLEditText = savedInstanceState.getString(OPTION_1);
+//         optionENEditText = savedInstanceState.getString(OPTION_2);
+
         }
         idiomText.setText(question_save.getName().toString());
     }
@@ -224,12 +231,6 @@ public class AddOption extends AppCompatActivity implements TextWatcher {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
     }
@@ -256,5 +257,12 @@ public class AddOption extends AppCompatActivity implements TextWatcher {
         } else{
             saveOption.setEnabled(true);
         }
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(OPTION_1, optionPLEditText.toString());
+        outState.putString(OPTION_2, optionENEditText.toString());
+
     }
 }

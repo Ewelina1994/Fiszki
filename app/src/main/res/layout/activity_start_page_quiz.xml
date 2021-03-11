@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#23293F">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activityPanel.StartPageQuiz"
     android:background="#23293F"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
     <LinearLayout
@@ -132,3 +134,4 @@
 
     </LinearLayout>
 </RelativeLayout>
+</ScrollView>

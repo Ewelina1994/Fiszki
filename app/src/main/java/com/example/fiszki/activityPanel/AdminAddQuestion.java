@@ -50,6 +50,7 @@ import java.net.URLConnection;
 import xdroid.toaster.Toaster;
 
 public class AdminAddQuestion extends AppCompatActivity implements TextWatcher {
+    public static final String OPTION_1 = "option1";
 
     private EditText questionEditT;
     Button addImageGallery;
@@ -108,7 +109,7 @@ public class AdminAddQuestion extends AppCompatActivity implements TextWatcher {
         if (savedInstanceState == null) {
             dbHelper = new QuizDbHelper(this);
         }else {
-            //przywracanie zmiennych po obróceniu telefonu
+            questionEditT.setText(OPTION_1);
         }
     }
 
@@ -323,6 +324,12 @@ public class AdminAddQuestion extends AppCompatActivity implements TextWatcher {
             };
             thread.start();
         }
+
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(OPTION_1, questionEditT.toString());
 
     }
 }

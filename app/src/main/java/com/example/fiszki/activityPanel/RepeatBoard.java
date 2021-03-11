@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class RepeatBoard extends AppCompatActivity {
+    public static final String CURRENT_QUESTION = "current_question";
+
     ImageView image;
     private TextView questionTextView;
     private TextView answerTextViewEN;
@@ -63,10 +65,15 @@ public class RepeatBoard extends AppCompatActivity {
         buttoinNext=findViewById(R.id.btnNextQuestion);
         btnGiveVoice=findViewById(R.id.speakBtn);
 
+        if (savedInstanceState != null) {
+            currentQuestion = savedInstanceState.getInt(CURRENT_QUESTION);
+        }else{
+            currentQuestion=0;
+
+        }
         converter= new Converter();
         repeatQuestionDTOList= RepeatQuestionService.getAllQuestionOnRepeatBoard();
 
-        currentQuestion=0;
 
         cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -109,7 +116,7 @@ public class RepeatBoard extends AppCompatActivity {
             }
         });
         initialTextToSpech();
-        showQuestion(0);
+        showQuestion(currentQuestion);
 
     }
 
@@ -300,5 +307,11 @@ public class RepeatBoard extends AppCompatActivity {
         if (textToSpeach != null) {
             textToSpeach.shutdown();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_QUESTION, currentQuestion);
     }
 }

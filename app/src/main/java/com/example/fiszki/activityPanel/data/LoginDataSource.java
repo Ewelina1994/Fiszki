@@ -14,7 +14,7 @@ public class LoginDataSource {
 
         try {
             // TODO: handle loggedInUser authentication
-            if(username.equals("admin") && password.equals("admin1234")){
+            if(username.equals("admin1234@wp.pl") && password.equals("admin1234")){
                 LoggedInUser fakeUser =
                         new LoggedInUser(
                                 java.util.UUID.randomUUID().toString(),

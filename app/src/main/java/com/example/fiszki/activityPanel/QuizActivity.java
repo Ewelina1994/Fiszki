@@ -49,8 +49,8 @@ public class QuizActivity extends AppCompatActivity {
     public static final String EXTRA_TOTAL = "extraTotal";
     private static final String KEY_SCORE = "keyScore";
     private static final String KEY_WRONG = "keyWrong";
-    private static final String KEY_QUESTION_COUNT="keyQuestionCount" ;
-    private static final String KEY_QUESTION_COUNT_TOTAL="keyQuestionCountTotal" ;
+    private static final String KEY_QUESTION_COUNT = "keyQuestionCount";
+    private static final String KEY_QUESTION_COUNT_TOTAL = "keyQuestionCountTotal";
     private static final String KEY_MILIS_LEFT = "keyMiliLeft";
     private static final String KEY_ANSWER = "keyAnswered";
     private static final String KEY_QUESTION_LIST = "keyQuestionList";
@@ -80,8 +80,8 @@ public class QuizActivity extends AppCompatActivity {
     private QuestionDTO currentQuestion;
 
 
-    private int score=0;
-    private int wrong=0;
+    private int score = 0;
+    private int wrong = 0;
     private String date;
 
     boolean is_addQuestion_to_replace_board;
@@ -98,7 +98,7 @@ public class QuizActivity extends AppCompatActivity {
     //przychodzi z podrzednej aktywnosci
     String difficulty;
     DifficultyEnum difficultyEnum;
-    List<Option>listOptionsInQuiz;
+    List<Option> listOptionsInQuiz;
 
     Button speakButton;
     TextToSpeachImpl textToSpeach;
@@ -121,15 +121,14 @@ public class QuizActivity extends AppCompatActivity {
         buttoinNext = findViewById(R.id.btnNextQuestion);
         buttonAddToReplays = findViewById(R.id.btnAddToReplays);
 
-        clickedAnswer=new Option();
+        clickedAnswer = new Option();
         speakButton = findViewById(R.id.speakBtn);
         textColorDefaultCd = textViewCountDown.getTextColors();
 
         Intent intent = getIntent();
 
-        // difficulty = intent.getStringExtra(Quiz.EXTRA_DIFFICULTY);
         difficulty = intent.getStringExtra(QuizActivity.EXTRA_DIFFICULTY);
-        textDifficulty.setText(getString(R.string.difficulty) +": " + difficulty);
+        textDifficulty.setText(getString(R.string.difficulty) + ": " + difficulty);
 
         //inicjalizacja textToSpeach
         initialTextToSpech();
@@ -137,86 +136,33 @@ public class QuizActivity extends AppCompatActivity {
         //inicjalizacja array cardViews
         initialCardsView();
 
-        //pobranie randomowych pytań z QuizService
+        difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
 
-        if (savedInstanceState == null) {
-            difficultyEnum = DifficultyEnum.valueOf(DifficultyEnum.class, difficulty);
+        questionList = (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(this);
 
-            questionList= (ArrayList<QuestionDTO>) QuizService.getRandomQuestionInQuiz(this);
+        questionCountTotal = questionList.size();
+        Collections.shuffle(questionList);
 
-            questionCountTotal = questionList.size();
-            Collections.shuffle(questionList);
+        setSingleEvent();
 
-            //set Event to cardView
-            setSingleEvent();
-
-            showNextQuestion();
-
-            //ustawienie dla poziomu trudnego nie wyświetlanai textu pytania
-            if(difficultyEnum==DifficultyEnum.Zaawansowany){
-                final ViewGroup viewGroup= findViewById(R.id.questionLayout);
-                viewGroup.removeAllViews();
-                viewGroup.addView(View.inflate(this, R.layout.hard_difficulty_change_question_view, null));
-            }
-
-            buttoinNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //JEŚLI nie jest nic zaznaczone
-                    if (!ansewered) {
-
-                        if (clickedAnswer != null) {
-                            checkAnswer();
-                        }else {
-                             Toast.makeText(QuizActivity.this, R.string.valid_check_answer, Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                    //JEŚŁI ODP została zaznaczona
-                    else {
-                        // checkAnswer();
-                        showNextQuestion();
-                    }
-                }
-            });
-            buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(RepeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion)){
-                        currentQuestion.setIs_added_to_repaet_board(false);
-                        is_addQuestion_to_replace_board=false;
-                        RepeatQuestionService.deleteQuestionToRepeatBoard(currentQuestion);
-                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-                    }else {
-                        currentQuestion.setIs_added_to_repaet_board(true);
-                        is_addQuestion_to_replace_board=true;
-                        RepeatQuestionService.addQuestionToRepeatBoard(currentQuestion);
-                        setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-                    }
-                }
-            });
-
-            speakButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    giveVoice();
-                }
-            });
-        } else {
+//        if (savedInstanceState != null) {
+        if (savedInstanceState != null) {
             questionList = savedInstanceState.getParcelableArrayList(KEY_QUESTION_LIST);
 
             questionCountTotal = savedInstanceState.getInt(KEY_QUESTION_COUNT_TOTAL);
             questionCount = savedInstanceState.getInt(KEY_QUESTION_COUNT);
 
             score = savedInstanceState.getInt(KEY_SCORE);
-            wrong=savedInstanceState.getInt(KEY_WRONG);
+            wrong = savedInstanceState.getInt(KEY_WRONG);
             timeLeftInMillis = savedInstanceState.getLong(KEY_MILIS_LEFT);
+            difficulty = savedInstanceState.getString(EXTRA_DIFFICULTY);
             ansewered = savedInstanceState.getBoolean(KEY_ANSWER);
+            difficultyEnum = DifficultyEnum.valueOf(difficulty);
             buttoinNext.setText(savedInstanceState.getString(BUTTON_NEXT_NAME));
             buttonAddToReplays.setText(savedInstanceState.getString(BUTTON_ADD_TO_REPEAT));
             countQuestion.setText(getString(R.string.question) + ": " + questionCount + "/" + questionCountTotal);
 
-            currentQuestion = questionList.get(questionCount - 1);
+           // currentQuestion = questionList.get(questionCount - 1);
 
 
             if (!ansewered) {
@@ -226,14 +172,67 @@ public class QuizActivity extends AppCompatActivity {
                 showSolution();
             }
         }
+        //do poprawy !!!
+//        else{
+//            showNextQuestion();
+//        }
+
+
+        buttoinNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //JEŚLI nie jest nic zaznaczone
+                if (!ansewered) {
+
+                    if (clickedAnswer != null) {
+                        checkAnswer();
+                    } else {
+                        Toast.makeText(QuizActivity.this, R.string.valid_check_answer, Toast.LENGTH_LONG).show();
+
+                    }
+                }
+                //JEŚŁI ODP została zaznaczona
+                else {
+                    // checkAnswer();
+                    showNextQuestion();
+                }
+            }
+        });
+        buttonAddToReplays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (RepeatQuestionService.isAddQuestionToRepeatBoard(currentQuestion)) {
+                    currentQuestion.setIs_added_to_repaet_board(false);
+                    is_addQuestion_to_replace_board = false;
+                    RepeatQuestionService.deleteQuestionToRepeatBoard(currentQuestion);
+                    setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+                } else {
+                    currentQuestion.setIs_added_to_repaet_board(true);
+                    is_addQuestion_to_replace_board = true;
+                    RepeatQuestionService.addQuestionToRepeatBoard(currentQuestion);
+                    setColorBtnAddToReplace(is_addQuestion_to_replace_board);
+                }
+            }
+        });
+
+        speakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                giveVoice();
+            }
+        });
+
+        showNextQuestion();
+
     }
 
     private void initialCardsView() {
-        cardsView=new ArrayList<>();
+        cardsView = new ArrayList<>();
         cardsView.add(findViewById(R.id.cardView1));
         cardsView.add(findViewById(R.id.cardView2));
         cardsView.add(findViewById(R.id.cardView3));
-        for(CardView card: cardsView){
+        for (CardView card : cardsView) {
             card.setRadius(25.0f);
         }
     }
@@ -241,21 +240,22 @@ public class QuizActivity extends AppCompatActivity {
     private List<Option> getOptionByLevel(QuestionDTO questionDTO) {
         // daj dla konkretnego poziomu opcje
 
-        List<Option> newOptionList=new ArrayList<>();
-        for (Option option: questionDTO.getOptions()) {
-            if(option.getLanguage().equals(checkWhatLanguage(difficultyEnum).toString())){
+        List<Option> newOptionList = new ArrayList<>();
+        for (Option option : questionDTO.getOptions()) {
+            if (option.getLanguage().equals(checkWhatLanguage(difficultyEnum).toString())) {
                 newOptionList.add(option);
             }
         }
         return newOptionList;
 
     }
+
     public LanguageEnum checkWhatLanguage(DifficultyEnum difficulty) {
         switch (difficulty) {
             case Łatwy:
                 return LanguageEnum.PL;
             case Średni:
-                return  LanguageEnum.EN;
+                return LanguageEnum.EN;
             default:
                 return LanguageEnum.EN;
         }
@@ -281,7 +281,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void giveVoice() {
-        String text = textViewQuestion.getText().toString();
+        String text = currentQuestion.getQuestion().getName().toString();
         textToSpeach.audio(text);
     }
 
@@ -289,21 +289,20 @@ public class QuizActivity extends AppCompatActivity {
     private void setSingleEvent() {
         //ustawiamy dla każdego cardView nasłuch
         for (int i = 0; i < cardsView.size(); i++) {
-            final int index=i;
+            final int index = i;
             cardsView.get(i).setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @SuppressLint({"ResourceAsColor", "ResourceType"})
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onClick(View v) {
                     //spr czy czas już nie minął czy nie udzieliłes odp
-                    if(!ansewered){
-                        clickedAnswer=listOptionsInQuiz.get(index);
+                    if (!ansewered) {
+                        clickedAnswer = listOptionsInQuiz.get(index);
                         //dla każdej karty ustawiamy kolor żeby przy podwójnym kliknięciu nie było 2 razy zaznaczonej karty
-                        cardsView.forEach(card->{
-                            if(card==cardsView.get(index)){
+                        cardsView.forEach(card -> {
+                            if (card == cardsView.get(index)) {
                                 card.setBackgroundColor(Color.parseColor("#E78230"));
 
-                            }else {
+                            } else {
                                 card.setBackgroundColor(Color.parseColor("#CCDAE7"));
                             }
                         });
@@ -315,17 +314,21 @@ public class QuizActivity extends AppCompatActivity {
 
     private void showNextQuestion() {
         //ustaw kliknieto odp na null
-        clickedAnswer=null;
+        clickedAnswer = null;
         if (questionCount < questionCountTotal) {
             cleanColorCardView();
             currentQuestion = questionList.get(questionCount);
 
-            listOptionsInQuiz=getOptionByLevel(currentQuestion);
+            listOptionsInQuiz = getOptionByLevel(currentQuestion);
             Collections.shuffle(listOptionsInQuiz);
 
             //currentQuestion.setOptions(listOptionsInQuiz);
 
-            textViewQuestion.setText(currentQuestion.getQuestion().getName());
+            if (difficultyEnum == DifficultyEnum.Zaawansowany) {
+                textViewQuestion.setText("");
+            }else{
+                textViewQuestion.setText(currentQuestion.getQuestion().getName());
+            }
             textViewQuestion1.setText(listOptionsInQuiz.get(0).getName());
             textViewQuestion2.setText(listOptionsInQuiz.get(1).getName());
             textViewQuestion3.setText(listOptionsInQuiz.get(2).getName());
@@ -333,7 +336,7 @@ public class QuizActivity extends AppCompatActivity {
             //daj głos do pytania automatycznie ale nie działa :(
             giveVoice();
 
-
+            questionCount++;
             countQuestion.setText(getString(R.string.question) + ": " + questionCount + "/" + questionCountTotal);
             //ustawienie że nie została wybrana żadna odpowiedz
             ansewered = false;
@@ -342,26 +345,26 @@ public class QuizActivity extends AppCompatActivity {
             startCountDown();
 
             //spr czy pytanie jest w tablicy powtórek
-            is_addQuestion_to_replace_board=currentQuestion.isIs_added_to_repaet_board();
+            is_addQuestion_to_replace_board = currentQuestion.isIs_added_to_repaet_board();
             setColorBtnAddToReplace(is_addQuestion_to_replace_board);
-            questionCount++;
+
         } else {
             finishQuiz();
         }
     }
 
     private void cleanColorCardView() {
-        for(CardView card: cardsView){
+        for (CardView card : cardsView) {
             card.setBackgroundColor(Color.parseColor("#CCDAE7"));
         }
     }
 
     private void setColorBtnAddToReplace(boolean is_addQuestion) {
         GradientDrawable bgShape1 = (GradientDrawable) buttonAddToReplays.getBackground();
-        if(is_addQuestion==true){
+        if (is_addQuestion == true) {
             bgShape1.setColor(Color.parseColor("#E78230"));
             buttonAddToReplays.setText(R.string.addedToReplace);
-        }else {
+        } else {
             bgShape1.setColor(Color.parseColor("#C0C0C0"));
             buttonAddToReplays.setText(R.string.no_added_to_replace);
         }
@@ -403,35 +406,36 @@ public class QuizActivity extends AppCompatActivity {
             countDownTimer.cancel();
         }
         //jeśli poprawna odp
-        if (clickedAnswer!=null
-                && clickedAnswer.getIs_right()==1) {
+        if (clickedAnswer != null
+                && clickedAnswer.getIs_right() == 1) {
             score++;
             String scoreTxt = getString(R.string.score);
-            textViewCorect.setText(scoreTxt+": " + score);}
+            textViewCorect.setText(scoreTxt + ": " + score);
+        }
         //jeśli nie poprawna odp
         else {
             wrong++;
             String wrongTxt = getString(R.string.wrong);
-            textViewWrong.setText(wrongTxt +": " + wrong);
+            textViewWrong.setText(wrongTxt + ": " + wrong);
         }
         showSolution();
     }
 
     private void showSolution() {
-        String goodOption=null;
-        listOptionsInQuiz=getOptionByLevel(currentQuestion);
-        
+        String goodOption = null;
+        listOptionsInQuiz = getOptionByLevel(currentQuestion);
+
         for (Option option : listOptionsInQuiz) {
             if (option.getIs_right() == 1) {
                 goodOption = option.getName();
             }
         }
 
-        for(int i=0; i<listOptionsInQuiz.size(); i++){
-            String textInCardView=((TextView) cardsView.get(i).getChildAt(0)).getText().toString();
-            if(textInCardView.equalsIgnoreCase(goodOption)){
+        for (int i = 0; i < listOptionsInQuiz.size(); i++) {
+            String textInCardView = ((TextView) cardsView.get(i).getChildAt(0)).getText().toString();
+            if (textInCardView.equalsIgnoreCase(goodOption)) {
                 cardsView.get(i).setBackgroundColor(Color.parseColor("#2AFF3F"));
-            }else {
+            } else {
                 cardsView.get(i).setBackgroundColor(Color.parseColor("#FF0A0E"));
             }
         }
@@ -445,7 +449,6 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void finishQuiz() {
-
         //dodawanie statystyki do bazy
         Date nowDate = new Date();
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm");
@@ -508,11 +511,12 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(textToSpeach!=null){
+        if (textToSpeach != null) {
             textToSpeach.stop();
             textToSpeach.shutdown();
         }
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(KEY_QUESTION_LIST, questionList);
@@ -521,9 +525,10 @@ public class QuizActivity extends AppCompatActivity {
         outState.putInt(KEY_SCORE, score);
         outState.putInt(KEY_WRONG, wrong);
         outState.putLong(KEY_MILIS_LEFT, timeLeftInMillis);
+        outState.putString(EXTRA_DIFFICULTY, difficulty);
         outState.putBoolean(KEY_ANSWER, ansewered);
-        outState.putString(BUTTON_NEXT_NAME,  buttoinNext.getText().toString());
-        outState.putString(BUTTON_ADD_TO_REPEAT,  buttoinNext.getText().toString());
+        outState.putString(BUTTON_NEXT_NAME, buttoinNext.getText().toString());
+        outState.putString(BUTTON_ADD_TO_REPEAT, buttonAddToReplays.getText().toString());
 
         super.onSaveInstanceState(outState);
     }

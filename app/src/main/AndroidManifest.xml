@@ -71,9 +71,10 @@
         <activity
             android:name=".activityPanel.QuizActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/quiz"
-            android:parentActivityName=".activityPanel.Ustawienia"
-            android:theme="@style/MyAppTheme"/>
+            android:parentActivityName=".activityPanel.StartPageQuiz"
+            />
+<!--        android:theme="@style/MyAppTheme"-->
+
         <activity android:name=".activityPanel.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
