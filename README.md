@@ -7,6 +7,10 @@ The application connects to a database located on the cloud - firebase.
 The application works offline.
 
 In the new game section, after selecting the gameplay level, English idioms are displayed in the form of a quiz. The user must indicate the appropriate answer from among the three selected within the given time. After each question, the answer result is saved. The question may be added to the revision board.
+<p align="center">
+  <img src="app/pictures/1.png" width="350" title="Main window">
+  <img src="app/pictures/2.png" width="350" alt="Menu">
+</p>
 ![idiom](https://github.com/Ewelina1994/english_idioms/blob/master/app/pictures/1.png?raw=true)
 
 
