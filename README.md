@@ -1,6 +1,6 @@
 # English idioms quiz
 
-Application for android devices implemented as part of engineering work.
+Application for android devices for learning English idioms.
 
 <strong>
 The application installer is in the english_idioms / install app directory, 
